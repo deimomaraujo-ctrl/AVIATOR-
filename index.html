@@ -94,14 +94,14 @@ header { background: rgba(11, 11, 11, 0.95); backdrop-filter: blur(10px); border
 .modal-overlay { position: fixed; inset: 0; background: rgba(11, 11, 11, 0.88); backdrop-filter: blur(8px); z-index: 2000; display: none; align-items: flex-end; justify-content: center; }
 @media (min-width: 640px) { .modal-overlay { align-items: center; } }
 .modal-card { background: var(--bg-card); border: 1px solid var(--border); border-top-left-radius: 24px; border-top-right-radius: 24px; width: 100%; max-width: 550px; max-height: 90vh; display: flex; flex-direction: column; box-shadow: 0 -20px 40px rgba(0,0,0,0.9); animation: slideUp 0.3s ease; }
-@media (min-width: 640px) { .modal-card { border-radius: 20px; } }
+@media (min-width: 640px) { .modal-card { border-radius: 20px; max-width: 650px; } }
 @keyframes slideUp { from { transform: translateY(100%); } to { transform: translateY(0); } }
 
 .modal-header { padding: 18px 20px; border-bottom: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; }
 .modal-title { font-size: 15px; font-weight: 900; color: var(--gold-light); text-transform: uppercase; letter-spacing: 0.5px; }
 .modal-close-btn { background: transparent; border: none; color: var(--text-muted); font-size: 22px; font-weight: bold; cursor: pointer; }
 
-.modal-body { padding: 20px; overflow-y: auto; display: flex; flex-direction: column; gap: 14px; max-height: 60vh; }
+.modal-body { padding: 20px; overflow-y: auto; display: flex; flex-direction: column; gap: 14px; max-height: 70vh; }
 
 /* Estilos específicos do Modal de Zoom de Imagem */
 .image-zoom-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.92); z-index: 3000; display: none; align-items: center; justify-content: center; padding: 20px; }
@@ -109,13 +109,24 @@ header { background: rgba(11, 11, 11, 0.95); backdrop-filter: blur(10px); border
 .image-zoom-container img { max-width: 100%; max-height: 85vh; object-fit: contain; border-radius: 12px; border: 1px solid var(--border); box-shadow: 0 10px 40px rgba(0,0,0,0.8); }
 .image-zoom-close { position: absolute; top: -45px; right: 0; background: transparent; border: none; color: #fff; font-size: 28px; font-weight: bold; cursor: pointer; }
 
+/* Abas do Painel Admin */
+.admin-tabs { display: flex; gap: 6px; border-bottom: 1px solid var(--border); padding-bottom: 10px; margin-bottom: 5px; }
+.admin-tab-btn { background: var(--bg-input); border: 1px solid var(--border); color: var(--text-muted); padding: 8px 12px; border-radius: 8px; font-size: 11px; font-weight: 800; cursor: pointer; transition: 0.2s; }
+.admin-tab-btn.active { background: var(--gold-primary); color: #0b0b0b; border-color: var(--gold-primary); }
+
 /* Estilos específicos do Painel Admin */
 .admin-form-group { display: flex; flex-direction: column; gap: 6px; }
 .admin-form-group label { font-size: 11px; font-weight: 800; color: var(--gold-light); text-transform: uppercase; }
-.admin-form-group input, .admin-form-group select { background: var(--bg-input); border: 1px solid var(--border); border-radius: 8px; padding: 10px; color: #fff; font-size: 12px; }
-.admin-btn { background: var(--gold-primary); color: #0b0b0b; font-weight: 900; border: none; padding: 12px; border-radius: 8px; cursor: pointer; text-transform: uppercase; font-size: 12px; }
-.admin-product-row { display: flex; align-items: center; justify-content: space-between; background: var(--bg-input); padding: 10px; border-radius: 8px; border: 1px solid var(--border); font-size: 12px; }
+.admin-form-group input, .admin-form-group select, .admin-form-group textarea { background: var(--bg-input); border: 1px solid var(--border); border-radius: 8px; padding: 10px; color: #fff; font-size: 12px; font-family: var(--font); }
+.admin-btn { background: var(--gold-primary); color: #0b0b0b; font-weight: 900; border: none; padding: 12px; border-radius: 8px; cursor: pointer; text-transform: uppercase; font-size: 12px; transition: 0.2s; }
+.admin-btn:hover { background: var(--gold-light); }
+.admin-product-row { display: flex; align-items: center; justify-content: space-between; background: var(--bg-input); padding: 10px; border-radius: 8px; border: 1px solid var(--border); font-size: 12px; gap: 10px; }
+.admin-slide-card { background: var(--bg-input); padding: 12px; border-radius: 10px; border: 1px solid var(--border); display: flex; flex-direction: column; gap: 8px; }
 .btn-delete-prod { background: #ff4d4d; color: #fff; border: none; padding: 6px 10px; border-radius: 6px; font-weight: bold; cursor: pointer; font-size: 10px; }
+.file-input-wrapper { display: flex; align-items: center; gap: 8px; }
+.file-input-wrapper input[type="file"] { display: none; }
+.btn-file-custom { background: #2a2a2a; border: 1px solid var(--border); color: var(--gold-light); padding: 9px 12px; border-radius: 8px; font-size: 11px; font-weight: 800; cursor: pointer; display: inline-flex; align-items: center; gap: 6px; transition: 0.2s; }
+.btn-file-custom:hover { border-color: var(--gold-primary); background: #333; }
 
 /* Carrinho */
 .cart-items-list { display: flex; flex-direction: column; gap: 12px; }
@@ -162,64 +173,20 @@ footer .brand-sign { font-weight: 900; color: var(--gold-light); letter-spacing:
         </div>
     </div>
     <div class="header-actions">
-        <button class="admin-login-btn" onclick="openAdminModal()">⚙️ Admin</button>
+        <button class="admin-login-btn" onclick="openAdminModal()">⚙️️ Admin</button>
         <button class="cart-btn-top" onclick="openCartModal()">
             🛒 Carrinho <span class="cart-badge" id="cart-counter">0</span>
         </button>
     </div>
 </header>
 
-<!-- CARROSSEL PROFISSIONAL DE DESTAQUE (SLIDER COM 4 SLIDES) -->
+<!-- CARROSSEL PROFISSIONAL DE DESTAQUE (SLIDER DINÂMICO) -->
 <div class="hero-slider">
     <div class="slide-track" id="slide-track">
-        <!-- Slide 1: Cabelo Afro Antes e Depois da Selagem Progressiva -->
-        <div class="slide-item">
-            <img src="https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?w=1200&auto=format&fit=crop&q=80" alt="Transformação Cabelo Afro para Liso Perfeito">
-            <div class="slide-overlay"></div>
-            <div class="slide-content">
-                <h2>Transformação Afro &bull; Liso Absoluto</h2>
-                <p>Resultado profissional impecável após a aplicação da Selagem Progressiva de alto desempenho.</p>
-                <div class="slide-slogan">Realce sua beleza, revele sua essência.</div>
-            </div>
-        </div>
-        <!-- Slide 2: Cabelo Liso Extremo e Brilhoso -->
-        <div class="slide-item">
-            <img src="https://images.unsplash.com/photo-1560869713-7d0a29430803?w=1200&auto=format&fit=crop&q=80" alt="Cabelo Liso Profissional">
-            <div class="slide-overlay"></div>
-            <div class="slide-content">
-                <h2>Tecnologia e Liso Perfeito</h2>
-                <p>O padrão de excelência que o seu salão de beleza merece.</p>
-                <div class="slide-slogan">Brilho espelhado e toque sedoso.</div>
-            </div>
-        </div>
-        <!-- Slide 3: Nova Foto Enviada (Alzey Gold Máscara Teia) -->
-        <div class="slide-item">
-            <img src="1001434774.jpg" alt="Máscara Teia Alzey Gold Tratamento Profissional">
-            <div class="slide-overlay"></div>
-            <div class="slide-content">
-                <h2>Alzey Gold &bull; Máscara Teia</h2>
-                <p>Trata, neutraliza e realça os fios. Cuidado completo que seu cabelo sente desde a primeira aplicação.</p>
-                <div class="slide-slogan">Qualidade e alta performance para salões.</div>
-            </div>
-        </div>
-        <!-- Slide 4: Profissionalismo e Alta Performance -->
-        <div class="slide-item">
-            <img src="https://images.unsplash.com/photo-1519699047748-de8e457a634e?w=1200&auto=format&fit=crop&q=80" alt="Salão de Beleza Profissional">
-            <div class="slide-overlay"></div>
-            <div class="slide-content">
-                <h2>Exclusivo para Cabeleireiros</h2>
-                <p>Atendimento especializado e entrega rápida para profissionais exigentes.</p>
-                <div class="slide-slogan">WhatsApp: (63) 99220-4543</div>
-            </div>
-        </div>
+        <!-- Gerado via JavaScript -->
     </div>
     <!-- Bolinhas indicadoras -->
-    <div class="slide-dots" id="slide-dots">
-        <span class="dot active" onclick="currentSlide(0)"></span>
-        <span class="dot" onclick="currentSlide(1)"></span>
-        <span class="dot" onclick="currentSlide(2)"></span>
-        <span class="dot" onclick="currentSlide(3)"></span>
-    </div>
+    <div class="slide-dots" id="slide-dots"></div>
 </div>
 
 <!-- FILTROS DE CATEGORIA -->
@@ -277,7 +244,7 @@ footer .brand-sign { font-weight: 900; color: var(--gold-light); letter-spacing:
 
 <!-- MODAL DO PAINEL ADMINISTRADOR / DESENVOLVEDOR -->
 <div class="modal-overlay" id="admin-modal">
-    <div class="modal-card" style="max-width: 600px;">
+    <div class="modal-card" style="max-width: 650px;">
         <div class="modal-header">
             <div class="modal-title">Painel do Administrador</div>
             <button class="modal-close-btn" onclick="closeAdminModal()">&times;</button>
@@ -285,7 +252,7 @@ footer .brand-sign { font-weight: 900; color: var(--gold-light); letter-spacing:
         <div class="modal-body" id="admin-modal-content">
             <!-- Tela de Login do Admin -->
             <div id="admin-login-screen" style="display:flex; flex-direction:column; gap:14px; padding: 10px 0;">
-                <p style="font-size:12px; color:var(--text-muted);">Área restrita para gerenciamento do catálogo e fotos do site.</p>
+                <p style="font-size:12px; color:var(--text-muted);">Área restrita para gerenciamento do catálogo, banner rotativo (slides) e fotos do site.</p>
                 <div class="admin-form-group">
                     <label>Senha de Acesso</label>
                     <input type="password" id="admin-password-input" placeholder="Digite a senha (ex: admin123)">
@@ -294,49 +261,101 @@ footer .brand-sign { font-weight: 900; color: var(--gold-light); letter-spacing:
             </div>
 
             <!-- Tela de Gestão do Admin (Oculta até logar) -->
-            <div id="admin-dashboard-screen" style="display:none; flex-direction:column; gap:18px;">
+            <div id="admin-dashboard-screen" style="display:none; flex-direction:column; gap:16px;">
                 <div style="display:flex; justify-content:space-between; align-items:center;">
-                    <span style="font-size:12px; color:var(--gold-light); font-weight:800;">✨ Gerenciar Produtos</span>
+                    <span style="font-size:12px; color:var(--gold-light); font-weight:800;">✨ Gerenciamento Completo do Site</span>
                     <button class="admin-btn" style="padding:6px 12px; font-size:10px;" onclick="logoutAdmin()">Sair</button>
                 </div>
                 
-                <!-- Formulário para Adicionar Novo Produto -->
-                <div style="background:var(--bg-input); padding:14px; border-radius:12px; border:1px solid var(--border); display:flex; flex-direction:column; gap:10px;">
-                    <h4 style="font-size:12px; color:#fff; font-weight:900;">Adicionar Novo Produto</h4>
-                    <div class="admin-form-group">
-                        <label>Nome do Produto</label>
-                        <input type="text" id="new-p-name" placeholder="Ex: Selagem Térmica Liss 1L">
-                    </div>
-                    <div class="admin-form-group">
-                        <label>Categoria</label>
-                        <select id="new-p-cat">
-                            <option value="Selagem Progressiva">Selagem Progressiva</option>
-                            <option value="Hidratação">Hidratação</option>
-                            <option value="Coloração">Coloração</option>
-                            <option value="Descolorante">Descolorante</option>
-                            <option value="Finalizador">Finalizador</option>
-                        </select>
-                    </div>
-                    <div class="admin-form-group">
-                        <label>Especificações (Volume / Peso)</label>
-                        <input type="text" id="new-p-specs" placeholder="Ex: Frasco 1 Litro">
-                    </div>
-                    <div class="admin-form-group">
-                        <label>Preço (R$)</label>
-                        <input type="number" step="0.01" id="new-p-price" placeholder="149.90">
-                    </div>
-                    <div class="admin-form-group">
-                        <label>URL da Imagem (Foto)</label>
-                        <input type="text" id="new-p-image" placeholder="https://exemplo.com/foto.jpg">
-                    </div>
-                    <button class="admin-btn" onclick="addNewProduct()">Salvar e Publicar Produto</button>
+                <!-- Abas de navegação interna do Admin -->
+                <div class="admin-tabs">
+                    <button class="admin-tab-btn active" id="tab-btn-products" onclick="switchAdminTab('products')">📦 Produtos</button>
+                    <button class="admin-tab-btn" id="tab-btn-slides" onclick="switchAdminTab('slides')">🖼️ Slides do Topo</button>
                 </div>
 
-                <!-- Lista de Produtos Existentes para Gerenciar/Excluir -->
-                <div style="display:flex; flex-direction:column; gap:8px;">
-                    <h4 style="font-size:12px; color:#fff; font-weight:900;">Produtos Cadastrados</h4>
-                    <div id="admin-products-list" style="display:flex; flex-direction:column; gap:8px; max-height:220px; overflow-y:auto;">
-                        <!-- Gerado via JS -->
+                <!-- SEÇÃO 1: GERENCIAR PRODUTOS -->
+                <div id="admin-tab-products" style="display:flex; flex-direction:column; gap:16px;">
+                    <!-- Formulário para Adicionar Novo Produto -->
+                    <div style="background:var(--bg-input); padding:14px; border-radius:12px; border:1px solid var(--border); display:flex; flex-direction:column; gap:10px;">
+                        <h4 style="font-size:12px; color:#fff; font-weight:900;">Adicionar Novo Produto</h4>
+                        <div class="admin-form-group">
+                            <label>Nome do Produto</label>
+                            <input type="text" id="new-p-name" placeholder="Ex: Selagem Térmica Liss 1L">
+                        </div>
+                        <div class="admin-form-group">
+                            <label>Categoria</label>
+                            <select id="new-p-cat">
+                                <option value="Selagem Progressiva">Selagem Progressiva</option>
+                                <option value="Hidratação">Hidratação</option>
+                                <option value="Coloração">Coloração</option>
+                                <option value="Descolorante">Descolorante</option>
+                                <option value="Finalizador">Finalizador</option>
+                            </select>
+                        </div>
+                        <div class="admin-form-group">
+                            <label>Especificações (Volume / Peso)</label>
+                            <input type="text" id="new-p-specs" placeholder="Ex: Frasco 1 Litro">
+                        </div>
+                        <div class="admin-form-group">
+                            <label>Preço (R$)</label>
+                            <input type="number" step="0.01" id="new-p-price" placeholder="149.90">
+                        </div>
+                        <div class="admin-form-group">
+                            <label>Foto do Produto (Escolher do Dispositivo ou URL)</label>
+                            <div class="file-input-wrapper">
+                                <label class="btn-file-custom" for="new-p-file">📁 Importar da Galeria</label>
+                                <input type="file" id="new-p-file" accept="image/*" onchange="previewProductImage(event)">
+                                <span id="new-p-file-name" style="font-size:11px; color:var(--text-muted);">Nenhum arquivo escolhido</span>
+                            </div>
+                            <input type="text" id="new-p-image" placeholder="Ou cole a URL da imagem aqui" style="margin-top:6px;">
+                        </div>
+                        <button class="admin-btn" onclick="addNewProduct()">Salvar e Publicar Produto</button>
+                    </div>
+
+                    <!-- Lista de Produtos Existentes -->
+                    <div style="display:flex; flex-direction:column; gap:8px;">
+                        <h4 style="font-size:12px; color:#fff; font-weight:900;">Produtos Cadastrados</h4>
+                        <div id="admin-products-list" style="display:flex; flex-direction:column; gap:8px; max-height:220px; overflow-y:auto;">
+                            <!-- Gerado via JS -->
+                        </div>
+                    </div>
+                </div>
+
+                <!-- SEÇÃO 2: GERENCIAR SLIDES (BANNER ROTATIVO) -->
+                <div id="admin-tab-slides" style="display:none; flex-direction:column; gap:16px;">
+                    <p style="font-size:11px; color:var(--text-muted);">Personalize as fotos, títulos e slogans que passam no topo do site (tipo carrossel).</p>
+                    
+                    <div style="background:var(--bg-input); padding:14px; border-radius:12px; border:1px solid var(--border); display:flex; flex-direction:column; gap:10px;">
+                        <h4 style="font-size:12px; color:#fff; font-weight:900;">Adicionar Novo Slide</h4>
+                        <div class="admin-form-group">
+                            <label>Título Principal</label>
+                            <input type="text" id="new-s-title" placeholder="Ex: Alzey Gold • Máscara Teia">
+                        </div>
+                        <div class="admin-form-group">
+                            <label>Subtítulo / Descrição</label>
+                            <input type="text" id="new-s-desc" placeholder="Ex: Trata, neutraliza e realça os fios.">
+                        </div>
+                        <div class="admin-form-group">
+                            <label>Slogan de Destaque (Rodapé do Slide)</label>
+                            <input type="text" id="new-s-slogan" placeholder="Ex: Qualidade e alta performance.">
+                        </div>
+                        <div class="admin-form-group">
+                            <label>Imagem do Slide (Importar do Dispositivo ou URL)</label>
+                            <div class="file-input-wrapper">
+                                <label class="btn-file-custom" for="new-s-file">📁 Importar da Galeria</label>
+                                <input type="file" id="new-s-file" accept="image/*" onchange="previewSlideImage(event)">
+                                <span id="new-s-file-name" style="font-size:11px; color:var(--text-muted);">Nenhum arquivo escolhido</span>
+                            </div>
+                            <input type="text" id="new-s-image" placeholder="Ou cole a URL da imagem aqui" style="margin-top:6px;">
+                        </div>
+                        <button class="admin-btn" onclick="addNewSlide()">Adicionar Novo Slide</button>
+                    </div>
+
+                    <div style="display:flex; flex-direction:column; gap:8px;">
+                        <h4 style="font-size:12px; color:#fff; font-weight:900;">Slides Ativos no Topo</h4>
+                        <div id="admin-slides-list" style="display:flex; flex-direction:column; gap:10px; max-height:280px; overflow-y:auto;">
+                            <!-- Gerado via JS -->
+                        </div>
                     </div>
                 </div>
             </div>
@@ -352,43 +371,103 @@ footer .brand-sign { font-weight: 900; color: var(--gold-light); letter-spacing:
 </footer>
 
 <script>
-/* --- CONTROLE DO CARROSSEL DE FOTOS --- */
-let slideIndex = 0;
-const totalSlides = 4;
+/* --- BASE DE DADOS DOS SLIDES (BANNER ROTATIVO) --- */
+let slidesDatabase = [
+    {
+        id: 1,
+        title: "Transformação Afro • Liso Absoluto",
+        description: "Resultado profissional impecável após a aplicação da Selagem Progressiva de alto desempenho.",
+        slogan: "Realce sua beleza, revele sua essência.",
+        image: "https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?w=1200&auto=format&fit=crop&q=80"
+    },
+    {
+        id: 2,
+        title: "Tecnologia e Liso Perfeito",
+        description: "O padrão de excelência que o seu salão de beleza merece.",
+        slogan: "Brilho espelhado e toque sedoso.",
+        image: "https://images.unsplash.com/photo-1560869713-7d0a29430803?w=1200&auto=format&fit=crop&q=80"
+    },
+    {
+        id: 3,
+        title: "Alzey Gold • Máscara Teia",
+        description: "Trata, neutraliza e realça os fios. Cuidado completo que seu cabelo sente desde a primeira aplicação.",
+        slogan: "Qualidade e alta performance para salões.",
+        image: "1001434774.jpg"
+    },
+    {
+        id: 4,
+        title: "Exclusivo para Cabeleireiros",
+        description: "Atendimento especializado e entrega rápida para profissionais exigentes.",
+        slogan: "WhatsApp: (63) 99220-4543",
+        image: "https://images.unsplash.com/photo-1519699047748-de8e457a634e?w=1200&auto=format&fit=crop&q=80"
+    }
+];
 
-function showSlide(index) {
+let slideIndex = 0;
+let slideInterval;
+
+function renderSlider() {
+    const track = document.getElementById('slide-track');
+    const dotsContainer = document.getElementById('slide-dots');
+    track.innerHTML = '';
+    dotsContainer.innerHTML = '';
+
+    slidesDatabase.forEach((slide, idx) => {
+        // Montar item do slide
+        const item = document.createElement('div');
+        item.className = 'slide-item';
+        item.innerHTML = `
+            <img src="${slide.image}" alt="${slide.title}">
+            <div class="slide-overlay"></div>
+            <div class="slide-content">
+                <h2>${slide.title}</h2>
+                <p>${slide.description}</p>
+                <div class="slide-slogan">${slide.slogan}</div>
+            </div>
+        `;
+        track.appendChild(item);
+
+        // Montar bolinha indicadora
+        const dot = document.createElement('span');
+        dot.className = `dot ${idx === slideIndex ? 'active' : ''}`;
+        dot.onclick = () => currentSlide(idx);
+        dotsContainer.appendChild(dot);
+    });
+
+    if (slideIndex >= slidesDatabase.length) {
+        slideIndex = 0;
+    }
+    updateSlidePosition();
+}
+
+function updateSlidePosition() {
     const track = document.getElementById('slide-track');
     const dots = document.querySelectorAll('.dot');
-    
-    if (index >= totalSlides) slideIndex = 0;
-    if (index < 0) slideIndex = totalSlides - 1;
-    
     track.style.transform = `translateX(-${slideIndex * 100}%)`;
-    
-    dots.forEach(dot => dot.classList.remove('active'));
-    dots[slideIndex].classList.add('active');
+    dots.forEach((dot, idx) => {
+        if (idx === slideIndex) dot.classList.add('active');
+        else dot.classList.remove('active');
+    });
 }
 
 function currentSlide(index) {
     slideIndex = index;
-    showSlide(slideIndex);
+    updateSlidePosition();
+    resetSlideInterval();
 }
 
-setInterval(() => {
-    slideIndex++;
-    showSlide(slideIndex);
-}, 5000);
-
-/* --- CONTROLE DE ZOOM DA IMAGEM DO PRODUTO --- */
-function openZoomModal(imageSrc) {
-    const modal = document.getElementById('image-zoom-modal');
-    const imgEl = document.getElementById('zoomed-image-element');
-    imgEl.src = imageSrc;
-    modal.style.display = 'flex';
+function startSlideInterval() {
+    slideInterval = setInterval(() => {
+        if (slidesDatabase.length > 0) {
+            slideIndex = (slideIndex + 1) % slidesDatabase.length;
+            updateSlidePosition();
+        }
+    }, 5000);
 }
 
-function closeZoomModal() {
-    document.getElementById('image-zoom-modal').style.display = 'none';
+function resetSlideInterval() {
+    clearInterval(slideInterval);
+    startSlideInterval();
 }
 
 /* --- BASE DE DADOS COMPLETA DE PRODUTOS PROFISSIONAIS --- */
@@ -514,6 +593,18 @@ function filterCategory(category, btnElement) {
     renderProducts(category);
 }
 
+/* --- CONTROLE DE ZOOM DA IMAGEM --- */
+function openZoomModal(imageSrc) {
+    const modal = document.getElementById('image-zoom-modal');
+    const imgEl = document.getElementById('zoomed-image-element');
+    imgEl.src = imageSrc;
+    modal.style.display = 'flex';
+}
+
+function closeZoomModal() {
+    document.getElementById('image-zoom-modal').style.display = 'none';
+}
+
 /* --- GERENCIAMENTO DO CARRINHO --- */
 function addToCart(productId) {
     if (cart[productId]) {
@@ -615,6 +706,7 @@ function verifyAdminLogin() {
         document.getElementById('admin-login-screen').style.display = 'none';
         document.getElementById('admin-dashboard-screen').style.display = 'flex';
         renderAdminProductsList();
+        renderAdminSlidesList();
     } else {
         alert('Senha incorreta! Use: admin123');
     }
@@ -626,6 +718,58 @@ function logoutAdmin() {
     document.getElementById('admin-login-screen').style.display = 'flex';
 }
 
+function switchAdminTab(tabName) {
+    const prodTab = document.getElementById('admin-tab-products');
+    const slideTab = document.getElementById('admin-tab-slides');
+    const btnProd = document.getElementById('tab-btn-products');
+    const btnSlide = document.getElementById('tab-btn-slides');
+
+    if (tabName === 'products') {
+        prodTab.style.display = 'flex';
+        slideTab.style.display = 'none';
+        btnProd.classList.add('active');
+        btnSlide.classList.remove('active');
+    } else {
+        prodTab.style.display = 'none';
+        slideTab.style.display = 'flex';
+        btnProd.classList.remove('active');
+        btnSlide.classList.add('active');
+    }
+}
+
+/* --- CONVERSÃO DE ARQUIVO LOCAL (GALERIA) PARA BASE64 --- */
+function convertFileToBase64(fileInput, callback) {
+    const file = fileInput.files[0];
+    if (file) {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            callback(e.target.result, file.name);
+        };
+        reader.readAsDataURL(file);
+    } else {
+        callback(null, null);
+    }
+}
+
+function previewProductImage(event) {
+    const fileNameSpan = document.getElementById('new-p-file-name');
+    if (event.target.files.length > 0) {
+        fileNameSpan.innerText = event.target.files[0].name;
+    } else {
+        fileNameSpan.innerText = 'Nenhum arquivo escolhido';
+    }
+}
+
+function previewSlideImage(event) {
+    const fileNameSpan = document.getElementById('new-s-file-name');
+    if (event.target.files.length > 0) {
+        fileNameSpan.innerText = event.target.files[0].name;
+    } else {
+        fileNameSpan.innerText = 'Nenhum arquivo escolhido';
+    }
+}
+
+/* --- GESTÃO DE PRODUTOS NO ADMIN --- */
 function renderAdminProductsList() {
     const list = document.getElementById('admin-products-list');
     list.innerHTML = '';
@@ -634,7 +778,7 @@ function renderAdminProductsList() {
         const row = document.createElement('div');
         row.className = 'admin-product-row';
         row.innerHTML = `
-            <span><b>${p.name}</b> (${p.category}) - R$ ${p.price.toFixed(2)}</span>
+            <span style="overflow:hidden; text-overflow:ellipsis; white-space:nowrap; max-width:280px;"><b>${p.name}</b> - R$ ${p.price.toFixed(2)}</span>
             <button class="btn-delete-prod" onclick="deleteProduct(${p.id})">Excluir</button>
         `;
         list.appendChild(row);
@@ -646,13 +790,26 @@ function addNewProduct() {
     const category = document.getElementById('new-p-cat').value;
     const specs = document.getElementById('new-p-specs').value;
     const price = parseFloat(document.getElementById('new-p-price').value);
-    const image = document.getElementById('new-p-image').value;
-    
-    if (!name || !price || !image) {
-        alert('Preencha os campos obrigatórios (Nome, Preço e Imagem)!');
+    const textUrl = document.getElementById('new-p-image').value.trim();
+    const fileInput = document.getElementById('new-p-file');
+
+    if (!name || !price) {
+        alert('Preencha pelo menos o Nome e o Preço do produto!');
         return;
     }
-    
+
+    if (fileInput.files.length > 0) {
+        convertFileToBase64(fileInput, (base64Img) => {
+            saveProductFinal(name, category, specs, price, base64Img);
+        });
+    } else if (textUrl) {
+        saveProductFinal(name, category, specs, price, textUrl);
+    } else {
+        alert('Selecione uma foto da galeria ou insira uma URL de imagem!');
+    }
+}
+
+function saveProductFinal(name, category, specs, price, imageUrl) {
     const newId = productsDatabase.length > 0 ? Math.max(...productsDatabase.map(p => p.id)) + 1 : 1;
     
     productsDatabase.push({
@@ -662,7 +819,7 @@ function addNewProduct() {
         specs: specs || 'Uso Profissional',
         price: price,
         tag: 'Novo',
-        image: image
+        image: imageUrl
     });
     
     // Limpar campos
@@ -670,6 +827,8 @@ function addNewProduct() {
     document.getElementById('new-p-specs').value = '';
     document.getElementById('new-p-price').value = '';
     document.getElementById('new-p-image').value = '';
+    document.getElementById('new-p-file').value = '';
+    document.getElementById('new-p-file-name').innerText = 'Nenhum arquivo escolhido';
     
     renderProducts(currentCategory);
     renderAdminProductsList();
@@ -686,7 +845,147 @@ function deleteProduct(id) {
     }
 }
 
+/* --- GESTÃO DE SLIDES NO ADMIN --- */
+function renderAdminSlidesList() {
+    const list = document.getElementById('admin-slides-list');
+    list.innerHTML = '';
+
+    slidesDatabase.forEach((slide, idx) => {
+        const card = document.createElement('div');
+        card.className = 'admin-slide-card';
+        card.innerHTML = `
+            <div style="display:flex; justify-content:space-between; align-items:center;">
+                <span style="font-size:11px; color:var(--gold-light); font-weight:900;">Slide ${idx + 1}</span>
+                <button class="btn-delete-prod" onclick="deleteSlide(${slide.id})">Excluir Slide</button>
+            </div>
+            <div class="admin-form-group">
+                <label>Título</label>
+                <input type="text" id="slide-title-${slide.id}" value="${slide.title}">
+            </div>
+            <div class="admin-form-group">
+                <label>Subtítulo</label>
+                <input type="text" id="slide-desc-${slide.id}" value="${slide.description}">
+            </div>
+            <div class="admin-form-group">
+                <label>Slogan</label>
+                <input type="text" id="slide-slogan-${slide.id}" value="${slide.slogan}">
+            </div>
+            <div class="admin-form-group">
+                <label>Alterar Imagem do Slide (Galeria ou URL)</label>
+                <div class="file-input-wrapper">
+                    <label class="btn-file-custom" for="slide-file-${slide.id}">📁 Escolher da Galeria</label>
+                    <input type="file" id="slide-file-${slide.id}" accept="image/*" onchange="updateSlideFileLabel(${slide.id})">
+                    <span id="slide-file-name-${slide.id}" style="font-size:11px; color:var(--text-muted);">Manter atual</span>
+                </div>
+                <input type="text" id="slide-img-${slide.id}" value="${slide.image}" placeholder="URL da imagem" style="margin-top:4px;">
+            </div>
+            <button class="admin-btn" style="padding:8px; font-size:11px; margin-top:4px;" onclick="saveSlideChanges(${slide.id})">Salvar Alterações do Slide</button>
+        `;
+        list.appendChild(card);
+    });
+}
+
+function updateSlideFileLabel(id) {
+    const fileInput = document.getElementById(`slide-file-${id}`);
+    const nameSpan = document.getElementById(`slide-file-name-${id}`);
+    if (fileInput.files.length > 0) {
+        nameSpan.innerText = fileInput.files[0].name;
+    } else {
+        nameSpan.innerText = 'Manter atual';
+    }
+}
+
+function addNewSlide() {
+    const title = document.getElementById('new-s-title').value;
+    const desc = document.getElementById('new-s-desc').value;
+    const slogan = document.getElementById('new-s-slogan').value;
+    const textUrl = document.getElementById('new-s-image').value.trim();
+    const fileInput = document.getElementById('new-s-file');
+
+    if (!title) {
+        alert('Preencha pelo menos o Título do slide!');
+        return;
+    }
+
+    if (fileInput.files.length > 0) {
+        convertFileToBase64(fileInput, (base64Img) => {
+            saveSlideFinal(title, desc, slogan, base64Img);
+        });
+    } else if (textUrl) {
+        saveSlideFinal(title, desc, slogan, textUrl);
+    } else {
+        alert('Selecione uma foto da galeria ou insira uma URL para o slide!');
+    }
+}
+
+function saveSlideFinal(title, desc, slogan, imageUrl) {
+    const newId = slidesDatabase.length > 0 ? Math.max(...slidesDatabase.map(s => s.id)) + 1 : 1;
+    
+    slidesDatabase.push({
+        id: newId,
+        title: title,
+        description: desc || '',
+        slogan: slogan || '',
+        image: imageUrl || 'https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?w=1200&auto=format&fit=crop&q=80'
+    });
+
+    // Limpar campos
+    document.getElementById('new-s-title').value = '';
+    document.getElementById('new-s-desc').value = '';
+    document.getElementById('new-s-slogan').value = '';
+    document.getElementById('new-s-image').value = '';
+    document.getElementById('new-s-file').value = '';
+    document.getElementById('new-s-file-name').innerText = 'Nenhum arquivo escolhido';
+
+    renderSlider();
+    renderAdminSlidesList();
+    alert('Slide adicionado com sucesso!');
+}
+
+function saveSlideChanges(id) {
+    const slide = slidesDatabase.find(s => s.id === id);
+    if (!slide) return;
+
+    const newTitle = document.getElementById(`slide-title-${id}`).value;
+    const newDesc = document.getElementById(`slide-desc-${id}`).value;
+    const newSlogan = document.getElementById(`slide-slogan-${id}`).value;
+    const textUrl = document.getElementById(`slide-img-${id}`).value.trim();
+    const fileInput = document.getElementById(`slide-file-${id}`);
+
+    slide.title = newTitle;
+    slide.description = newDesc;
+    slide.slogan = newSlogan;
+
+    if (fileInput.files.length > 0) {
+        convertFileToBase64(fileInput, (base64Img) => {
+            slide.image = base64Img;
+            renderSlider();
+            renderAdminSlidesList();
+            alert('Slide atualizado com sucesso!');
+        });
+    } else {
+        if (textUrl) slide.image = textUrl;
+        renderSlider();
+        renderAdminSlidesList();
+        alert('Slide atualizado com sucesso!');
+    }
+}
+
+function deleteSlide(id) {
+    if (slidesDatabase.length <= 1) {
+        alert('O carrossel precisa ter pelo menos um slide ativo.');
+        return;
+    }
+    if (confirm('Tem certeza que deseja excluir este slide?')) {
+        slidesDatabase = slidesDatabase.filter(s => s.id !== id);
+        renderSlider();
+        renderAdminSlidesList();
+    }
+}
+
 window.onload = () => {
+    renderSlider();
+    startSlideInterval();
     renderProducts('todos');
 };
 </script>

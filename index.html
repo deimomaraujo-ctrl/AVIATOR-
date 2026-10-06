@@ -103,52 +103,12 @@
         .item-info {
             font-size: 14px;
         }
-
-        #painelConteudo {
-            display: none; /* Oculto até autenticar */
-        }
-
-        .login-box {
-            max-width: 400px;
-            margin: 100px auto;
-            background-color: var(--card-bg);
-            padding: 30px;
-            border-radius: 10px;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.5);
-            text-align: center;
-        }
     </style>
 </head>
 <body>
 
-<!-- TELA DE LOGIN / SEGURANÇA DO ADMINISTRADOR -->
-<div id="telaLogin" class="login-box">
-    <h2>🔒 Área Restrita</h2>
-    <p style="font-size: 14px; color: var(--text-muted);">Digite a senha de administrador para acessar o painel.</p>
-    <div class="form-group" style="text-align: left;">
-        <label>SENHA DE ADMINISTRADOR</label>
-        <input type="password" id="senhaInput" placeholder="Digite sua senha">
-    </div>
-    <button style="width: 100%; margin-bottom: 10px;" onclick="fazerLogin()">ENTRAR NO PAINEL</button>
-    <button class="btn-danger" style="width: 100%; background-color: #333; color: var(--accent-color);" onclick="esqueciSenha()">Esqueci minha senha</button>
-</div>
-
-<!-- PAINEL DO ADMINISTRADOR (PROTEGIDO) -->
-<div class="container" id="painelConteudo">
-    <div style="display: flex; justify-content: space-between; align-items: center;">
-        <h1>PAINEL DO ADMINISTRADOR</h1>
-        <button class="btn-danger" onclick="sairPainel()">SAIR</button>
-    </div>
-
-    <!-- GERENCIAR SENHA E SEGURANÇA -->
-    <div class="admin-panel">
-        <h3>🔐 Segurança e Senha do Administrador</h3>
-        <div class="form-group">
-            <label>CADASTRAR OU ALTERAR SENHA</label>
-            <input type="password" id="novaSenhaAdmin" placeholder="Digite a nova senha desejada">
-        </div>
-        <button onclick="salvarSenhaAdmin()">SALVAR NOVA SENHA</button>
-    </div>
+<div class="container">
+    <h1>PAINEL DO ADMINISTRADOR</h1>
 
     <!-- GERENCIAR BANNER / SLIDE -->
     <div class="admin-panel">
@@ -166,7 +126,9 @@
         </div>
         <button onclick="adicionarBanner()">ADICIONAR IMAGEM AO BANNER</button>
 
-        <div class="item-list" id="listaBannerAdmin"></div>
+        <div class="item-list" id="listaBannerAdmin">
+            <!-- Banners cadastrados aparecem aqui -->
+        </div>
     </div>
 
     <!-- GERENCIAR PRODUTOS -->
@@ -195,19 +157,21 @@
         </div>
         <div class="form-group">
             <label>FOTO DO PRODUTO (GALERIA OU URL)</label>
-            <div class="file-input-wrapper" style="margin-bottom: 8px;">
+            <div class="file-input-wrapper mb-2" style="margin-bottom: 8px;">
                 <input type="file" id="prodFile" accept="image/*" onchange="converterImagemProduto(event)">
             </div>
             <input type="text" id="prodUrl" placeholder="https://exemplo.com/foto.jpg">
         </div>
         <button onclick="adicionarProduto()">SALVAR E PUBLICAR PRODUTO</button>
 
-        <div class="item-list" id="listaProdutosAdmin"></div>
+        <div class="item-list" id="listaProdutosAdmin">
+            <!-- Produtos cadastrados aparecem aqui -->
+        </div>
     </div>
 </div>
 
 <script>
-    // Dados iniciais e localStorage
+    // Carregar dados salvos ou criar listas vazias
     let produtos = JSON.parse(localStorage.getItem('admin_produtos')) || [
         { nome: "Kit Cronograma Capilar Completo Salão", categoria: "Hidratação", preco: 198.00 },
         { nome: "Óleo Reparador de Pontas Finalizador 60ml", categoria: "Finalizador", preco: 54.90 },
@@ -216,47 +180,6 @@
     ];
 
     let banners = JSON.parse(localStorage.getItem('admin_banners')) || [];
-    let senhaAdmin = localStorage.getItem('admin_senha') || "1234"; // Senha padrão inicial (pode ser alterada no painel)
-
-    // Sistema de Login
-    function fazerLogin() {
-        const digitada = document.getElementById('senhaInput').value;
-        if (digitada === senhaAdmin) {
-            document.getElementById('telaLogin').style.display = 'none';
-            document.getElementById('painelConteudo').style.display = 'block';
-            atualizarPainel();
-        } else {
-            alert('Senha incorreta!');
-        }
-    }
-
-    function sairPainel() {
-        document.getElementById('senhaInput').value = '';
-        document.getElementById('painelConteudo').style.display = 'none';
-        document.getElementById('telaLogin').style.display = 'block';
-    }
-
-    // Salvar nova senha
-    function salvarSenhaAdmin() {
-        const novaSenha = document.getElementById('novaSenhaAdmin').value;
-        if (!novaSenha) {
-            alert('Digite uma senha válida.');
-            return;
-        }
-        senhaAdmin = novaSenha;
-        localStorage.setItem('admin_senha', senhaAdmin);
-        document.getElementById('novaSenhaAdmin').value = '';
-        alert('Senha de administrador alterada com sucesso!');
-    }
-
-    // Restaurar / Enviar senha para o WhatsApp oculto (63 99287-4160)
-    function esqueciSenha() {
-        const numeroDestino = "5563992874160"; 
-        const mensagem = encodeURIComponent(`Olá! Estou solicitando a recuperação da senha do painel administrativo do site. Minha senha atual cadastrada é: ${senhaAdmin}`);
-        
-        const urlWhatsapp = `https://api.whatsapp.com/send?phone=${numeroDestino}&text=${mensagem}`;
-        window.open(urlWhatsapp, '_blank');
-    }
 
     // Converter imagem do Banner da Galeria para Base64
     function converterImagemBanner(event) {
@@ -318,6 +241,7 @@
         produtos.push({ nome, categoria, spec, preco, url });
         localStorage.setItem('admin_produtos', JSON.stringify(produtos));
 
+        // Limpar campos
         document.getElementById('prodNome').value = '';
         document.getElementById('prodSpec').value = '';
         document.getElementById('prodPreco').value = '';
@@ -335,6 +259,7 @@
 
     // Atualizar visualização na tela do Admin
     function atualizarPainel() {
+        // Renderizar Banners
         const listaBannersEl = document.getElementById('listaBannerAdmin');
         listaBannersEl.innerHTML = '';
         banners.forEach((b, index) => {
@@ -346,6 +271,7 @@
             `;
         });
 
+        // Renderizar Produtos
         const listaProdEl = document.getElementById('listaProdutosAdmin');
         listaProdEl.innerHTML = '';
         produtos.forEach((p, index) => {
@@ -357,6 +283,9 @@
             `;
         });
     }
+
+    // Executar ao carregar a página
+    atualizarPainel();
 </script>
 
 </body>

@@ -57,9 +57,8 @@ header { background: rgba(11, 11, 11, 0.95); backdrop-filter: blur(10px); border
 .dot { width: 8px; height: 8px; border-radius: 50%; background: rgba(255,255,255,0.4); cursor: pointer; transition: 0.3s; }
 .dot.active { background: var(--gold-primary); width: 22px; border-radius: 4px; }
 
-/* --- BOTÃO FLUTUANTE DO WHATSAPP (SÍMBOLO OFICIAL) --- */
-.whatsapp-float { position: fixed; bottom: 24px; right: 20px; background: #25d366; color: #fff; width: 58px; height: 58px; border-radius: 50%; display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 20px rgba(37, 211, 102, 0.45); z-index: 1500; text-decoration: none; transition: 0.3s; }
-.whatsapp-float svg { width: 34px; height: 34px; fill: #ffffff; }
+/* --- BOTÃO FLUTUANTE DO WHATSAPP --- */
+.whatsapp-float { position: fixed; bottom: 24px; right: 20px; background: #25d366; color: #fff; width: 56px; height: 56px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 28px; box-shadow: 0 4px 20px rgba(37, 211, 102, 0.4); z-index: 1500; text-decoration: none; transition: 0.3s; }
 .whatsapp-float:hover { transform: scale(1.1); background: #22bf5b; }
 
 /* --- FILTROS DE CATEGORIA --- */
@@ -77,11 +76,10 @@ header { background: rgba(11, 11, 11, 0.95); backdrop-filter: blur(10px); border
 
 .product-card { background: var(--bg-card); border: 1px solid var(--border); border-radius: 14px; overflow: hidden; display: flex; flex-direction: column; transition: 0.3s; position: relative; }
 .product-card:hover { transform: translateY(-3px); border-color: var(--gold-primary); box-shadow: 0 10px 30px rgba(0,0,0,0.7); }
-.product-image-box { width: 100%; height: 180px; background: #1a1a1a; position: relative; display: flex; align-items: center; justify-content: center; overflow: hidden; cursor: pointer; }
+.product-image-box { width: 100%; height: 170px; background: #1a1a1a; position: relative; display: flex; align-items: center; justify-content: center; overflow: hidden; }
 .product-image-box img { width: 100%; height: 100%; object-fit: cover; transition: 0.3s; }
-.product-card:hover .product-image-box img { transform: scale(1.06); }
-.zoom-indicator { position: absolute; bottom: 8px; right: 8px; background: rgba(0,0,0,0.7); border: 1px solid rgba(255,255,255,0.2); color: #fff; font-size: 9px; padding: 3px 6px; border-radius: 4px; font-weight: bold; pointer-events: none; opacity: 0.8; }
-.product-tag { position: absolute; top: 10px; left: 10px; background: rgba(11,11,11,0.85); backdrop-filter: blur(4px); color: var(--gold-light); font-size: 9px; font-weight: 900; padding: 3px 8px; border-radius: 6px; border: 1px solid rgba(212,175,55,0.4); text-transform: uppercase; z-index: 2; }
+.product-card:hover .product-image-box img { transform: scale(1.05); }
+.product-tag { position: absolute; top: 10px; left: 10px; background: rgba(11,11,11,0.85); backdrop-filter: blur(4px); color: var(--gold-light); font-size: 9px; font-weight: 900; padding: 3px 8px; border-radius: 6px; border: 1px solid rgba(212,175,55,0.4); text-transform: uppercase; }
 
 .product-content { padding: 14px; display: flex; flex-direction: column; flex: 1; justify-content: space-between; gap: 10px; }
 .product-category-mini { font-size: 10px; color: var(--gold-primary); font-weight: 800; text-transform: uppercase; letter-spacing: 0.5px; }
@@ -92,15 +90,7 @@ header { background: rgba(11, 11, 11, 0.95); backdrop-filter: blur(10px); border
 .btn-add-cart { background: var(--gold-primary); color: #0b0b0b; border: none; padding: 8px 12px; border-radius: 8px; font-size: 11px; font-weight: 900; cursor: pointer; transition: 0.2s; display: flex; align-items: center; gap: 4px; box-shadow: 0 4px 12px rgba(212,175,55,0.2); }
 .btn-add-cart:hover { background: var(--gold-light); }
 
-/* --- MODAL LIGHTBOX PARA AMPLIAR IMAGEM --- */
-.lightbox-overlay { position: fixed; inset: 0; background: rgba(0, 0, 0, 0.92); z-index: 3000; display: none; align-items: center; justify-content: center; padding: 20px; backdrop-filter: blur(10px); }
-.lightbox-content { position: relative; max-width: 90vw; max-height: 90vh; display: flex; flex-direction: column; align-items: center; }
-.lightbox-content img { max-width: 100%; max-height: 75vh; object-fit: contain; border-radius: 12px; border: 1px solid var(--border); box-shadow: 0 10px 40px rgba(0,0,0,0.8); }
-.lightbox-title { color: var(--gold-light); font-size: 14px; font-weight: 900; margin-top: 14px; text-align: center; text-transform: uppercase; letter-spacing: 0.5px; }
-.lightbox-close { position: absolute; top: -45px; right: 0; background: #222; color: #fff; border: 1px solid var(--border); width: 36px; height: 36px; border-radius: 50%; font-size: 20px; font-weight: bold; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: 0.2s; }
-.lightbox-close:hover { background: var(--gold-primary); color: #0b0b0b; }
-
-/* --- MODAIS GERAIS (CARRINHO E ADMIN) --- */
+/* --- MODAIS (CARRINHO E ADMIN) --- */
 .modal-overlay { position: fixed; inset: 0; background: rgba(11, 11, 11, 0.88); backdrop-filter: blur(8px); z-index: 2000; display: none; align-items: flex-end; justify-content: center; }
 @media (min-width: 640px) { .modal-overlay { align-items: center; } }
 .modal-card { background: var(--bg-card); border: 1px solid var(--border); border-top-left-radius: 24px; border-top-right-radius: 24px; width: 100%; max-width: 550px; max-height: 90vh; display: flex; flex-direction: column; box-shadow: 0 -20px 40px rgba(0,0,0,0.9); animation: slideUp 0.3s ease; }
@@ -113,7 +103,7 @@ header { background: rgba(11, 11, 11, 0.95); backdrop-filter: blur(10px); border
 
 .modal-body { padding: 20px; overflow-y: auto; display: flex; flex-direction: column; gap: 14px; max-height: 60vh; }
 
-/* Painel Admin */
+/* Estilos específicos do Painel Admin */
 .admin-form-group { display: flex; flex-direction: column; gap: 6px; }
 .admin-form-group label { font-size: 11px; font-weight: 800; color: var(--gold-light); text-transform: uppercase; }
 .admin-form-group input, .admin-form-group select { background: var(--bg-input); border: 1px solid var(--border); border-radius: 8px; padding: 10px; color: #fff; font-size: 12px; }
@@ -134,7 +124,6 @@ header { background: rgba(11, 11, 11, 0.95); backdrop-filter: blur(10px); border
 .cart-total-row { display: flex; justify-content: space-between; font-size: 14px; font-weight: 900; margin-bottom: 14px; color: var(--text-muted); }
 .cart-total-row span:last-child { color: var(--gold-light); font-size: 18px; }
 .btn-checkout-whatsapp { width: 100%; padding: 14px; background: linear-gradient(90deg, #25d366, #1ebe5d); border: none; border-radius: 12px; color: #fff; font-size: 13px; font-weight: 900; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; box-shadow: 0 6px 20px rgba(37,211,102,0.3); transition: 0.2s; text-transform: uppercase; letter-spacing: 0.5px; }
-.btn-checkout-whatsapp svg { width: 20px; height: 20px; fill: #fff; }
 .btn-checkout-whatsapp:hover { transform: translateY(-2px); filter: brightness(1.1); }
 
 /* --- RODAPÉ INSTITUCIONAL --- */
@@ -145,9 +134,9 @@ footer .brand-sign { font-weight: 900; color: var(--gold-light); letter-spacing:
 </head>
 <body>
 
-<!-- BOTÃO FLUTUANTE DO WHATSAPP (COM SÍMBOLO OFICIAL E SAUDAÇÃO DINÂMICA) -->
-<a href="javascript:void(0);" onclick="openDynamicWhatsApp()" class="whatsapp-float" title="Falar com o Vendedor no WhatsApp">
-    <svg viewBox="0 0 24 24"><path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.893 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884-.001 2.225.651 3.891 1.746 5.634l-.999 3.648 3.742-.981zm11.387-5.464c-.074-.124-.272-.198-.57-.347-.297-.149-1.758-.868-2.031-.967-.272-.099-.47-.149-.669.149-.198.297-.768.967-.941 1.165-.173.198-.347.223-.644.074-.297-.149-1.255-.462-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.297-.347.446-.521.151-.172.2-.296.3-.495.099-.198.05-.372-.025-.521-.075-.148-.669-1.611-.916-2.206-.242-.579-.487-.501-.669-.51l-.57-.01c-.198 0-.52.074-.792.372s-1.04 1.016-1.04 2.479 1.065 2.876 1.213 3.074c.149.198 2.095 3.2 5.076 4.487.709.306 1.263.489 1.694.626.712.226 1.36.194 1.872.118.571-.085 1.758-.719 2.006-1.413.248-.695.248-1.29.173-1.414z"/></svg>
+<!-- BOTÃO FLUTUANTE DO WHATSAPP -->
+<a href="https://wa.me/5563992204543?text=Olá!%20Gostaria%20de%20falar%20com%20o%20vendedor%20da%20JR%20Cosméticos." class="whatsapp-float" target="_blank" title="Falar com o Vendedor">
+    💬
 </a>
 
 <!-- BARRA SUPERIOR DE AVISO -->
@@ -172,9 +161,10 @@ footer .brand-sign { font-weight: 900; color: var(--gold-light); letter-spacing:
     </div>
 </header>
 
-<!-- CARROSSEL PROFISSIONAL DE DESTAQUE -->
+<!-- CARROSSEL PROFISSIONAL DE DESTAQUE (SLIDER COM TRANSIÇÃO & CABELO AFRO ANTES/DEPOIS) -->
 <div class="hero-slider">
     <div class="slide-track" id="slide-track">
+        <!-- Slide 1: Cabelo Afro Antes e Depois da Selagem Progressiva -->
         <div class="slide-item">
             <img src="https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?w=1200&auto=format&fit=crop&q=80" alt="Transformação Cabelo Afro para Liso Perfeito">
             <div class="slide-overlay"></div>
@@ -184,6 +174,7 @@ footer .brand-sign { font-weight: 900; color: var(--gold-light); letter-spacing:
                 <div class="slide-slogan">Realce sua beleza, revele sua essência.</div>
             </div>
         </div>
+        <!-- Slide 2: Cabelo Liso Extremo e Brilhoso -->
         <div class="slide-item">
             <img src="https://images.unsplash.com/photo-1560869713-7d0a29430803?w=1200&auto=format&fit=crop&q=80" alt="Cabelo Liso Profissional">
             <div class="slide-overlay"></div>
@@ -193,6 +184,7 @@ footer .brand-sign { font-weight: 900; color: var(--gold-light); letter-spacing:
                 <div class="slide-slogan">Brilho espelhado e toque sedoso.</div>
             </div>
         </div>
+        <!-- Slide 3: Profissionalismo e Alta Performance -->
         <div class="slide-item">
             <img src="https://images.unsplash.com/photo-1519699047748-de8e457a634e?w=1200&auto=format&fit=crop&q=80" alt="Salão de Beleza Profissional">
             <div class="slide-overlay"></div>
@@ -203,6 +195,7 @@ footer .brand-sign { font-weight: 900; color: var(--gold-light); letter-spacing:
             </div>
         </div>
     </div>
+    <!-- Bolinhas indicadoras -->
     <div class="slide-dots" id="slide-dots">
         <span class="dot active" onclick="currentSlide(0)"></span>
         <span class="dot" onclick="currentSlide(1)"></span>
@@ -210,7 +203,7 @@ footer .brand-sign { font-weight: 900; color: var(--gold-light); letter-spacing:
     </div>
 </div>
 
-<!-- FILTROS DE CATEGORIA -->
+<!-- FILTROS DE CATEGORIA (ATUALIZADOS) -->
 <div class="categories-bar" id="category-filter-bar">
     <button class="cat-chip active" onclick="filterCategory('todos', this)">Todos os Produtos</button>
     <button class="cat-chip" onclick="filterCategory('Selagem Progressiva', this)">Selagem Progressiva</button>
@@ -228,15 +221,6 @@ footer .brand-sign { font-weight: 900; color: var(--gold-light); letter-spacing:
     </div>
     <div class="products-grid" id="products-grid">
         <!-- Inserido dinamicamente via JS -->
-    </div>
-</div>
-
-<!-- LIGHTBOX PARA AMPLIAR FOTO DO PRODUTO -->
-<div class="lightbox-overlay" id="lightbox-modal" onclick="closeLightbox()">
-    <div class="lightbox-content" onclick="event.stopPropagation()">
-        <button class="lightbox-close" onclick="closeLightbox()">&times;</button>
-        <img id="lightbox-img" src="" alt="Ampliar Imagem">
-        <div class="lightbox-title" id="lightbox-title"></div>
     </div>
 </div>
 
@@ -258,14 +242,13 @@ footer .brand-sign { font-weight: 900; color: var(--gold-light); letter-spacing:
                 <span id="cart-total-value">R$ 0,00</span>
             </div>
             <button class="btn-checkout-whatsapp" onclick="finalizeOrderWhatsApp()">
-                <svg viewBox="0 0 24 24"><path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.893 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884-.001 2.225.651 3.891 1.746 5.634l-.999 3.648 3.742-.981zm11.387-5.464c-.074-.124-.272-.198-.57-.347-.297-.149-1.758-.868-2.031-.967-.272-.099-.47-.149-.669.149-.198.297-.768.967-.941 1.165-.173.198-.347.223-.644.074-.297-.149-1.255-.462-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.297-.347.446-.521.151-.172.2-.296.3-.495.099-.198.05-.372-.025-.521-.075-.148-.669-1.611-.916-2.206-.242-.579-.487-.501-.669-.51l-.57-.01c-.198 0-.52.074-.792.372s-1.04 1.016-1.04 2.479 1.065 2.876 1.213 3.074c.149.198 2.095 3.2 5.076 4.487.709.306 1.263.489 1.694.626.712.226 1.36.194 1.872.118.571-.085 1.758-.719 2.006-1.413.248-.695.248-1.29.173-1.414z"/></svg>
-                Enviar Pedido via WhatsApp
+                💬 Enviar Pedido via WhatsApp
             </button>
         </div>
     </div>
 </div>
 
-<!-- MODAL DO PAINEL ADMINISTRADOR -->
+<!-- MODAL DO PAINEL ADMINISTRADOR / DESENVOLVEDOR -->
 <div class="modal-overlay" id="admin-modal">
     <div class="modal-card" style="max-width: 600px;">
         <div class="modal-header">
@@ -273,6 +256,7 @@ footer .brand-sign { font-weight: 900; color: var(--gold-light); letter-spacing:
             <button class="modal-close-btn" onclick="closeAdminModal()">&times;</button>
         </div>
         <div class="modal-body" id="admin-modal-content">
+            <!-- Tela de Login do Admin -->
             <div id="admin-login-screen" style="display:flex; flex-direction:column; gap:14px; padding: 10px 0;">
                 <p style="font-size:12px; color:var(--text-muted);">Área restrita para gerenciamento do catálogo e fotos do site.</p>
                 <div class="admin-form-group">
@@ -282,12 +266,14 @@ footer .brand-sign { font-weight: 900; color: var(--gold-light); letter-spacing:
                 <button class="admin-btn" onclick="verifyAdminLogin()">Entrar no Painel</button>
             </div>
 
+            <!-- Tela de Gestão do Admin (Oculta até logar) -->
             <div id="admin-dashboard-screen" style="display:none; flex-direction:column; gap:18px;">
                 <div style="display:flex; justify-content:space-between; align-items:center;">
                     <span style="font-size:12px; color:var(--gold-light); font-weight:800;">✨ Gerenciar Produtos</span>
                     <button class="admin-btn" style="padding:6px 12px; font-size:10px;" onclick="logoutAdmin()">Sair</button>
                 </div>
                 
+                <!-- Formulário para Adicionar Novo Produto -->
                 <div style="background:var(--bg-input); padding:14px; border-radius:12px; border:1px solid var(--border); display:flex; flex-direction:column; gap:10px;">
                     <h4 style="font-size:12px; color:#fff; font-weight:900;">Adicionar Novo Produto</h4>
                     <div class="admin-form-group">
@@ -319,9 +305,11 @@ footer .brand-sign { font-weight: 900; color: var(--gold-light); letter-spacing:
                     <button class="admin-btn" onclick="addNewProduct()">Salvar e Publicar Produto</button>
                 </div>
 
+                <!-- Lista de Produtos Existentes para Gerenciar/Excluir -->
                 <div style="display:flex; flex-direction:column; gap:8px;">
                     <h4 style="font-size:12px; color:#fff; font-weight:900;">Produtos Cadastrados</h4>
                     <div id="admin-products-list" style="display:flex; flex-direction:column; gap:8px; max-height:220px; overflow-y:auto;">
+                        <!-- Gerado via JS -->
                     </div>
                 </div>
             </div>
@@ -337,21 +325,6 @@ footer .brand-sign { font-weight: 900; color: var(--gold-light); letter-spacing:
 </footer>
 
 <script>
-/* --- SAUDAÇÃO DINÂMICA WHATSAPP --- */
-function openDynamicWhatsApp() {
-    const hora = new Date().getHours();
-    let saudacao = "Bom dia";
-    if (hora >= 12 && hora < 18) {
-        saudacao = "Boa tarde";
-    } else if (hora >= 18 || hora < 5) {
-        saudacao = "Boa noite";
-    }
-
-    const mensagem = `${saudacao}! 👋 Gostaria de obter mais informações sobre os produtos profissionais da JR Cosméticos e verificar valores e disponibilidade para salão.`;
-    const phoneNumber = "5563992204543";
-    window.open(`https://wa.me/${phoneNumber}?text=${encodeURIComponent(mensagem)}`, '_blank');
-}
-
 /* --- CONTROLE DO CARROSSEL DE FOTOS --- */
 let slideIndex = 0;
 const totalSlides = 3;
@@ -364,6 +337,7 @@ function showSlide(index) {
     if (index < 0) slideIndex = totalSlides - 1;
     
     track.style.transform = `translateX(-${slideIndex * 100}%)`;
+    
     dots.forEach(dot => dot.classList.remove('active'));
     dots[slideIndex].classList.add('active');
 }
@@ -387,7 +361,7 @@ let productsDatabase = [
         specs: "Frasco 1 Litro • Zero Formol",
         price: 159.90,
         tag: "Mais Vendido",
-        image: "https://images.unsplash.com/photo-1608248597359-97424e8838d7?w=800&auto=format&fit=crop&q=80"
+        image: "https://images.unsplash.com/photo-1608248597359-97424e8838d7?w=500&auto=format&fit=crop&q=60"
     },
     {
         id: 2,
@@ -396,7 +370,7 @@ let productsDatabase = [
         specs: "Pote 1Kg • Alta Nutrição",
         price: 110.00,
         tag: "Essencial",
-        image: "https://images.unsplash.com/photo-1526947425960-945c6e72858f?w=800&auto=format&fit=crop&q=80"
+        image: "https://images.unsplash.com/photo-1526947425960-945c6e72858f?w=500&auto=format&fit=crop&q=60"
     },
     {
         id: 3,
@@ -405,7 +379,7 @@ let productsDatabase = [
         specs: "Pote 500g • Abertura Rápida",
         price: 89.90,
         tag: "Destaque",
-        image: "https://images.unsplash.com/photo-1608248597359-97424e8838d7?w=800&auto=format&fit=crop&q=80"
+        image: "https://images.unsplash.com/photo-1608248597359-97424e8838d7?w=500&auto=format&fit=crop&q=60"
     },
     {
         id: 4,
@@ -414,7 +388,7 @@ let productsDatabase = [
         specs: "Frasco 900ml • Estabilizada",
         price: 45.00,
         tag: "Salão",
-        image: "https://images.unsplash.com/photo-1535585209827-a15fcdbc4c2d?w=800&auto=format&fit=crop&q=80"
+        image: "https://images.unsplash.com/photo-1535585209827-a15fcdbc4c2d?w=500&auto=format&fit=crop&q=60"
     },
     {
         id: 5,
@@ -423,7 +397,7 @@ let productsDatabase = [
         specs: "3 Potes 500g cada",
         price: 198.00,
         tag: "Combo",
-        image: "https://images.unsplash.com/photo-1526947425960-945c6e72858f?w=800&auto=format&fit=crop&q=80"
+        image: "https://images.unsplash.com/photo-1526947425960-945c6e72858f?w=500&auto=format&fit=crop&q=60"
     },
     {
         id: 6,
@@ -432,7 +406,7 @@ let productsDatabase = [
         specs: "Frasco 60ml • Brilho Extremo",
         price: 54.90,
         tag: "Essencial",
-        image: "https://images.unsplash.com/photo-1608248597359-97424e8838d7?w=800&auto=format&fit=crop&q=80"
+        image: "https://images.unsplash.com/photo-1608248597359-97424e8838d7?w=500&auto=format&fit=crop&q=60"
     },
     {
         id: 7,
@@ -441,7 +415,7 @@ let productsDatabase = [
         specs: "Bisnaga 60g • Cobertura Total",
         price: 32.50,
         tag: "Novo",
-        image: "https://images.unsplash.com/photo-1535585209827-a15fcdbc4c2d?w=800&auto=format&fit=crop&q=80"
+        image: "https://images.unsplash.com/photo-1535585209827-a15fcdbc4c2d?w=500&auto=format&fit=crop&q=60"
     },
     {
         id: 8,
@@ -450,7 +424,7 @@ let productsDatabase = [
         specs: "Frasco 1 Litro • Efeito Espelhado",
         price: 179.00,
         tag: "Profissional",
-        image: "https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?w=800&auto=format&fit=crop&q=80"
+        image: "https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?w=500&auto=format&fit=crop&q=60"
     }
 ];
 
@@ -472,10 +446,9 @@ function renderProducts(category = 'todos') {
         const card = document.createElement('div');
         card.className = 'product-card';
         card.innerHTML = `
-            <div class="product-image-box" onclick="openLightbox('${p.image}', '${p.name.replace(/'/g, "\\'")}')" title="Clique para ampliar a foto">
+            <div class="product-image-box">
                 <span class="product-tag">${p.tag}</span>
                 <img src="${p.image}" alt="${p.name}" loading="lazy">
-                <div class="zoom-indicator">🔍 Ampliar</div>
             </div>
             <div class="product-content">
                 <div>
@@ -500,17 +473,6 @@ function filterCategory(category, btnElement) {
     document.querySelectorAll('.cat-chip').forEach(c => c.classList.remove('active'));
     btnElement.classList.add('active');
     renderProducts(category);
-}
-
-/* --- FUNÇÕES DO LIGHTBOX (AMPLIAR FOTO) --- */
-function openLightbox(imgSrc, imgTitle) {
-    document.getElementById('lightbox-img').src = imgSrc;
-    document.getElementById('lightbox-title').innerText = imgTitle;
-    document.getElementById('lightbox-modal').style.display = 'flex';
-}
-
-function closeLightbox() {
-    document.getElementById('lightbox-modal').style.display = 'none';
 }
 
 /* --- GERENCIAMENTO DO CARRINHO --- */
@@ -578,7 +540,7 @@ function updateCartUI() {
 function openCartModal() { document.getElementById('cart-modal').style.display = 'flex'; }
 function closeCartModal() { document.getElementById('cart-modal').style.display = 'none'; }
 
-/* --- FINALIZAÇÃO VIA WHATSAPP (COM SAUDAÇÃO HORÁRIA) --- */
+/* --- FINALIZAÇÃO VIA WHATSAPP --- */
 function finalizeOrderWhatsApp() {
     const keys = Object.keys(cart);
     if (keys.length === 0) {
@@ -586,15 +548,7 @@ function finalizeOrderWhatsApp() {
         return;
     }
     
-    const hora = new Date().getHours();
-    let saudacao = "Bom dia";
-    if (hora >= 12 && hora < 18) {
-        saudacao = "Boa tarde";
-    } else if (hora >= 18 || hora < 5) {
-        saudacao = "Boa noite";
-    }
-
-    let message = `${saudacao}! 👋 Gostaria de fechar o seguinte pedido na *JR Cosméticos*:\n\n`;
+    let message = "Olá! 👋 Gostaria de fechar o seguinte pedido na *JR Cosméticos*:\n\n";
     let totalSum = 0;
     
     keys.forEach(id => {
@@ -607,15 +561,18 @@ function finalizeOrderWhatsApp() {
     message += `\n*Total do Pedido: R$ ${totalSum.toFixed(2).replace('.', ',')}*\n\nAguardo orientações sobre pagamento e entrega para o salão.`;
     
     const phoneNumber = "5563992204543"; 
-    window.open(`https://wa.me/${phoneNumber}?text=${encodeURIComponent(message)}`, '_blank');
+    const encodedURL = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(message)}`;
+    
+    window.open(encodedURL, '_blank');
 }
 
-/* --- PAINEL ADMINISTRADOR --- */
+/* --- PAINEL ADMINISTRADOR / DESENVOLVEDOR --- */
 function openAdminModal() { document.getElementById('admin-modal').style.display = 'flex'; }
 function closeAdminModal() { document.getElementById('admin-modal').style.display = 'none'; }
 
 function verifyAdminLogin() {
     const pass = document.getElementById('admin-password-input').value;
+    // Senha padrão de desenvolvedor/administrador (pode alterar aqui se quiser)
     if (pass === 'admin123') {
         document.getElementById('admin-login-screen').style.display = 'none';
         document.getElementById('admin-dashboard-screen').style.display = 'flex';
@@ -670,6 +627,7 @@ function addNewProduct() {
         image: image
     });
     
+    // Limpar campos
     document.getElementById('new-p-name').value = '';
     document.getElementById('new-p-specs').value = '';
     document.getElementById('new-p-price').value = '';

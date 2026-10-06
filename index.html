@@ -1,656 +1,663 @@
 <!DOCTYPE html>
-<html lang="pt-BR">
+<html lang="pt-BR" class="dark">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<meta name="theme-color" content="#0b0b0b">
-<title>JR Cosméticos | Profissional</title>
-<style>
-:root {
-    --bg-main: #0b0b0b;
-    --bg-card: #141414;
-    --bg-card-hover: #1c1c1c;
-    --bg-input: #1a1a1a;
-    --gold-primary: #d4af37;
-    --gold-light: #f3e5ab;
-    --gold-dark: #aa820a;
-    --text-white: #ffffff;
-    --text-muted: #a3a3a3;
-    --border: #2a2a2a;
-    --font: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-}
-* { box-sizing: border-box; margin: 0; padding: 0; font-family: var(--font); -webkit-tap-highlight-color: transparent; }
-body { background-color: var(--bg-main); color: var(--text-white); min-height: 100vh; display: flex; flex-direction: column; overflow-x: hidden; padding-bottom: 90px; }
-
-/* --- BARRA DE ANÚNCIOS / TOPO LUXURY --- */
-.top-announcement { background: linear-gradient(90deg, #aa820a, #d4af37, #f3e5ab); color: #0b0b0b; font-size: 11px; font-weight: 900; text-align: center; padding: 7px 12px; letter-spacing: 1px; text-transform: uppercase; }
-
-/* --- HEADER / NAVEGAÇÃO SUPERIOR --- */
-header { background: rgba(11, 11, 11, 0.95); backdrop-filter: blur(10px); border-bottom: 1px solid var(--border); position: sticky; top: 0; z-index: 1000; padding: 12px 20px; display: flex; align-items: center; justify-content: space-between; }
-.brand-wrapper { display: flex; align-items: center; gap: 12px; }
-.brand-logo-circle { width: 42px; height: 42px; border: 2px solid var(--gold-primary); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 900; color: var(--gold-primary); font-size: 16px; background: #000; box-shadow: 0 0 15px rgba(212, 175, 55, 0.2); }
-.brand-texts h1 { font-size: 15px; font-weight: 900; letter-spacing: 1px; color: var(--gold-light); line-height: 1.1; text-transform: uppercase; }
-.brand-texts span { font-size: 9px; color: var(--text-muted); font-weight: 700; text-transform: uppercase; letter-spacing: 1.5px; }
-
-.header-actions { display: flex; align-items: center; gap: 8px; }
-.admin-login-btn { background: transparent; border: 1px solid var(--border); padding: 8px 12px; border-radius: 10px; color: var(--text-muted); font-weight: 800; font-size: 11px; cursor: pointer; transition: 0.2s; }
-.admin-login-btn:hover { color: var(--gold-light); border-color: var(--gold-primary); }
-
-.cart-btn-top { background: var(--bg-input); border: 1px solid var(--border); padding: 8px 14px; border-radius: 10px; color: var(--gold-light); font-weight: 800; font-size: 12px; display: flex; align-items: center; gap: 6px; cursor: pointer; position: relative; transition: 0.2s; }
-.cart-btn-top:hover { border-color: var(--gold-primary); }
-.cart-badge { background: var(--gold-primary); color: #0b0b0b; font-size: 10px; font-weight: 900; padding: 1px 6px; border-radius: 20px; }
-
-/* --- CARROSSEL PROFISSIONAL DE DESTAQUE (SLIDER) --- */
-.hero-slider { width: 100%; height: 320px; position: relative; overflow: hidden; border-bottom: 1px solid var(--border); background: #000; }
-@media (min-width: 768px) { .hero-slider { height: 420px; } }
-.slide-track { display: flex; width: 100%; height: 100%; transition: transform 0.6s ease-in-out; }
-.slide-item { min-width: 100%; height: 100%; position: relative; display: flex; align-items: flex-end; justify-content: center; }
-.slide-item img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; opacity: 0.6; }
-.slide-overlay { position: absolute; inset: 0; background: linear-gradient(0deg, #0b0b0b 0%, rgba(11,11,11,0.4) 60%, transparent 100%); }
-.slide-content { position: relative; z-index: 2; text-align: center; padding: 24px 20px; max-width: 650px; }
-.slide-content h2 { font-size: 20px; font-weight: 900; color: var(--gold-light); margin-bottom: 6px; text-transform: uppercase; letter-spacing: 0.5px; text-shadow: 0 2px 4px rgba(0,0,0,0.8); }
-.slide-content p { font-size: 12px; color: #e5e5e5; margin-bottom: 8px; text-shadow: 0 1px 3px rgba(0,0,0,0.8); }
-.slide-slogan { font-size: 10px; color: var(--gold-primary); font-weight: 800; text-transform: uppercase; letter-spacing: 2px; text-shadow: 0 1px 2px rgba(0,0,0,0.9); }
-
-/* Indicadores de Slide */
-.slide-dots { position: absolute; bottom: 12px; left: 50%; transform: translateX(-50%); display: flex; gap: 6px; z-index: 10; }
-.dot { width: 8px; height: 8px; border-radius: 50%; background: rgba(255,255,255,0.4); cursor: pointer; transition: 0.3s; }
-.dot.active { background: var(--gold-primary); width: 22px; border-radius: 4px; }
-
-/* --- BOTÃO FLUTUANTE DO WHATSAPP --- */
-.whatsapp-float { position: fixed; bottom: 24px; right: 20px; background: #25d366; color: #fff; width: 56px; height: 56px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 28px; box-shadow: 0 4px 20px rgba(37, 211, 102, 0.4); z-index: 1500; text-decoration: none; transition: 0.3s; }
-.whatsapp-float:hover { transform: scale(1.1); background: #22bf5b; }
-
-/* --- FILTROS DE CATEGORIA --- */
-.categories-bar { display: flex; gap: 8px; padding: 16px 20px; overflow-x: auto; scrollbar-width: none; background: var(--bg-main); }
-.categories-bar::-webkit-scrollbar { display: none; }
-.cat-chip { background: var(--bg-card); border: 1px solid var(--border); color: var(--text-muted); padding: 8px 16px; border-radius: 20px; font-size: 12px; font-weight: 800; white-space: nowrap; cursor: pointer; transition: 0.2s; }
-.cat-chip.active { background: var(--gold-primary); color: #0b0b0b; border-color: var(--gold-primary); box-shadow: 0 4px 15px rgba(212,175,55,0.25); }
-
-/* --- VITRINE DE PRODUTOS --- */
-.catalog-container { max-width: 1200px; margin: 0 auto; width: 100%; padding: 0 20px 40px 20px; }
-.section-title { font-size: 13px; font-weight: 900; text-transform: uppercase; letter-spacing: 1.5px; color: var(--gold-light); margin-bottom: 14px; display: flex; align-items: center; justify-content: space-between; }
-.products-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 14px; }
-@media (min-width: 768px) { .products-grid { grid-template-columns: repeat(3, 1fr); gap: 20px; } }
-@media (min-width: 1024px) { .products-grid { grid-template-columns: repeat(4, 1fr); gap: 20px; } }
-
-.product-card { background: var(--bg-card); border: 1px solid var(--border); border-radius: 14px; overflow: hidden; display: flex; flex-direction: column; transition: 0.3s; position: relative; }
-.product-card:hover { transform: translateY(-3px); border-color: var(--gold-primary); box-shadow: 0 10px 30px rgba(0,0,0,0.7); }
-.product-image-box { width: 100%; height: 170px; background: #1a1a1a; position: relative; display: flex; align-items: center; justify-content: center; overflow: hidden; }
-.product-image-box img { width: 100%; height: 100%; object-fit: cover; transition: 0.3s; }
-.product-card:hover .product-image-box img { transform: scale(1.05); }
-.product-tag { position: absolute; top: 10px; left: 10px; background: rgba(11,11,11,0.85); backdrop-filter: blur(4px); color: var(--gold-light); font-size: 9px; font-weight: 900; padding: 3px 8px; border-radius: 6px; border: 1px solid rgba(212,175,55,0.4); text-transform: uppercase; }
-
-.product-content { padding: 14px; display: flex; flex-direction: column; flex: 1; justify-content: space-between; gap: 10px; }
-.product-category-mini { font-size: 10px; color: var(--gold-primary); font-weight: 800; text-transform: uppercase; letter-spacing: 0.5px; }
-.product-name { font-size: 13px; font-weight: 800; color: #fff; line-height: 1.3; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
-.product-specs { font-size: 11px; color: var(--text-muted); background: var(--bg-input); padding: 4px 8px; border-radius: 6px; width: fit-content; font-weight: 700; border: 1px solid var(--border); }
-.product-footer { display: flex; align-items: center; justify-content: space-between; margin-top: 4px; }
-.product-price { font-size: 15px; font-weight: 900; color: var(--gold-light); }
-.btn-add-cart { background: var(--gold-primary); color: #0b0b0b; border: none; padding: 8px 12px; border-radius: 8px; font-size: 11px; font-weight: 900; cursor: pointer; transition: 0.2s; display: flex; align-items: center; gap: 4px; box-shadow: 0 4px 12px rgba(212,175,55,0.2); }
-.btn-add-cart:hover { background: var(--gold-light); }
-
-/* --- MODAIS (CARRINHO E ADMIN) --- */
-.modal-overlay { position: fixed; inset: 0; background: rgba(11, 11, 11, 0.88); backdrop-filter: blur(8px); z-index: 2000; display: none; align-items: flex-end; justify-content: center; }
-@media (min-width: 640px) { .modal-overlay { align-items: center; } }
-.modal-card { background: var(--bg-card); border: 1px solid var(--border); border-top-left-radius: 24px; border-top-right-radius: 24px; width: 100%; max-width: 550px; max-height: 90vh; display: flex; flex-direction: column; box-shadow: 0 -20px 40px rgba(0,0,0,0.9); animation: slideUp 0.3s ease; }
-@media (min-width: 640px) { .modal-card { border-radius: 20px; } }
-@keyframes slideUp { from { transform: translateY(100%); } to { transform: translateY(0); } }
-
-.modal-header { padding: 18px 20px; border-bottom: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; }
-.modal-title { font-size: 15px; font-weight: 900; color: var(--gold-light); text-transform: uppercase; letter-spacing: 0.5px; }
-.modal-close-btn { background: transparent; border: none; color: var(--text-muted); font-size: 22px; font-weight: bold; cursor: pointer; }
-
-.modal-body { padding: 20px; overflow-y: auto; display: flex; flex-direction: column; gap: 14px; max-height: 60vh; }
-
-/* Estilos específicos do Painel Admin */
-.admin-form-group { display: flex; flex-direction: column; gap: 6px; }
-.admin-form-group label { font-size: 11px; font-weight: 800; color: var(--gold-light); text-transform: uppercase; }
-.admin-form-group input, .admin-form-group select { background: var(--bg-input); border: 1px solid var(--border); border-radius: 8px; padding: 10px; color: #fff; font-size: 12px; }
-.admin-btn { background: var(--gold-primary); color: #0b0b0b; font-weight: 900; border: none; padding: 12px; border-radius: 8px; cursor: pointer; text-transform: uppercase; font-size: 12px; }
-.admin-product-row { display: flex; align-items: center; justify-content: space-between; background: var(--bg-input); padding: 10px; border-radius: 8px; border: 1px solid var(--border); font-size: 12px; }
-.btn-delete-prod { background: #ff4d4d; color: #fff; border: none; padding: 6px 10px; border-radius: 6px; font-weight: bold; cursor: pointer; font-size: 10px; }
-
-/* Carrinho */
-.cart-items-list { display: flex; flex-direction: column; gap: 12px; }
-.cart-item-row { display: flex; align-items: center; justify-content: space-between; background: var(--bg-input); padding: 10px 12px; border-radius: 12px; border: 1px solid var(--border); }
-.cart-item-info h4 { font-size: 12px; font-weight: 800; color: #fff; margin-bottom: 2px; }
-.cart-item-info span { font-size: 11px; color: var(--gold-light); font-weight: 900; }
-.cart-item-controls { display: flex; align-items: center; gap: 8px; }
-.qty-btn { background: #2a2a2a; border: 1px solid var(--border); color: white; width: 24px; height: 24px; border-radius: 6px; font-weight: bold; cursor: pointer; display: flex; align-items: center; justify-content: center; }
-.item-qty { font-size: 12px; font-weight: 900; width: 20px; text-align: center; }
-
-.modal-footer { padding: 20px; border-top: 1px solid var(--border); background: #0e0e0e; }
-.cart-total-row { display: flex; justify-content: space-between; font-size: 14px; font-weight: 900; margin-bottom: 14px; color: var(--text-muted); }
-.cart-total-row span:last-child { color: var(--gold-light); font-size: 18px; }
-.btn-checkout-whatsapp { width: 100%; padding: 14px; background: linear-gradient(90deg, #25d366, #1ebe5d); border: none; border-radius: 12px; color: #fff; font-size: 13px; font-weight: 900; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; box-shadow: 0 6px 20px rgba(37,211,102,0.3); transition: 0.2s; text-transform: uppercase; letter-spacing: 0.5px; }
-.btn-checkout-whatsapp:hover { transform: translateY(-2px); filter: brightness(1.1); }
-
-/* --- RODAPÉ INSTITUCIONAL --- */
-footer { background: #050505; border-top: 1px solid var(--border); padding: 30px 20px; text-align: center; margin-top: auto; }
-footer p { font-size: 12px; color: var(--text-muted); line-height: 1.5; margin-bottom: 8px; }
-footer .brand-sign { font-weight: 900; color: var(--gold-light); letter-spacing: 1px; text-transform: uppercase; }
-</style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JR Cosméticos Profissionais | Alto Padrão</title>
+    <!-- Tailwind CSS para base robusta -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- FontAwesome para ícones profissionais -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts: Plus Jakarta Sans -->
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['"Plus Jakarta Sans"', 'sans-serif'],
+                    },
+                    colors: {
+                        gold: {
+                            50: '#fbf8ee',
+                            100: '#f3ebd4',
+                            200: '#e5d3aa',
+                            300: '#d4b475',
+                            400: '#c59d52',
+                            500: '#b0833a',
+                            600: '#94692f',
+                            700: '#775228',
+                            800: '#634324',
+                            900: '#543822',
+                        },
+                        dark: {
+                            900: '#0a0a0a',
+                            800: '#121212',
+                            700: '#1a1a1a',
+                            600: '#242424',
+                            500: '#2e2e2e',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body { font-family: 'Plus Jakarta Sans', sans-serif; }
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: #121212; }
+        ::-webkit-scrollbar-thumb { background: #333; border-radius: 3px; }
+        ::-webkit-scrollbar-thumb:hover { background: #c59d52; }
+    </style>
 </head>
-<body>
+<body class="bg-dark-900 text-gray-100 antialiased selection:bg-gold-500 selection:text-dark-900">
 
-<!-- BOTÃO FLUTUANTE DO WHATSAPP -->
-<a href="https://wa.me/5563992204543?text=Olá!%20Gostaria%20de%20falar%20com%20o%20vendedor%20da%20JR%20Cosméticos." class="whatsapp-float" target="_blank" title="Falar com o Vendedor">
-    💬
-</a>
-
-<!-- BARRA SUPERIOR DE AVISO -->
-<div class="top-announcement">
-    ✨ Produtos Profissionais para Salões de Beleza &bull; Atendimento Exclusivo
-</div>
-
-<!-- HEADER PRINCIPAL -->
-<header>
-    <div class="brand-wrapper">
-        <div class="brand-logo-circle">JR</div>
-        <div class="brand-texts">
-            <h1>JR Cosméticos</h1>
-            <span>Profissional</span>
-        </div>
+    <!-- Topo / Barra de Anúncio -->
+    <div class="bg-gradient-to-r from-gold-600 via-gold-500 to-gold-600 text-dark-900 text-xs font-bold py-2.5 px-4 text-center tracking-widest uppercase shadow-md">
+        <i class="fa-solid fa-gem mr-2"></i> Produtos Profissionais para Salões de Beleza • Atendimento Exclusivo para Salões
     </div>
-    <div class="header-actions">
-        <button class="admin-login-btn" onclick="openAdminModal()">⚙️ Admin</button>
-        <button class="cart-btn-top" onclick="openCartModal()">
-            🛒 Carrinho <span class="cart-badge" id="cart-counter">0</span>
-        </button>
-    </div>
-</header>
 
-<!-- CARROSSEL PROFISSIONAL DE DESTAQUE (SLIDER COM TRANSIÇÃO & CABELO AFRO ANTES/DEPOIS) -->
-<div class="hero-slider">
-    <div class="slide-track" id="slide-track">
-        <!-- Slide 1: Cabelo Afro Antes e Depois da Selagem Progressiva -->
-        <div class="slide-item">
-            <img src="https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?w=1200&auto=format&fit=crop&q=80" alt="Transformação Cabelo Afro para Liso Perfeito">
-            <div class="slide-overlay"></div>
-            <div class="slide-content">
-                <h2>Transformação Afro &bull; Liso Absoluto</h2>
-                <p>Resultado profissional impecável após a aplicação da Selagem Progressiva de alto desempenho.</p>
-                <div class="slide-slogan">Realce sua beleza, revele sua essência.</div>
+    <!-- Header Principal -->
+    <header class="sticky top-0 z-40 bg-dark-900/90 backdrop-blur-md border-b border-dark-600 transition-all">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
+            <!-- Logotipo -->
+            <div class="flex items-center space-x-3 cursor-pointer" onclick="app.voltarHome()">
+                <div class="w-11 h-11 rounded-full border-2 border-gold-400 flex items-center justify-center bg-dark-800 shadow-inner">
+                    <span class="text-gold-400 font-extrabold text-lg tracking-tighter">JR</span>
+                </div>
+                <div>
+                    <h1 class="font-extrabold text-base tracking-wider text-white leading-tight">JR COSMÉTICOS</h1>
+                    <span class="text-[10px] tracking-[0.2em] text-gold-400 font-semibold uppercase">Profissional</span>
+                </div>
+            </div>
+
+            <!-- Ações do Topo -->
+            <div class="flex items-center space-x-3">
+                <button onclick="app.abrirAdminLoginModal()" class="flex items-center space-x-2 bg-dark-800 hover:bg-dark-700 text-gray-300 hover:text-white px-3.5 py-2 rounded-xl border border-dark-600 text-xs font-medium transition-all shadow-sm">
+                    <i class="fa-solid fa-lock text-gold-400"></i>
+                    <span class="hidden sm:inline">Painel Admin</span>
+                </button>
+                <button onclick="app.abrirCarrinho()" class="relative flex items-center space-x-2.5 bg-gold-500 hover:bg-gold-400 text-dark-900 px-4 py-2 rounded-xl text-xs font-bold transition-all shadow-lg shadow-gold-500/10">
+                    <i class="fa-solid fa-bag-shopping text-sm"></i>
+                    <span>Carrinho</span>
+                    <span id="cart-badge" class="bg-dark-900 text-gold-400 text-[10px] px-1.5 py-0.5 rounded-full font-extrabold">0</span>
+                </button>
             </div>
         </div>
-        <!-- Slide 2: Cabelo Liso Extremo e Brilhoso -->
-        <div class="slide-item">
-            <img src="https://images.unsplash.com/photo-1560869713-7d0a29430803?w=1200&auto=format&fit=crop&q=80" alt="Cabelo Liso Profissional">
-            <div class="slide-overlay"></div>
-            <div class="slide-content">
-                <h2>Tecnologia e Liso Perfeito</h2>
-                <p>O padrão de excelência que o seu salão de beleza merece.</p>
-                <div class="slide-slogan">Brilho espelhado e toque sedoso.</div>
+    </header>
+
+    <!-- Banner Principal (Hero) -->
+    <section class="relative bg-dark-800 border-b border-dark-700 overflow-hidden py-12 lg:py-20">
+        <div class="absolute inset-0 opacity-20 bg-[radial-gradient(#c59d52_1px,transparent_1px)] [background-size:16px_16px]"></div>
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 grid grid-cols-1 lg:grid-cols-2 gap-10 items-center">
+            <div class="space-y-6">
+                <div class="inline-flex items-center space-x-2 bg-gold-500/10 border border-gold-500/30 px-3 py-1 rounded-full text-gold-400 text-xs font-semibold tracking-wider uppercase">
+                    <i class="fa-solid fa-award"></i> Linha Exclusiva para Cabeleireiros
+                </div>
+                <h2 class="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-white tracking-tight leading-tight">
+                    Alta Performance e <span class="text-transparent bg-clip-text bg-gradient-to-r from-gold-300 via-gold-400 to-gold-600">Tecnologia Capilar</span>
+                </h2>
+                <p class="text-gray-400 text-sm sm:text-base leading-relaxed">
+                    Atendimento especializado, fórmulas avançadas de alto rendimento e entrega rápida para profissionais exigentes em todo o Tocantins.
+                </p>
+                <div class="flex flex-wrap gap-4 pt-2">
+                    <a href="https://wa.me/5563992204543?text=Olá,%20gostaria%20de%20atendimento%20para%20salão." target="_blank" class="flex items-center space-x-2 bg-emerald-600 hover:bg-emerald-500 text-white px-6 py-3 rounded-xl font-semibold text-sm transition-all shadow-lg shadow-emerald-900/20">
+                        <i class="fa-brands fa-whatsapp text-lg"></i>
+                        <span>Atendimento WhatsApp (63) 99220-4543</span>
+                    </a>
+                </div>
+            </div>
+            <div class="relative group">
+                <div class="absolute -inset-1 bg-gradient-to-r from-gold-500 to-gold-300 rounded-2xl blur-lg opacity-30 group-hover:opacity-50 transition duration-1000"></div>
+                <div class="relative rounded-2xl overflow-hidden border border-dark-600 bg-dark-900 aspect-[16/10] shadow-2xl">
+                    <img src="https://images.unsplash.com/photo-1562322140-8baeececf3df?auto=format&fit=crop&w=1000&q=80" alt="Salão de Beleza Profissional" class="w-full h-full object-cover">
+                </div>
             </div>
         </div>
-        <!-- Slide 3: Profissionalismo e Alta Performance -->
-        <div class="slide-item">
-            <img src="https://images.unsplash.com/photo-1519699047748-de8e457a634e?w=1200&auto=format&fit=crop&q=80" alt="Salão de Beleza Profissional">
-            <div class="slide-overlay"></div>
-            <div class="slide-content">
-                <h2>Exclusivo para Cabeleireiros</h2>
-                <p>Atendimento especializado e entrega rápida para profissionais exigentes.</p>
-                <div class="slide-slogan">WhatsApp: (63) 99220-4543</div>
+    </section>
+
+    <!-- Seção de Produtos -->
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+        <div class="flex flex-col md:flex-row md:items-end justify-between mb-8 gap-4 border-b border-dark-700 pb-6">
+            <div>
+                <span class="text-gold-400 text-xs font-bold uppercase tracking-widest">Catálogo Disponível</span>
+                <h3 class="text-2xl font-extrabold text-white mt-1">Produtos Profissionais</h3>
+            </div>
+            <!-- Filtros de Categorias -->
+            <div id="category-filters" class="flex flex-wrap gap-2">
+                <button onclick="app.filtrarCategoria('Todos')" class="cat-btn active px-4 py-2 rounded-xl text-xs font-semibold bg-gold-500 text-dark-900 transition-all shadow-sm">Todos</button>
+                <button onclick="app.filtrarCategoria('Selagem Progressiva')" class="cat-btn px-4 py-2 rounded-xl text-xs font-semibold bg-dark-800 text-gray-300 hover:bg-dark-700 hover:text-white border border-dark-600 transition-all">Selagem Progressiva</button>
+                <button onclick="app.filtrarCategoria('Hidratação')" class="cat-btn px-4 py-2 rounded-xl text-xs font-semibold bg-dark-800 text-gray-300 hover:bg-dark-700 hover:text-white border border-dark-600 transition-all">Hidratação</button>
+                <button onclick="app.filtrarCategoria('Reconstrução')" class="cat-btn px-4 py-2 rounded-xl text-xs font-semibold bg-dark-800 text-gray-300 hover:bg-dark-700 hover:text-white border border-dark-600 transition-all">Reconstrução</button>
+            </div>
+        </div>
+
+        <!-- Grade de Produtos -->
+        <div id="product-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+            <!-- Os produtos serão injetados dinamicamente via JavaScript -->
+        </div>
+    </main>
+
+    <!-- Rodapé -->
+    <footer class="bg-dark-800 border-t border-dark-700 py-10 mt-20 text-center text-xs text-gray-400">
+        <div class="max-w-7xl mx-auto px-4 space-y-4">
+            <div class="flex items-center justify-center space-x-2">
+                <div class="w-8 h-8 rounded-full border border-gold-400 flex items-center justify-center bg-dark-900">
+                    <span class="text-gold-400 font-bold text-xs">JR</span>
+                </div>
+                <span class="text-white font-bold tracking-wider">JR COSMÉTICOS PROFISSIONAIS</span>
+            </div>
+            <p>Atendimento exclusivo para profissionais da beleza e salões em Araguaína e região • Tocantins, Brasil.</p>
+            <p class="text-gray-600">&copy; 2026 JR Cosméticos. Todos os direitos reservados.</p>
+        </div>
+    </footer>
+
+    <!-- MODAL DE ZOOM DE IMAGEM -->
+    <div id="image-zoom-modal" class="fixed inset-0 z-50 bg-black/90 backdrop-blur-md hidden items-center justify-center p-4">
+        <div class="relative max-w-4xl w-full bg-dark-800 border border-dark-600 rounded-2xl overflow-hidden shadow-2xl p-2">
+            <button onclick="app.fecharZoom()" class="absolute top-4 right-4 z-10 w-10 h-10 rounded-full bg-dark-900/80 text-white hover:bg-gold-500 hover:text-dark-900 flex items-center justify-center transition-all">
+                <i class="fa-solid fa-xmark text-lg"></i>
+            </button>
+            <div class="flex items-center justify-center p-2">
+                <img id="zoomed-image" src="" alt="Zoom do Produto" class="max-h-[80vh] w-auto object-contain rounded-lg">
             </div>
         </div>
     </div>
-    <!-- Bolinhas indicadoras -->
-    <div class="slide-dots" id="slide-dots">
-        <span class="dot active" onclick="currentSlide(0)"></span>
-        <span class="dot" onclick="currentSlide(1)"></span>
-        <span class="dot" onclick="currentSlide(2)"></span>
-    </div>
-</div>
 
-<!-- FILTROS DE CATEGORIA (ATUALIZADOS) -->
-<div class="categories-bar" id="category-filter-bar">
-    <button class="cat-chip active" onclick="filterCategory('todos', this)">Todos os Produtos</button>
-    <button class="cat-chip" onclick="filterCategory('Selagem Progressiva', this)">Selagem Progressiva</button>
-    <button class="cat-chip" onclick="filterCategory('Hidratação', this)">Hidratação</button>
-    <button class="cat-chip" onclick="filterCategory('Coloração', this)">Coloração</button>
-    <button class="cat-chip" onclick="filterCategory('Descolorante', this)">Descolorante</button>
-    <button class="cat-chip" onclick="filterCategory('Finalizador', this)">Finalizador</button>
-</div>
-
-<!-- VITRINE DE PRODUTOS -->
-<div class="catalog-container">
-    <div class="section-title">
-        <span>Catálogo Profissional</span>
-        <span style="font-size:11px; color:var(--text-muted);" id="product-count-label">Exibindo itens</span>
-    </div>
-    <div class="products-grid" id="products-grid">
-        <!-- Inserido dinamicamente via JS -->
-    </div>
-</div>
-
-<!-- MODAL DO CARRINHO E CHECKOUT -->
-<div class="modal-overlay" id="cart-modal">
-    <div class="modal-card">
-        <div class="modal-header">
-            <div class="modal-title">Resumo do Pedido</div>
-            <button class="modal-close-btn" onclick="closeCartModal()">&times;</button>
-        </div>
-        <div class="modal-body">
-            <div class="cart-items-list" id="cart-items-list">
+    <!-- MODAL DO CARRINHO -->
+    <div id="cart-modal" class="fixed inset-0 z-50 bg-black/70 backdrop-blur-sm hidden justify-end">
+        <div class="w-full max-w-md bg-dark-800 h-full flex flex-col border-l border-dark-700 shadow-2xl animate-in slide-in-from-right duration-300">
+            <div class="p-6 border-b border-dark-700 flex items-center justify-between">
+                <div class="flex items-center space-x-2">
+                    <i class="fa-solid fa-bag-shopping text-gold-400"></i>
+                    <h3 class="font-bold text-white text-base">Seu Carrinho</h3>
+                </div>
+                <button onclick="app.fecharCarrinho()" class="text-gray-400 hover:text-white p-2">
+                    <i class="fa-solid fa-xmark text-lg"></i>
+                </button>
+            </div>
+            <div id="cart-items-container" class="flex-1 overflow-y-auto p-6 space-y-4 divide-y divide-dark-700/50">
                 <!-- Itens do carrinho -->
             </div>
-        </div>
-        <div class="modal-footer">
-            <div class="cart-total-row">
-                <span>Total Estimado:</span>
-                <span id="cart-total-value">R$ 0,00</span>
+            <div class="p-6 border-t border-dark-700 bg-dark-900 space-y-4">
+                <div class="flex justify-between items-center text-sm">
+                    <span class="text-gray-400">Total do Pedido:</span>
+                    <span id="cart-total" class="font-extrabold text-gold-400 text-lg">R$ 0,00</span>
+                </div>
+                <button onclick="app.finalizarPedidoWhatsApp()" class="w-full bg-emerald-600 hover:bg-emerald-500 text-white py-3.5 rounded-xl font-bold text-sm flex items-center justify-center space-x-2 transition-all shadow-lg shadow-emerald-900/30">
+                    <i class="fa-brands fa-whatsapp text-lg"></i>
+                    <span>Finalizar Pedido via WhatsApp</span>
+                </button>
             </div>
-            <button class="btn-checkout-whatsapp" onclick="finalizeOrderWhatsApp()">
-                💬 Enviar Pedido via WhatsApp
+        </div>
+    </div>
+
+    <!-- MODAL DE LOGIN ADMIN (COM CADASTRO/TROCA DE SENHA) -->
+    <div id="admin-login-modal" class="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm hidden items-center justify-center p-4">
+        <div class="bg-dark-800 border border-dark-600 w-full max-w-md rounded-2xl p-6 sm:p-8 space-y-6 shadow-2xl relative">
+            <button onclick="app.fecharAdminLoginModal()" class="absolute top-5 right-5 text-gray-400 hover:text-white">
+                <i class="fa-solid fa-xmark text-lg"></i>
             </button>
-        </div>
-    </div>
-</div>
-
-<!-- MODAL DO PAINEL ADMINISTRADOR / DESENVOLVEDOR -->
-<div class="modal-overlay" id="admin-modal">
-    <div class="modal-card" style="max-width: 600px;">
-        <div class="modal-header">
-            <div class="modal-title">Painel do Administrador</div>
-            <button class="modal-close-btn" onclick="closeAdminModal()">&times;</button>
-        </div>
-        <div class="modal-body" id="admin-modal-content">
-            <!-- Tela de Login do Admin -->
-            <div id="admin-login-screen" style="display:flex; flex-direction:column; gap:14px; padding: 10px 0;">
-                <p style="font-size:12px; color:var(--text-muted);">Área restrita para gerenciamento do catálogo e fotos do site.</p>
-                <div class="admin-form-group">
-                    <label>Senha de Acesso</label>
-                    <input type="password" id="admin-password-input" placeholder="Digite a senha (ex: admin123)">
+            <div class="text-center space-y-2">
+                <div class="w-12 h-12 rounded-full bg-gold-500/10 border border-gold-500/30 text-gold-400 flex items-center justify-center mx-auto">
+                    <i class="fa-solid fa-lock text-lg"></i>
                 </div>
-                <button class="admin-btn" onclick="verifyAdminLogin()">Entrar no Painel</button>
+                <h3 class="text-xl font-bold text-white">Painel Administrativo</h3>
+                <p id="admin-login-subtitle" class="text-xs text-gray-400">Digite sua senha para gerenciar produtos e preços.</p>
             </div>
-
-            <!-- Tela de Gestão do Admin (Oculta até logar) -->
-            <div id="admin-dashboard-screen" style="display:none; flex-direction:column; gap:18px;">
-                <div style="display:flex; justify-content:space-between; align-items:center;">
-                    <span style="font-size:12px; color:var(--gold-light); font-weight:800;">✨ Gerenciar Produtos</span>
-                    <button class="admin-btn" style="padding:6px 12px; font-size:10px;" onclick="logoutAdmin()">Sair</button>
-                </div>
-                
-                <!-- Formulário para Adicionar Novo Produto -->
-                <div style="background:var(--bg-input); padding:14px; border-radius:12px; border:1px solid var(--border); display:flex; flex-direction:column; gap:10px;">
-                    <h4 style="font-size:12px; color:#fff; font-weight:900;">Adicionar Novo Produto</h4>
-                    <div class="admin-form-group">
-                        <label>Nome do Produto</label>
-                        <input type="text" id="new-p-name" placeholder="Ex: Selagem Térmica Liss 1L">
-                    </div>
-                    <div class="admin-form-group">
-                        <label>Categoria</label>
-                        <select id="new-p-cat">
-                            <option value="Selagem Progressiva">Selagem Progressiva</option>
-                            <option value="Hidratação">Hidratação</option>
-                            <option value="Coloração">Coloração</option>
-                            <option value="Descolorante">Descolorante</option>
-                            <option value="Finalizador">Finalizador</option>
-                        </select>
-                    </div>
-                    <div class="admin-form-group">
-                        <label>Especificações (Volume / Peso)</label>
-                        <input type="text" id="new-p-specs" placeholder="Ex: Frasco 1 Litro">
-                    </div>
-                    <div class="admin-form-group">
-                        <label>Preço (R$)</label>
-                        <input type="number" step="0.01" id="new-p-price" placeholder="149.90">
-                    </div>
-                    <div class="admin-form-group">
-                        <label>URL da Imagem (Foto)</label>
-                        <input type="text" id="new-p-image" placeholder="https://exemplo.com/foto.jpg">
-                    </div>
-                    <button class="admin-btn" onclick="addNewProduct()">Salvar e Publicar Produto</button>
-                </div>
-
-                <!-- Lista de Produtos Existentes para Gerenciar/Excluir -->
-                <div style="display:flex; flex-direction:column; gap:8px;">
-                    <h4 style="font-size:12px; color:#fff; font-weight:900;">Produtos Cadastrados</h4>
-                    <div id="admin-products-list" style="display:flex; flex-direction:column; gap:8px; max-height:220px; overflow-y:auto;">
-                        <!-- Gerado via JS -->
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-
-<!-- RODAPÉ -->
-<footer>
-    <p><span class="brand-sign">JR Cosméticos</span> - Atendimento Profissional para Salões de Beleza.</p>
-    <p style="font-size:10px; color:#666; margin-top:8px;">📱 Contato Oficial / WhatsApp: (63) 99220-4543 &bull; Realce sua beleza, revele sua essência.</p>
-    <p style="font-size:10px; color:#444; margin-top:12px;">© 2026 JR Cosméticos. Todos os direitos reservados.</p>
-</footer>
-
-<script>
-/* --- CONTROLE DO CARROSSEL DE FOTOS --- */
-let slideIndex = 0;
-const totalSlides = 3;
-
-function showSlide(index) {
-    const track = document.getElementById('slide-track');
-    const dots = document.querySelectorAll('.dot');
-    
-    if (index >= totalSlides) slideIndex = 0;
-    if (index < 0) slideIndex = totalSlides - 1;
-    
-    track.style.transform = `translateX(-${slideIndex * 100}%)`;
-    
-    dots.forEach(dot => dot.classList.remove('active'));
-    dots[slideIndex].classList.add('active');
-}
-
-function currentSlide(index) {
-    slideIndex = index;
-    showSlide(slideIndex);
-}
-
-setInterval(() => {
-    slideIndex++;
-    showSlide(slideIndex);
-}, 5000);
-
-/* --- BASE DE DADOS COMPLETA DE PRODUTOS PROFISSIONAIS --- */
-let productsDatabase = [
-    {
-        id: 1,
-        name: "Selagem Progressiva Gold Liss Pro 1L",
-        category: "Selagem Progressiva",
-        specs: "Frasco 1 Litro • Zero Formol",
-        price: 159.90,
-        tag: "Mais Vendido",
-        image: "https://images.unsplash.com/photo-1608248597359-97424e8838d7?w=500&auto=format&fit=crop&q=60"
-    },
-    {
-        id: 2,
-        name: "Máscara de Hidratação Profunda Óleo de Argan 1Kg",
-        category: "Hidratação",
-        specs: "Pote 1Kg • Alta Nutrição",
-        price: 110.00,
-        tag: "Essencial",
-        image: "https://images.unsplash.com/photo-1526947425960-945c6e72858f?w=500&auto=format&fit=crop&q=60"
-    },
-    {
-        id: 3,
-        name: "Pó Descolorante Azul Premium Professional 500g",
-        category: "Descolorante",
-        specs: "Pote 500g • Abertura Rápida",
-        price: 89.90,
-        tag: "Destaque",
-        image: "https://images.unsplash.com/photo-1608248597359-97424e8838d7?w=500&auto=format&fit=crop&q=60"
-    },
-    {
-        id: 4,
-        name: "Água Oxigenada Cremosa 30 Volumes 900ml",
-        category: "Coloração",
-        specs: "Frasco 900ml • Estabilizada",
-        price: 45.00,
-        tag: "Salão",
-        image: "https://images.unsplash.com/photo-1535585209827-a15fcdbc4c2d?w=500&auto=format&fit=crop&q=60"
-    },
-    {
-        id: 5,
-        name: "Kit Cronograma Capilar Completo Salão",
-        category: "Hidratação",
-        specs: "3 Potes 500g cada",
-        price: 198.00,
-        tag: "Combo",
-        image: "https://images.unsplash.com/photo-1526947425960-945c6e72858f?w=500&auto=format&fit=crop&q=60"
-    },
-    {
-        id: 6,
-        name: "Óleo Reparador de Pontas Finalizador 60ml",
-        category: "Finalizador",
-        specs: "Frasco 60ml • Brilho Extremo",
-        price: 54.90,
-        tag: "Essencial",
-        image: "https://images.unsplash.com/photo-1608248597359-97424e8838d7?w=500&auto=format&fit=crop&q=60"
-    },
-    {
-        id: 7,
-        name: "Tintura Permanente Profissional Tonalizante 60g",
-        category: "Coloração",
-        specs: "Bisnaga 60g • Cobertura Total",
-        price: 32.50,
-        tag: "Novo",
-        image: "https://images.unsplash.com/photo-1535585209827-a15fcdbc4c2d?w=500&auto=format&fit=crop&q=60"
-    },
-    {
-        id: 8,
-        name: "Gloss Redutor de Volume Selagem Orgânica 1L",
-        category: "Selagem Progressiva",
-        specs: "Frasco 1 Litro • Efeito Espelhado",
-        price: 179.00,
-        tag: "Profissional",
-        image: "https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?w=500&auto=format&fit=crop&q=60"
-    }
-];
-
-let cart = {};
-let currentCategory = 'todos';
-
-/* --- RENDERIZAÇÃO DA VITRINE --- */
-function renderProducts(category = 'todos') {
-    const grid = document.getElementById('products-grid');
-    grid.innerHTML = '';
-    
-    const filtered = category === 'todos' 
-        ? productsDatabase 
-        : productsDatabase.filter(p => p.category === category);
-        
-    document.getElementById('product-count-label').innerText = `${filtered.length} produtos`;
-    
-    filtered.forEach(p => {
-        const card = document.createElement('div');
-        card.className = 'product-card';
-        card.innerHTML = `
-            <div class="product-image-box">
-                <span class="product-tag">${p.tag}</span>
-                <img src="${p.image}" alt="${p.name}" loading="lazy">
-            </div>
-            <div class="product-content">
+            <div class="space-y-4">
                 <div>
-                    <div class="product-category-mini">${p.category}</div>
-                    <div class="product-name">${p.name}</div>
-                    <div class="product-specs" style="margin-top:6px;">${p.specs}</div>
+                    <label class="block text-xs font-semibold text-gray-300 mb-1.5">Senha de Acesso</label>
+                    <input type="password" id="admin-password-input" placeholder="Sua senha de administrador" class="w-full bg-dark-900 border border-dark-600 rounded-xl px-4 py-3 text-sm text-white focus:outline-none focus:border-gold-500 transition-all">
                 </div>
-                <div class="product-footer">
-                    <div class="product-price">R$ ${p.price.toFixed(2).replace('.', ',')}</div>
-                    <button class="btn-add-cart" onclick="addToCart(${p.id})">
-                        <span>+</span> Adicionar
+                <button onclick="app.tentarLoginAdmin()" class="w-full bg-gold-500 hover:bg-gold-400 text-dark-900 py-3 rounded-xl font-bold text-sm transition-all shadow-lg shadow-gold-500/10">
+                    Acessar Painel
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL DO PAINEL ADMIN (GERENCIAMENTO) -->
+    <div id="admin-dashboard-modal" class="fixed inset-0 z-50 bg-black/90 backdrop-blur-md hidden items-center justify-center p-2 sm:p-4">
+        <div class="bg-dark-800 border border-dark-600 w-full max-w-4xl max-h-[90vh] rounded-2xl flex flex-col overflow-hidden shadow-2xl">
+            <div class="p-6 border-b border-dark-700 flex items-center justify-between bg-dark-900">
+                <div class="flex items-center space-x-3">
+                    <div class="w-10 h-10 rounded-xl bg-gold-500/10 border border-gold-500/30 text-gold-400 flex items-center justify-center">
+                        <i class="fa-solid fa-sliders"></i>
+                    </div>
+                    <div>
+                        <h3 class="font-bold text-white text-base">Gerenciamento de Produtos e Senha</h3>
+                        <span class="text-xs text-gold-400 font-medium">Painel de Controle Exclusivo</span>
+                    </div>
+                </div>
+                <div class="flex items-center space-x-2">
+                    <button onclick="app.abrirConfiguracaoSenha()" class="bg-dark-700 hover:bg-dark-600 text-gray-300 hover:text-white px-3 py-2 rounded-xl text-xs font-medium border border-dark-600 transition-all">
+                        <i class="fa-solid fa-key mr-1.5 text-gold-400"></i> Alterar Senha
+                    </button>
+                    <button onclick="app.fecharAdminDashboard()" class="text-gray-400 hover:text-white p-2">
+                        <i class="fa-solid fa-xmark text-lg"></i>
                     </button>
                 </div>
             </div>
-        `;
-        grid.appendChild(card);
-    });
-}
-
-function filterCategory(category, btnElement) {
-    currentCategory = category;
-    document.querySelectorAll('.cat-chip').forEach(c => c.classList.remove('active'));
-    btnElement.classList.add('active');
-    renderProducts(category);
-}
-
-/* --- GERENCIAMENTO DO CARRINHO --- */
-function addToCart(productId) {
-    if (cart[productId]) {
-        cart[productId].qty += 1;
-    } else {
-        const product = productsDatabase.find(p => p.id === productId);
-        if (product) {
-            cart[productId] = { ...product, qty: 1 };
-        }
-    }
-    updateCartUI();
-    const cartCounter = document.getElementById('cart-counter');
-    cartCounter.style.transform = 'scale(1.3)';
-    setTimeout(() => cartCounter.style.transform = 'scale(1)', 200);
-}
-
-function changeQty(productId, delta) {
-    if (cart[productId]) {
-        cart[productId].qty += delta;
-        if (cart[productId].qty <= 0) {
-            delete cart[productId];
-        }
-    }
-    updateCartUI();
-}
-
-function updateCartUI() {
-    let totalItems = 0;
-    let totalPrice = 0;
-    const listContainer = document.getElementById('cart-items-list');
-    listContainer.innerHTML = '';
-    
-    const keys = Object.keys(cart);
-    if (keys.length === 0) {
-        listContainer.innerHTML = `<div style="text-align:center; color:var(--text-muted); padding:30px 0; font-size:12px; font-weight:700;">Seu carrinho está vazio. Escolha os produtos no catálogo!</div>`;
-    } else {
-        keys.forEach(id => {
-            const item = cart[id];
-            totalItems += item.qty;
-            totalPrice += item.price * item.qty;
-            
-            const row = document.createElement('div');
-            row.className = 'cart-item-row';
-            row.innerHTML = `
-                <div class="cart-item-info">
-                    <h4>${item.name}</h4>
-                    <span>R$ ${(item.price * item.qty).toFixed(2).replace('.', ',')}</span>
+            <div class="flex-1 overflow-y-auto p-6 space-y-6">
+                <!-- Formulário Adicionar/Editar Produto -->
+                <div class="bg-dark-900 border border-dark-700 rounded-xl p-5 space-y-4">
+                    <h4 id="form-product-title" class="text-sm font-bold text-white uppercase tracking-wider">Adicionar Novo Produto</h4>
+                    <input type="hidden" id="edit-product-id">
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-xs font-medium text-gray-400 mb-1">Nome do Produto</label>
+                            <input type="text" id="prod-name" class="w-full bg-dark-800 border border-dark-600 rounded-xl px-3.5 py-2.5 text-sm text-white focus:outline-none focus:border-gold-500">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-medium text-gray-400 mb-1">Categoria</label>
+                            <select id="prod-category" class="w-full bg-dark-800 border border-dark-600 rounded-xl px-3.5 py-2.5 text-sm text-white focus:outline-none focus:border-gold-500">
+                                <option value="Selagem Progressiva">Selagem Progressiva</option>
+                                <option value="Hidratação">Hidratação</option>
+                                <option value="Reconstrução">Reconstrução</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-xs font-medium text-gray-400 mb-1">Preço (R$)</label>
+                            <input type="number" step="0.01" id="prod-price" class="w-full bg-dark-800 border border-dark-600 rounded-xl px-3.5 py-2.5 text-sm text-white focus:outline-none focus:border-gold-500">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-medium text-gray-400 mb-1">URL da Imagem</label>
+                            <input type="text" id="prod-image" placeholder="https://..." class="w-full bg-dark-800 border border-dark-600 rounded-xl px-3.5 py-2.5 text-sm text-white focus:outline-none focus:border-gold-500">
+                        </div>
+                    </div>
+                    <div class="flex justify-end space-x-3 pt-2">
+                        <button onclick="app.limparFormularioProduto()" class="bg-dark-700 hover:bg-dark-600 text-gray-300 px-4 py-2 rounded-xl text-xs font-semibold">Cancelar</button>
+                        <button onclick="app.salvarProduto()" class="bg-gold-500 hover:bg-gold-400 text-dark-900 px-5 py-2 rounded-xl text-xs font-bold shadow-lg shadow-gold-500/10">Salvar Produto</button>
+                    </div>
                 </div>
-                <div class="cart-item-controls">
-                    <button class="qty-btn" onclick="changeQty(${id}, -1)">-</button>
-                    <span class="item-qty">${item.qty}</span>
-                    <button class="qty-btn" onclick="changeQty(${id}, 1)">+</button>
+
+                <!-- Lista de Produtos Cadastrados -->
+                <div class="space-y-3">
+                    <h4 class="text-sm font-bold text-white uppercase tracking-wider">Produtos Cadastrados</h4>
+                    <div id="admin-product-list" class="space-y-2">
+                        <!-- Itens da lista admin -->
+                    </div>
                 </div>
-            `;
-            listContainer.appendChild(row);
-        });
-    }
-    
-    document.getElementById('cart-counter').innerText = totalItems;
-    document.getElementById('cart-total-value').innerText = `R$ ${totalPrice.toFixed(2).replace('.', ',')}`;
-}
+            </div>
+        </div>
+    </div>
 
-function openCartModal() { document.getElementById('cart-modal').style.display = 'flex'; }
-function closeCartModal() { document.getElementById('cart-modal').style.display = 'none'; }
+    <!-- MODAL DE ALTERAÇÃO DE SENHA DO ADMIN -->
+    <div id="admin-password-modal" class="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm hidden items-center justify-center p-4">
+        <div class="bg-dark-800 border border-dark-600 w-full max-w-md rounded-2xl p-6 sm:p-8 space-y-6 shadow-2xl relative">
+            <button onclick="app.fecharConfiguracaoSenha()" class="absolute top-5 right-5 text-gray-400 hover:text-white">
+                <i class="fa-solid fa-xmark text-lg"></i>
+            </button>
+            <div class="text-center space-y-2">
+                <div class="w-12 h-12 rounded-full bg-gold-500/10 border border-gold-500/30 text-gold-400 flex items-center justify-center mx-auto">
+                    <i class="fa-solid fa-key text-lg"></i>
+                </div>
+                <h3 class="text-xl font-bold text-white">Definir Nova Senha</h3>
+                <p class="text-xs text-gray-400">Cadastre uma senha personalizada para proteger seu painel.</p>
+            </div>
+            <div class="space-y-4">
+                <div>
+                    <label class="block text-xs font-semibold text-gray-300 mb-1.5">Nova Senha</label>
+                    <input type="password" id="new-admin-password" placeholder="Digite a nova senha desejada" class="w-full bg-dark-900 border border-dark-600 rounded-xl px-4 py-3 text-sm text-white focus:outline-none focus:border-gold-500 transition-all">
+                </div>
+                <div>
+                    <label class="block text-xs font-semibold text-gray-300 mb-1.5">Confirmar Nova Senha</label>
+                    <input type="password" id="confirm-admin-password" placeholder="Confirme a nova senha" class="w-full bg-dark-900 border border-dark-600 rounded-xl px-4 py-3 text-sm text-white focus:outline-none focus:border-gold-500 transition-all">
+                </div>
+                <button onclick="app.salvarNovaSenhaAdmin()" class="w-full bg-gold-500 hover:bg-gold-400 text-dark-900 py-3 rounded-xl font-bold text-sm transition-all shadow-lg shadow-gold-500/10">
+                    Salvar Nova Senha
+                </button>
+            </div>
+        </div>
+    </div>
 
-/* --- FINALIZAÇÃO VIA WHATSAPP --- */
-function finalizeOrderWhatsApp() {
-    const keys = Object.keys(cart);
-    if (keys.length === 0) {
-        alert('Adicione pelo menos um produto ao carrinho antes de enviar o pedido.');
-        return;
-    }
-    
-    let message = "Olá! 👋 Gostaria de fechar o seguinte pedido na *JR Cosméticos*:\n\n";
-    let totalSum = 0;
-    
-    keys.forEach(id => {
-        const item = cart[id];
-        const sub = item.price * item.qty;
-        totalSum += sub;
-        message += `• ${item.qty}x ${item.name} - R$ ${sub.toFixed(2).replace('.', ',')}\n`;
-    });
-    
-    message += `\n*Total do Pedido: R$ ${totalSum.toFixed(2).replace('.', ',')}*\n\nAguardo orientações sobre pagamento e entrega para o salão.`;
-    
-    const phoneNumber = "5563992204543"; 
-    const encodedURL = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(message)}`;
-    
-    window.open(encodedURL, '_blank');
-}
+    <!-- Script da Aplicação -->
+    <script>
+        class JRStore {
+            constructor() {
+                // Senha inicial padrão caso não haja nenhuma salva (o usuário poderá alterar a qualquer momento)
+                if (!localStorage.getItem('jr_admin_pass')) {
+                    localStorage.setItem('jr_admin_pass', 'admin123');
+                }
 
-/* --- PAINEL ADMINISTRADOR / DESENVOLVEDOR --- */
-function openAdminModal() { document.getElementById('admin-modal').style.display = 'flex'; }
-function closeAdminModal() { document.getElementById('admin-modal').style.display = 'none'; }
+                // Produtos padrão de alta qualidade para salões
+                if (!localStorage.getItem('jr_products')) {
+                    const produtosIniciais = [
+                        { id: 1, name: 'Selagem Progressiva Gold Liss Pro 1L', category: 'Selagem Progressiva', price: 189.90, image: 'https://images.unsplash.com/photo-1608248597359-f55c914e0d2d?auto=format&fit=crop&w=800&q=80', badge: 'Mais Vendido' },
+                        { id: 2, name: 'Máscara de Hidratação Profunda Cocooil 1kg', category: 'Hidratação', price: 149.90, image: 'https://images.unsplash.com/photo-1535585209827-a15fcdbc4c2d?auto=format&fit=crop&w=800&q=80', badge: 'Essencial' },
+                        { id: 3, name: 'Reconstrução Capilar Absolute Repair 500ml', category: 'Reconstrução', price: 219.90, image: 'https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?auto=format&fit=crop&w=800&q=80', badge: 'Profissional' },
+                        { id: 4, name: 'Kit Botox Capilar Matizador Blond 1kg', category: 'Selagem Progressiva', price: 179.90, image: 'https://images.unsplash.com/photo-1512290900672-8a6e8b093322?auto=format&fit=crop&w=800&q=80', badge: 'Destaque' }
+                    ];
+                    localStorage.setItem('jr_products', JSON.stringify(produtosIniciais));
+                }
 
-function verifyAdminLogin() {
-    const pass = document.getElementById('admin-password-input').value;
-    // Senha padrão de desenvolvedor/administrador (pode alterar aqui se quiser)
-    if (pass === 'admin123') {
-        document.getElementById('admin-login-screen').style.display = 'none';
-        document.getElementById('admin-dashboard-screen').style.display = 'flex';
-        renderAdminProductsList();
-    } else {
-        alert('Senha incorreta! Use: admin123');
-    }
-}
+                this.cart = [];
+                this.categoriaAtual = 'Todos';
+                this.init();
+            }
 
-function logoutAdmin() {
-    document.getElementById('admin-password-input').value = '';
-    document.getElementById('admin-dashboard-screen').style.display = 'none';
-    document.getElementById('admin-login-screen').style.display = 'flex';
-}
+            init() {
+                this.renderProdutos();
+                this.atualizarBadgeCarrinho();
+            }
 
-function renderAdminProductsList() {
-    const list = document.getElementById('admin-products-list');
-    list.innerHTML = '';
-    
-    productsDatabase.forEach(p => {
-        const row = document.createElement('div');
-        row.className = 'admin-product-row';
-        row.innerHTML = `
-            <span><b>${p.name}</b> (${p.category}) - R$ ${p.price.toFixed(2)}</span>
-            <button class="btn-delete-prod" onclick="deleteProduct(${p.id})">Excluir</button>
-        `;
-        list.appendChild(row);
-    });
-}
+            getProdutos() {
+                return JSON.parse(localStorage.getItem('jr_products')) || [];
+            }
 
-function addNewProduct() {
-    const name = document.getElementById('new-p-name').value;
-    const category = document.getElementById('new-p-cat').value;
-    const specs = document.getElementById('new-p-specs').value;
-    const price = parseFloat(document.getElementById('new-p-price').value);
-    const image = document.getElementById('new-p-image').value;
-    
-    if (!name || !price || !image) {
-        alert('Preencha os campos obrigatórios (Nome, Preço e Imagem)!');
-        return;
-    }
-    
-    const newId = productsDatabase.length > 0 ? Math.max(...productsDatabase.map(p => p.id)) + 1 : 1;
-    
-    productsDatabase.push({
-        id: newId,
-        name: name,
-        category: category,
-        specs: specs || 'Uso Profissional',
-        price: price,
-        tag: 'Novo',
-        image: image
-    });
-    
-    // Limpar campos
-    document.getElementById('new-p-name').value = '';
-    document.getElementById('new-p-specs').value = '';
-    document.getElementById('new-p-price').value = '';
-    document.getElementById('new-p-image').value = '';
-    
-    renderProducts(currentCategory);
-    renderAdminProductsList();
-    alert('Produto adicionado com sucesso!');
-}
+            setProdutos(produtos) {
+                localStorage.setItem('jr_products', JSON.stringify(produtos));
+                this.renderProdutos();
+            }
 
-function deleteProduct(id) {
-    if (confirm('Tem certeza que deseja remover este produto?')) {
-        productsDatabase = productsDatabase.filter(p => p.id !== id);
-        delete cart[id];
-        renderProducts(currentCategory);
-        renderAdminProductsList();
-        updateCartUI();
-    }
-}
+            renderProdutos() {
+                const grid = document.getElementById('product-grid');
+                const produtos = this.getProdutos();
+                const filtrados = this.categoriaAtual === 'Todos' 
+                    ? produtos 
+                    : produtos.filter(p => p.category === this.categoriaAtual);
 
-window.onload = () => {
-    renderProducts('todos');
-};
-</script>
+                if (filtrados.length === 0) {
+                    grid.innerHTML = `<div class="col-span-full py-16 text-center text-gray-500 text-sm">Nenhum produto encontrado nesta categoria.</div>`;
+                    return;
+                }
+
+                grid.innerHTML = filtrados.map(p => `
+                    <div class="bg-dark-800 border border-dark-600 rounded-2xl overflow-hidden hover:border-gold-500/50 transition-all duration-300 flex flex-col group shadow-lg">
+                        <div class="relative aspect-[4/3] bg-dark-900 overflow-hidden cursor-pointer" onclick="app.abrirZoom('${p.image}')">
+                            <img src="${p.image}" alt="${p.name}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+                            ${p.badge ? `<span class="absolute top-3 left-3 bg-gold-500 text-dark-900 text-[10px] font-extrabold px-2.5 py-1 rounded-full uppercase tracking-wider shadow-md">${p.badge}</span>` : ''}
+                            <div class="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center text-white text-xs font-semibold space-x-1.5">
+                                <i class="fa-solid fa-magnifying-glass-plus"></i>
+                                <span>Ampliar Imagem</span>
+                            </div>
+                        </div>
+                        <div class="p-5 flex-1 flex flex-col justify-between space-y-4">
+                            <div class="space-y-1.5">
+                                <span class="text-[10px] uppercase tracking-widest text-gold-400 font-bold">${p.category}</span>
+                                <h4 class="font-bold text-white text-sm sm:text-base leading-snug line-clamp-2">${p.name}</h4>
+                            </div>
+                            <div class="flex items-center justify-between pt-2 border-t border-dark-700">
+                                <div>
+                                    <span class="text-[10px] text-gray-500 block uppercase">Preço Exclusivo</span>
+                                    <span class="text-base sm:text-lg font-extrabold text-gold-400">R$ ${p.price.toFixed(2).replace('.', ',')}</span>
+                                </div>
+                                <button onclick="app.adicionarAoCarrinho(${p.id})" class="bg-gold-500 hover:bg-gold-400 text-dark-900 px-3.5 py-2.5 rounded-xl text-xs font-extrabold transition-all shadow-md shadow-gold-500/10 flex items-center space-x-1.5">
+                                    <i class="fa-solid fa-cart-plus"></i>
+                                    <span>Comprar</span>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                `).join('');
+            }
+
+            filtrarCategoria(cat) {
+                this.categoriaAtual = cat;
+                document.querySelectorAll('.cat-btn').forEach(btn => {
+                    if (btn.textContent.trim() === cat) {
+                        btn.className = 'cat-btn active px-4 py-2 rounded-xl text-xs font-semibold bg-gold-500 text-dark-900 transition-all shadow-sm';
+                    } else {
+                        btn.className = 'cat-btn px-4 py-2 rounded-xl text-xs font-semibold bg-dark-800 text-gray-300 hover:bg-dark-700 hover:text-white border border-dark-600 transition-all';
+                    }
+                });
+                this.renderProdutos();
+            }
+
+            abrirZoom(url) {
+                document.getElementById('zoomed-image').src = url;
+                const modal = document.getElementById('image-zoom-modal');
+                modal.classList.remove('hidden');
+                modal.classList.add('flex');
+            }
+
+            fecharZoom() {
+                const modal = document.getElementById('image-zoom-modal');
+                modal.classList.remove('flex');
+                modal.classList.add('hidden');
+            }
+
+            adicionarAoCarrinho(id) {
+                const produtos = this.getProdutos();
+                const produto = produtos.find(p => p.id === id);
+                if (!produto) return;
+
+                const itemExistente = this.cart.find(item => item.id === id);
+                if (itemExistente) {
+                    itemExistente.qtd += 1;
+                } else {
+                    this.cart.push({ ...produto, qtd: 1 });
+                }
+                this.atualizarBadgeCarrinho();
+                this.abrirCarrinho();
+            }
+
+            atualizarBadgeCarrinho() {
+                const totalItens = this.cart.reduce((sum, item) => sum + item.qtd, 0);
+                document.getElementById('cart-badge').textContent = totalItens;
+            }
+
+            abrirCarrinho() {
+                const container = document.getElementById('cart-items-container');
+                if (this.cart.length === 0) {
+                    container.innerHTML = `<div class="text-center py-16 text-gray-500 text-xs">Seu carrinho está vazio.</div>`;
+                    document.getElementById('cart-total').textContent = 'R$ 0,00';
+                } else {
+                    container.innerHTML = this.cart.map((item, index) => `
+                        <div class="flex items-center justify-between py-3">
+                            <div class="flex items-center space-x-3">
+                                <img src="${item.image}" class="w-12 h-12 rounded-lg object-cover border border-dark-600">
+                                <div>
+                                    <h5 class="text-xs font-bold text-white line-clamp-1">${item.name}</h5>
+                                    <span class="text-xs text-gold-400 font-semibold">R$ ${item.price.toFixed(2).replace('.', ',')}</span>
+                                </div>
+                            </div>
+                            <div class="flex items-center space-x-2">
+                                <button onclick="app.alterarQtd(${index}, -1)" class="w-6 h-6 rounded bg-dark-700 text-white flex items-center justify-center text-xs hover:bg-dark-600">-</button>
+                                <span class="text-xs font-bold text-white">${item.qtd}</span>
+                                <button onclick="app.alterarQtd(${index}, 1)" class="w-6 h-6 rounded bg-dark-700 text-white flex items-center justify-center text-xs hover:bg-dark-600">+</button>
+                            </div>
+                        </div>
+                    `).join('');
+
+                    const totalGeral = this.cart.reduce((sum, item) => sum + (item.price * item.qtd), 0);
+                    document.getElementById('cart-total').textContent = `R$ ${totalGeral.toFixed(2).replace('.', ',')}`;
+                }
+
+                const modal = document.getElementById('cart-modal');
+                modal.classList.remove('hidden');
+                modal.classList.add('flex');
+            }
+
+            fecharCarrinho() {
+                const modal = document.getElementById('cart-modal');
+                modal.classList.remove('flex');
+                modal.classList.add('hidden');
+            }
+
+            alterarQtd(index, delta) {
+                this.cart[index].qtd += delta;
+                if (this.cart[index].qtd <= 0) {
+                    this.cart.splice(index, 1);
+                }
+                this.atualizarBadgeCarrinho();
+                this.abrirCarrinho();
+            }
+
+            finalizarPedidoWhatsApp() {
+                if (this.cart.length === 0) return;
+                let texto = "Olá! Gostaria de fazer o pedido dos seguintes produtos profissionais:\n\n";
+                this.cart.forEach(item => {
+                    texto += `• ${item.qtd}x ${item.name} - R$ ${(item.price * item.qtd).toFixed(2).replace('.', ',')}\n`;
+                });
+                const totalGeral = this.cart.reduce((sum, item) => sum + (item.price * item.qtd), 0);
+                texto += `\n*Total Geral: R$ ${totalGeral.toFixed(2).replace('.', ',')}*`;
+
+                const url = `https://wa.me/5563992204543?text=${encodeURIComponent(texto)}`;
+                window.open(url, '_blank');
+            }
+
+            // CONTROLE ADMIN E SENHA
+            abrirAdminLoginModal() {
+                document.getElementById('admin-password-input').value = '';
+                const modal = document.getElementById('admin-login-modal');
+                modal.classList.remove('hidden');
+                modal.classList.add('flex');
+            }
+
+            fecharAdminLoginModal() {
+                const modal = document.getElementById('admin-login-modal');
+                modal.classList.remove('flex');
+                modal.classList.add('hidden');
+            }
+
+            tentarLoginAdmin() {
+                const senhaDigitada = document.getElementById('admin-password-input').value;
+                const senhaSalva = localStorage.getItem('jr_admin_pass');
+
+                if (senhaDigitada === senhaSalva) {
+                    this.fecharAdminLoginModal();
+                    this.abrirAdminDashboard();
+                } else {
+                    alert('Senha incorreta. Tente novamente.');
+                }
+            }
+
+            abrirAdminDashboard() {
+                this.renderizarListaAdmin();
+                this.limparFormularioProduto();
+                const modal = document.getElementById('admin-dashboard-modal');
+                modal.classList.remove('hidden');
+                modal.classList.add('flex');
+            }
+
+            fecharAdminDashboard() {
+                const modal = document.getElementById('admin-dashboard-modal');
+                modal.classList.remove('flex');
+                modal.classList.add('hidden');
+            }
+
+            abrirConfiguracaoSenha() {
+                document.getElementById('new-admin-password').value = '';
+                document.getElementById('confirm-admin-password').value = '';
+                const modal = document.getElementById('admin-password-modal');
+                modal.classList.remove('hidden');
+                modal.classList.add('flex');
+            }
+
+            fecharConfiguracaoSenha() {
+                const modal = document.getElementById('admin-password-modal');
+                modal.classList.remove('flex');
+                modal.classList.add('hidden');
+            }
+
+            salvarNovaSenhaAdmin() {
+                const nova = document.getElementById('new-admin-password').value;
+                const confirma = document.getElementById('confirm-admin-password').value;
+
+                if (!nova || nova.length < 4) {
+                    alert('A senha deve ter pelo menos 4 caracteres.');
+                    return;
+                }
+                if (nova !== confirma) {
+                    alert('As senhas não coincidem.');
+                    return;
+                }
+
+                localStorage.setItem('jr_admin_pass', nova);
+                alert('Senha alterada com sucesso! Utilize esta nova senha nos próximos acessos.');
+                this.fecharConfiguracaoSenha();
+            }
+
+            renderizarListaAdmin() {
+                const produtos = this.getProdutos();
+                const container = document.getElementById('admin-product-list');
+                container.innerHTML = produtos.map(p => `
+                    <div class="bg-dark-800 border border-dark-700 rounded-xl p-3.5 flex items-center justify-between">
+                        <div class="flex items-center space-x-3">
+                            <img src="${p.image}" class="w-10 h-10 rounded-lg object-cover">
+                            <div>
+                                <h5 class="text-xs font-bold text-white">${p.name}</h5>
+                                <span class="text-[11px] text-gold-400 font-semibold">R$ ${p.price.toFixed(2).replace('.', ',')}</span>
+                            </div>
+                        </div>
+                        <div class="flex items-center space-x-2">
+                            <button onclick="app.editarProduto(${p.id})" class="bg-dark-700 hover:bg-dark-600 text-gray-300 p-2 rounded-lg text-xs">
+                                <i class="fa-solid fa-pen"></i>
+                            </button>
+                            <button onclick="app.excluirProduto(${p.id})" class="bg-red-500/10 hover:bg-red-500/20 text-red-400 p-2 rounded-lg text-xs">
+                                <i class="fa-solid fa-trash"></i>
+                            </button>
+                        </div>
+                    </div>
+                `).join('');
+            }
+
+            limparFormularioProduto() {
+                document.getElementById('edit-product-id').value = '';
+                document.getElementById('prod-name').value = '';
+                document.getElementById('prod-price').value = '';
+                document.getElementById('prod-image').value = '';
+                document.getElementById('form-product-title').textContent = 'Adicionar Novo Produto';
+            }
+
+            salvarProduto() {
+                const id = document.getElementById('edit-product-id').value;
+                const name = document.getElementById('prod-name').value.trim();
+                const category = document.getElementById('prod-category').value;
+                const price = parseFloat(document.getElementById('prod-price').value);
+                const image = document.getElementById('prod-image').value.trim();
+
+                if (!name || isNaN(price) || !image) {
+                    alert('Preencha todos os campos corretamente.');
+                    return;
+                }
+
+                let produtos = this.getProdutos();
+                if (id) {
+                    // Editar
+                    produtos = produtos.map(p => p.id == id ? { ...p, name, category, price, image } : p);
+                } else {
+                    // Criar
+                    const novoId = produtos.length > 0 ? Math.max(...produtos.map(p => p.id)) + 1 : 1;
+                    produtos.push({ id: novoId, name, category, price, image, badge: 'Profissional' });
+                }
+
+                this.setProdutos(produtos);
+                this.renderizarListaAdmin();
+                this.limparFormularioProduto();
+            }
+
+            editarProduto(id) {
+                const produtos = this.getProdutos();
+                const p = produtos.find(item => item.id == id);
+                if (!p) return;
+
+                document.getElementById('edit-product-id').value = p.id;
+                document.getElementById('prod-name').value = p.name;
+                document.getElementById('prod-category').value = p.category;
+                document.getElementById('prod-price').value = p.price;
+                document.getElementById('prod-image').value = p.image;
+                document.getElementById('form-product-title').textContent = 'Editar Produto';
+            }
+
+            excluirProduto(id) {
+                if (confirm('Deseja realmente excluir este produto?')) {
+                    let produtos = this.getProdutos();
+                    produtos = produtos.filter(p => p.id != id);
+                    this.setProdutos(produtos);
+                    this.renderizarListaAdmin();
+                }
+            }
+
+            voltarHome() {
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            }
+        }
+
+        const app = new JRStore();
+    </script>
 </body>
 </html>

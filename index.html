@@ -3,757 +3,459 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<meta name="theme-color" content="#0e1015">
-<title>Aviator Pro</title>
+<meta name="theme-color" content="#0b0b0b">
+<title>JR Cosméticos | Profissional</title>
 <style>
 :root {
-    --bg-main: #07090e;
-    --bg-card: #121722;
-    --bg-input: #1a2130;
-    --green-primary: #00c853;
-    --green-hover: #00a844;
-    --red-primary: #e6004c;
+    --bg-main: #0b0b0b;
+    --bg-card: #141414;
+    --bg-card-hover: #1c1c1c;
+    --bg-input: #1a1a1a;
+    --gold-primary: #d4af37;
+    --gold-light: #f3e5ab;
+    --gold-dark: #aa820a;
     --text-white: #ffffff;
-    --text-muted: #8c9cb6;
-    --border-color: #232c3d;
-    --font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    --text-muted: #a3a3a3;
+    --border: #2a2a2a;
+    --font: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
 }
-* { box-sizing: border-box; margin: 0; padding: 0; font-family: var(--font-family); user-select: none; -webkit-tap-highlight-color: transparent; }
-body { background-color: var(--bg-main); color: var(--text-white); min-height: 100vh; display: flex; flex-direction: column; overflow-x: hidden; padding-bottom: 65px; }
+* { box-sizing: border-box; margin: 0; padding: 0; font-family: var(--font); -webkit-tap-highlight-color: transparent; }
+body { background-color: var(--bg-main); color: var(--text-white); min-height: 100vh; display: flex; flex-direction: column; overflow-x: hidden; padding-bottom: 90px; }
 
-/* --- AUTENTICAÇÃO --- */
-#auth-screen { position: fixed; inset: 0; background: radial-gradient(circle at center, #0f2619 0%, #07090e 100%); z-index: 2000; display: flex; align-items: center; justify-content: center; padding: 20px; overflow-y: auto; }
-.auth-card { background: var(--bg-card); border: 1px solid var(--border-color); border-radius: 20px; width: 100%; max-width: 420px; padding: 30px 24px; box-shadow: 0 25px 60px rgba(0, 200, 83, 0.15); text-align: center; }
-.auth-logo { width: 75px; height: 75px; margin: 0 auto 15px; background: linear-gradient(135deg, #00c853, #004d1f); border-radius: 20px; display: flex; align-items: center; justify-content: center; box-shadow: 0 10px 25px rgba(0, 200, 83, 0.3); }
-.auth-title { font-size: 24px; font-weight: 900; letter-spacing: 1px; color: #fff; margin-bottom: 4px; }
-.auth-subtitle { color: var(--text-muted); font-size: 12px; margin-bottom: 20px; }
-.auth-tabs { display: flex; background: var(--bg-input); border-radius: 10px; padding: 4px; margin-bottom: 20px; }
-.auth-tab { flex: 1; padding: 10px; border: none; background: transparent; color: var(--text-muted); font-weight: 700; border-radius: 8px; cursor: pointer; transition: 0.3s; font-size: 13px; }
-.auth-tab.active { background: var(--green-primary); color: #00260b; box-shadow: 0 4px 15px rgba(0, 200, 83, 0.3); }
-.input-group { margin-bottom: 14px; text-align: left; }
-.input-group label { display: block; font-size: 11px; color: var(--text-muted); margin-bottom: 5px; text-transform: uppercase; font-weight: 800; letter-spacing: 0.5px; }
-.input-group input { width: 100%; padding: 12px 14px; background: var(--bg-input); border: 1px solid var(--border-color); border-radius: 10px; color: white; font-size: 14px; outline: none; transition: 0.3s; }
-.input-group input:focus { border-color: var(--green-primary); box-shadow: 0 0 10px rgba(0, 200, 83, 0.2); }
-.phone-row { display: flex; gap: 8px; }
-.phone-prefix { width: 75px; background: var(--bg-input); border: 1px solid var(--border-color); border-radius: 10px; color: white; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 13px; }
-.checkbox-group { display: flex; align-items: center; gap: 8px; font-size: 11px; color: var(--text-muted); margin-bottom: 16px; text-align: left; }
-.checkbox-group input { accent-brColor: var(--green-primary); width: 16px; height: 16px; }
-.checkbox-group a { color: var(--green-primary); text-decoration: none; font-weight: 700; }
-.btn-submit { width: 100%; padding: 14px; background: linear-gradient(90deg, #00c853, #00e676); border: none; border-radius: 10px; color: #00260b; font-size: 15px; font-weight: 900; cursor: pointer; box-shadow: 0 6px 20px rgba(0, 200, 83, 0.3); transition: 0.2s; letter-spacing: 0.5px; }
+/* --- BARRA DE ANÚNCIOS / TOPO LUXURY --- */
+.top-announcement { background: linear-gradient(90deg, #aa820a, #d4af37, #f3e5ab); color: #0b0b0b; font-size: 11px; font-weight: 900; text-align: center; padding: 7px 12px; letter-spacing: 1px; text-transform: uppercase; }
 
-/* --- INTERFACE PRINCIPAL --- */
-#app-screen { display: none; flex-direction: column; min-height: calc(100vh - 65px); }
-header { background: var(--bg-card); border-bottom: 1px solid var(--border-color); padding: 8px 14px; display: flex; align-items: center; justify-content: space-between; }
-.brand { display: flex; align-items: center; gap: 6px; font-weight: 900; font-size: 16px; color: var(--red-primary); letter-spacing: 1px; }
-.user-info-bar { display: flex; align-items: center; gap: 8px; }
-.balance-badge { background: #0c1017; border: 1px solid var(--border-color); padding: 3px 10px; border-radius: 20px; display: flex; align-items: center; gap: 5px; font-weight: 800; font-size: 12px; color: var(--green-primary); }
-.btn-deposit-top { background: var(--green-primary); color: #00260b; border: none; padding: 6px 12px; border-radius: 6px; font-weight: 800; font-size: 11px; cursor: pointer; }
-.btn-menu-top { background: transparent; border: none; color: var(--text-muted); font-size: 20px; cursor: pointer; padding: 0 4px; }
+/* --- HEADER / NAVEGAÇÃO SUPERIOR --- */
+header { background: rgba(11, 11, 11, 0.95); backdrop-filter: blur(10px); border-bottom: 1px solid var(--border); position: sticky; top: 0; z-index: 1000; padding: 12px 20px; display: flex; align-items: center; justify-content: space-between; }
+.brand-wrapper { display: flex; align-items: center; gap: 12px; }
+.brand-logo-circle { width: 42px; height: 42px; border: 2px solid var(--gold-primary); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 900; color: var(--gold-primary); font-size: 16px; background: #000; box-shadow: 0 0 15px rgba(212, 175, 55, 0.2); }
+.brand-texts h1 { font-size: 15px; font-weight: 900; letter-spacing: 1px; color: var(--gold-light); line-height: 1.1; text-transform: uppercase; }
+.brand-texts span { font-size: 9px; color: var(--text-muted); font-weight: 700; text-transform: uppercase; letter-spacing: 1.5px; }
 
-/* HISTÓRICO MULTIPLICADORES */
-.history-bar { background: #0b0f17; padding: 6px 14px; display: flex; gap: 6px; overflow-x: auto; border-bottom: 1px solid var(--border-color); scrollbar-width: none; }
-.history-bar::-webkit-scrollbar { display: none; }
-.history-item { padding: 3px 8px; border-radius: 10px; font-size: 11px; font-weight: 800; white-space: nowrap; }
-.h-blue { background: rgba(59, 130, 246, 0.15); color: #60a5fa; border: 1px solid rgba(59, 130, 246, 0.3); }
-.h-purple { background: rgba(168, 85, 247, 0.15); color: #c084fc; border: 1px solid rgba(168, 85, 247, 0.3); }
-.h-gold { background: rgba(234, 179, 8, 0.15); color: #facc15; border: 1px solid rgba(234, 179, 8, 0.3); }
+.header-actions { display: flex; align-items: center; gap: 12px; }
+.cart-btn-top { background: var(--bg-input); border: 1px solid var(--border); padding: 8px 14px; border-radius: 10px; color: var(--gold-light); font-weight: 800; font-size: 12px; display: flex; align-items: center; gap: 6px; cursor: pointer; position: relative; transition: 0.2s; }
+.cart-btn-top:hover { border-color: var(--gold-primary); }
+.cart-badge { background: var(--gold-primary); color: #0b0b0b; font-size: 10px; font-weight: 900; padding: 1px 6px; border-radius: 20px; }
 
-/* LAYOUT PRINCIPAL DO JOGO */
-.game-layout { display: flex; flex-direction: column; flex: 1; max-width: 900px; margin: 0 auto; width: 100%; }
+/* --- CARROSSEL PROFISSIONAL DE DESTAQUE (SLIDER) --- */
+.hero-slider { width: 100%; height: 320px; position: relative; overflow: hidden; border-bottom: 1px solid var(--border); background: #000; }
+@media (min-width: 768px) { .hero-slider { height: 400px; } }
+.slide-track { display: flex; width: 100%; height: 100%; transition: transform 0.6s ease-in-out; }
+.slide-item { min-width: 100%; height: 100%; position: relative; display: flex; align-items: flex-end; justify-content: center; }
+.slide-item img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; opacity: 0.55; }
+.slide-overlay { position: absolute; inset: 0; background: linear-gradient(0deg, #0b0b0b 0%, rgba(11,11,11,0.3) 60%, transparent 100%); }
+.slide-content { position: relative; z-index: 2; text-align: center; padding: 24px 20px; max-width: 600px; }
+.slide-content h2 { font-size: 20px; font-weight: 900; color: var(--gold-light); margin-bottom: 6px; text-transform: uppercase; letter-spacing: 0.5px; text-shadow: 0 2px 4px rgba(0,0,0,0.8); }
+.slide-content p { font-size: 12px; color: #e5e5e5; margin-bottom: 8px; text-shadow: 0 1px 3px rgba(0,0,0,0.8); }
+.slide-slogan { font-size: 10px; color: var(--gold-primary); font-weight: 800; text-transform: uppercase; letter-spacing: 2px; text-shadow: 0 1px 2px rgba(0,0,0,0.9); }
 
-/* CANVAS DE VOO */
-.game-display-wrapper { display: flex; flex-direction: column; flex: 1; }
-.game-display { position: relative; height: 260px; background: radial-gradient(circle at 20% 80%, #1a0610 0%, #07090e 70%); margin: 8px; border-radius: 12px; border: 1px solid var(--border-color); overflow: hidden; box-shadow: inset 0 0 30px rgba(0,0,0,0.8); }
-@media (min-width: 850px) { .game-display { height: 340px; margin: 8px 0; } }
-canvas { width: 100%; height: 100%; display: block; }
-.multiplier-overlay { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); text-align: center; pointer-events: none; }
-.multiplier-text { font-size: 48px; font-weight: 900; color: white; text-shadow: 0 0 20px rgba(230, 0, 76, 0.6); line-height: 1; letter-spacing: -1px; }
-.status-text { font-size: 11px; font-weight: 800; color: var(--text-muted); margin-top: 6px; text-transform: uppercase; letter-spacing: 1px; }
+/* Indicadores de Slide (Bolinhas) */
+.slide-dots { position: absolute; bottom: 12px; left: 50%; transform: translateX(-50%); display: flex; gap: 6px; z-index: 10; }
+.dot { width: 8px; height: 8px; border-radius: 50%; background: rgba(255,255,255,0.4); cursor: pointer; transition: 0.3s; }
+.dot.active { background: var(--gold-primary); width: 22px; border-radius: 4px; }
 
-/* PAINEL DE CONTROLE DE APOSTAS DUPLO */
-.controls-container { padding: 0 8px 8px 8px; display: flex; flex-direction: column; gap: 8px; }
-.bet-card { background: var(--bg-card); border: 1px solid var(--border-color); border-radius: 12px; padding: 10px; display: flex; flex-direction: column; gap: 8px; box-shadow: 0 6px 20px rgba(0,0,0,0.4); }
-.bet-mode-tabs { display: flex; background: var(--bg-input); border-radius: 8px; padding: 2px; width: fit-content; margin-bottom: 2px; }
-.bet-mode-tab { padding: 4px 12px; border: none; background: transparent; color: var(--text-muted); font-size: 10px; font-weight: 800; border-radius: 6px; cursor: pointer; }
-.bet-mode-tab.active { background: #28334a; color: white; }
+/* --- FILTROS DE CATEGORIA --- */
+.categories-bar { display: flex; gap: 8px; padding: 16px 20px; overflow-x: auto; scrollbar-width: none; background: var(--bg-main); }
+.categories-bar::-webkit-scrollbar { display: none; }
+.cat-chip { background: var(--bg-card); border: 1px solid var(--border); color: var(--text-muted); padding: 8px 16px; border-radius: 20px; font-size: 12px; font-weight: 800; white-space: nowrap; cursor: pointer; transition: 0.2s; }
+.cat-chip.active { background: var(--gold-primary); color: #0b0b0b; border-color: var(--gold-primary); box-shadow: 0 4px 15px rgba(212,175,55,0.25); }
 
-.bet-inputs-row { display: flex; gap: 8px; align-items: center; }
-.input-stepper { display: flex; align-items: center; background: var(--bg-input); border: 1px solid var(--border-color); border-radius: 8px; padding: 4px 8px; flex: 1.2; }
-.step-btn { background: transparent; border: none; color: var(--text-muted); font-size: 16px; font-weight: bold; cursor: pointer; padding: 0 4px; }
-.step-input-box { flex: 1; text-align: center; }
-.step-input-box input { width: 100%; background: transparent; border: none; color: white; font-size: 15px; font-weight: 900; text-align: center; outline: none; }
+/* --- VITRINE DE PRODUTOS --- */
+.catalog-container { max-width: 1200px; margin: 0 auto; width: 100%; padding: 0 20px 40px 20px; }
+.section-title { font-size: 13px; font-weight: 900; text-transform: uppercase; letter-spacing: 1.5px; color: var(--gold-light); margin-bottom: 14px; display: flex; align-items: center; justify-content: space-between; }
+.products-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 14px; }
+@media (min-width: 768px) { .products-grid { grid-template-columns: repeat(3, 1fr); gap: 20px; } }
+@media (min-width: 1024px) { .products-grid { grid-template-columns: repeat(4, 1fr); gap: 20px; } }
 
-.quick-chips { display: grid; grid-template-columns: repeat(4, 1fr); gap: 4px; flex: 1.5; }
-.btn-chip { background: var(--bg-input); border: 1px solid var(--border-color); color: var(--text-muted); padding: 6px 2px; border-radius: 6px; font-size: 10px; font-weight: 800; cursor: pointer; text-align: center; }
-.btn-chip:hover { background: #232c3d; color: white; }
+.product-card { background: var(--bg-card); border: 1px solid var(--border); border-radius: 14px; overflow: hidden; display: flex; flex-direction: column; transition: 0.3s; position: relative; }
+.product-card:hover { transform: translateY(-3px); border-color: var(--gold-primary); box-shadow: 0 10px 30px rgba(0,0,0,0.7); }
+.product-image-box { width: 100%; height: 170px; background: #1a1a1a; position: relative; display: flex; align-items: center; justify-content: center; overflow: hidden; }
+.product-image-box img { width: 100%; height: 100%; object-fit: cover; transition: 0.3s; }
+.product-card:hover .product-image-box img { transform: scale(1.05); }
+.product-tag { position: absolute; top: 10px; left: 10px; background: rgba(11,11,11,0.85); backdrop-filter: blur(4px); color: var(--gold-light); font-size: 9px; font-weight: 900; padding: 3px 8px; border-radius: 6px; border: 1px solid rgba(212,175,55,0.4); text-transform: uppercase; }
 
-.btn-main-action { width: 100%; height: 46px; border: none; border-radius: 8px; font-size: 14px; font-weight: 900; text-transform: uppercase; cursor: pointer; transition: 0.2s; letter-spacing: 0.5px; }
-.btn-bet { background: linear-gradient(180deg, #00c853, #008f3b); color: #00260b; box-shadow: 0 4px 15px rgba(0, 200, 83, 0.3); }
-.btn-cashout { background: linear-gradient(180deg, #ff9800, #f57c00); color: #fff; box-shadow: 0 4px 15px rgba(255, 152, 0, 0.4); }
-.btn-waiting { background: #1f293d; color: var(--text-muted); cursor: not-allowed; }
+.product-content { padding: 14px; display: flex; flex-direction: column; flex: 1; justify-content: space-between; gap: 10px; }
+.product-category-mini { font-size: 10px; color: var(--gold-primary); font-weight: 800; text-transform: uppercase; letter-spacing: 0.5px; }
+.product-name { font-size: 13px; font-weight: 800; color: #fff; line-height: 1.3; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+.product-specs { font-size: 11px; color: var(--text-muted); background: var(--bg-input); padding: 4px 8px; border-radius: 6px; width: fit-content; font-weight: 700; border: 1px solid var(--border); }
+.product-footer { display: flex; align-items: center; justify-content: space-between; margin-top: 4px; }
+.product-price { font-size: 15px; font-weight: 900; color: var(--gold-light); }
+.btn-add-cart { background: var(--gold-primary); color: #0b0b0b; border: none; padding: 8px 12px; border-radius: 8px; font-size: 11px; font-weight: 900; cursor: pointer; transition: 0.2s; display: flex; align-items: center; gap: 4px; box-shadow: 0 4px 12px rgba(212,175,55,0.2); }
+.btn-add-cart:hover { background: var(--gold-light); }
 
-/* RODAPÉ INFERIOR FIXO */
-.bottom-nav { position: fixed; bottom: 0; left: 0; right: 0; height: 60px; background: #0c1017; border-top: 1px solid var(--border-color); display: flex; justify-content: space-around; align-items: center; z-index: 1000; }
-.nav-item { display: flex; flex-direction: column; align-items: center; justify-content: center; background: transparent; border: none; color: var(--text-muted); font-size: 10px; font-weight: 700; cursor: pointer; gap: 3px; flex: 1; }
-.nav-item.active { color: var(--green-primary); }
-.nav-item svg { width: 20px; height: 20px; fill: currentColor; }
-
-/* PAINEL LATERAL / MODAL DO MENU INFERIOR */
-.drawer-overlay { position: fixed; inset: 0; background: rgba(7, 9, 14, 0.85); backdrop-filter: blur(4px); z-index: 3000; display: none; align-items: flex-end; justify-content: center; }
-.drawer-card { background: var(--bg-card); border: 1px solid var(--border-color); border-top-left-radius: 20px; border-top-right-radius: 20px; width: 100%; max-width: 500px; max-height: 85vh; overflow-y: auto; padding: 20px 16px 30px 16px; box-shadow: 0 -10px 30px rgba(0,0,0,0.8); animation: slideUp 0.3s ease; }
+/* --- MODAL DO CARRINHO / CHECKOUT --- */
+.cart-modal-overlay { position: fixed; inset: 0; background: rgba(11, 11, 11, 0.88); backdrop-filter: blur(8px); z-index: 2000; display: none; align-items: flex-end; justify-content: center; }
+@media (min-width: 640px) { .cart-modal-overlay { align-items: center; } }
+.cart-modal-card { background: var(--bg-card); border: 1px solid var(--border); border-top-left-radius: 24px; border-top-right-radius: 24px; width: 100%; max-width: 500px; max-height: 90vh; display: flex; flex-direction: column; box-shadow: 0 -20px 40px rgba(0,0,0,0.9); animation: slideUp 0.3s ease; }
+@media (min-width: 640px) { .cart-modal-card { border-radius: 20px; } }
 @keyframes slideUp { from { transform: translateY(100%); } to { transform: translateY(0); } }
 
-.drawer-user-header { display: flex; align-items: center; justify-content: space-between; background: var(--bg-input); padding: 12px 14px; border-radius: 12px; margin-bottom: 16px; border: 1px solid var(--border-color); }
-.drawer-user-info { display: flex; align-items: center; gap: 10px; }
-.drawer-avatar { width: 40px; height: 40px; background: #28334a; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 20px; border: 1px solid var(--border-color); }
-.drawer-username { font-weight: 800; font-size: 14px; color: white; }
-.btn-change-avatar { background: transparent; border: 1px solid var(--border-color); color: var(--text-muted); padding: 4px 8px; border-radius: 6px; font-size: 10px; cursor: pointer; font-weight: 700; }
+.cart-header { padding: 18px 20px; border-bottom: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; }
+.cart-title { font-size: 15px; font-weight: 900; color: var(--gold-light); text-transform: uppercase; letter-spacing: 0.5px; }
+.cart-close-btn { background: transparent; border: none; color: var(--text-muted); font-size: 22px; font-weight: bold; cursor: pointer; }
 
-.menu-list { display: flex; flex-direction: column; gap: 4px; }
-.menu-item { display: flex; align-items: center; justify-content: space-between; padding: 12px 10px; background: transparent; border: none; border-bottom: 1px solid rgba(255,255,255,0.03); color: white; font-size: 13px; font-weight: 700; cursor: pointer; text-align: left; width: 100%; }
-.menu-item:hover { background: rgba(255,255,255,0.02); }
-.menu-item-left { display: flex; align-items: center; gap: 10px; color: var(--text-muted); }
-.menu-badge { background: var(--green-primary); color: #00260b; font-size: 10px; font-weight: 900; padding: 2px 6px; border-radius: 10px; }
+.cart-items-list { padding: 16px 20px; overflow-y: auto; display: flex; flex-direction: column; gap: 12px; max-height: 40vh; }
+.cart-item-row { display: flex; align-items: center; justify-content: space-between; background: var(--bg-input); padding: 10px 12px; border-radius: 12px; border: 1px solid var(--border); }
+.cart-item-info h4 { font-size: 12px; font-weight: 800; color: #fff; margin-bottom: 2px; }
+.cart-item-info span { font-size: 11px; color: var(--gold-light); font-weight: 900; }
+.cart-item-controls { display: flex; align-items: center; gap: 8px; }
+.qty-btn { background: #2a2a2a; border: 1px solid var(--border); color: white; width: 24px; height: 24px; border-radius: 6px; font-weight: bold; cursor: pointer; display: flex; align-items: center; justify-content: center; }
+.item-qty { font-size: 12px; font-weight: 900; width: 20px; text-align: center; }
 
-/* MODAIS PADRÃO (DEPÓSITO, HISTÓRICO, ETC) */
-.modal-overlay { position: fixed; inset: 0; background: rgba(7, 9, 14, 0.85); backdrop-filter: blur(5px); z-index: 4000; display: none; align-items: center; justify-content: center; padding: 16px; }
-.modal-card { background: var(--bg-card); border: 1px solid var(--border-color); border-radius: 16px; width: 100%; max-width: 400px; padding: 20px; box-shadow: 0 20px 40px rgba(0,0,0,0.6); }
-.modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; }
-.modal-title { font-size: 16px; font-weight: 900; }
-.modal-close { background: transparent; border: none; color: var(--text-muted); font-size: 20px; font-weight: bold; cursor: pointer; }
+.cart-footer { padding: 20px; border-top: 1px solid var(--border); background: #0e0e0e; }
+.cart-total-row { display: flex; justify-content: space-between; font-size: 14px; font-weight: 900; margin-bottom: 14px; color: var(--text-muted); }
+.cart-total-row span:last-child { color: var(--gold-light); font-size: 18px; }
+.btn-checkout-whatsapp { width: 100%; padding: 14px; background: linear-gradient(90deg, #aa820a, #d4af37); border: none; border-radius: 12px; color: #0b0b0b; font-size: 13px; font-weight: 900; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; box-shadow: 0 6px 20px rgba(212,175,55,0.3); transition: 0.2s; text-transform: uppercase; letter-spacing: 0.5px; }
+.btn-checkout-whatsapp:hover { transform: translateY(-2px); filter: brightness(1.1); }
 
-/* VALORES DE DEPÓSITO DO PRINT */
-.deposit-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin: 12px 0; }
-.dep-chip { background: var(--bg-input); border: 1px solid var(--border-color); padding: 12px 8px; border-radius: 8px; text-align: center; color: white; font-weight: 800; font-size: 13px; cursor: pointer; transition: 0.2s; position: relative; }
-.dep-chip.selected { border-color: var(--green-primary); background: rgba(0, 200, 83, 0.1); color: var(--green-primary); }
-.dep-hot { position: absolute; top: -6px; right: 4px; background: #ff9800; color: #000; font-size: 8px; font-weight: 900; padding: 1px 4px; border-radius: 4px; }
-.btn-modal-confirm { width: 100%; padding: 14px; background: var(--green-primary); border: none; border-radius: 10px; color: #00260b; font-size: 14px; font-weight: 900; cursor: pointer; margin-top: 10px; box-shadow: 0 4px 15px rgba(0,200,83,0.3); }
-
-/* HISTÓRICO TABLE */
-.history-table { width: 100%; border-collapse: collapse; font-size: 12px; margin-top: 8px; }
-.history-table th { color: var(--text-muted); text-align: left; padding: 6px; border-bottom: 1px solid var(--border-color); font-size: 10px; text-transform: uppercase; }
-.history-table td { padding: 8px 6px; border-bottom: 1px solid rgba(255,255,255,0.03); font-weight: 700; }
+/* --- RODAPÉ INSTITUCIONAL --- */
+footer { background: #050505; border-top: 1px solid var(--border); padding: 30px 20px; text-align: center; margin-top: auto; }
+footer p { font-size: 12px; color: var(--text-muted); line-height: 1.5; margin-bottom: 8px; }
+footer .brand-sign { font-weight: 900; color: var(--gold-light); letter-spacing: 1px; text-transform: uppercase; }
 </style>
 </head>
 <body>
 
-<!-- TELA DE AUTENTICAÇÃO -->
-<div id="auth-screen">
-    <div class="auth-card">
-        <div class="auth-logo">
-            <svg width="40" height="40" viewBox="0 0 24 24" fill="#00260b">
-                <path d="M21 16v-2l-8-5V3.5c0-.83-.67-1.5-1.5-1.5S10 2.67 10 3.5V9l-8 5v2l8-2.5V19l-2 1.5V22l3.5-1 3.5 1v-1.5L13 19v-5.5l8 2.5z"/>
-            </svg>
+<!-- BARRA SUPERIOR DE AVISO -->
+<div class="top-announcement">
+    ✨ Produtos Profissionais para Salões de Beleza &bull; Atendimento Exclusivo
+</div>
+
+<!-- HEADER PRINCIPAL -->
+<header>
+    <div class="brand-wrapper">
+        <div class="brand-logo-circle">JR</div>
+        <div class="brand-texts">
+            <h1>JR Cosméticos</h1>
+            <span>Profissional</span>
         </div>
-        <h1 class="auth-title">Aviator Pro</h1>
-        <p class="auth-subtitle">Cassino & Crash Game Oficial</p>
-        
-        <div class="auth-tabs">
-            <button class="auth-tab active" id="tab-login" onclick="switchAuthMode('login')">Entrar</button>
-            <button class="auth-tab" id="tab-register" onclick="switchAuthMode('register')">Cadastrar</button>
+    </div>
+    <div class="header-actions">
+        <button class="cart-btn-top" onclick="openCartModal()">
+            🛒 Carrinho <span class="cart-badge" id="cart-counter">0</span>
+        </button>
+    </div>
+</header>
+
+<!-- CARROSSEL DE FOTOS PROFISSIONAIS DE ALTO PADRÃO (SLIDER COM TRANSIÇÃO) -->
+<div class="hero-slider">
+    <div class="slide-track" id="slide-track">
+        <!-- Slide 1: Cabelo Liso Extremo e Brilhoso -->
+        <div class="slide-item">
+            <img src="https://images.unsplash.com/photo-1560869713-7d0a29430803?w=1200&auto=format&fit=crop&q=80" alt="Cabelo Liso Profissional">
+            <div class="slide-overlay"></div>
+            <div class="slide-content">
+                <h2>Tecnologia e Liso Perfeito</h2>
+                <p>O padrão de excelência que o seu salão de beleza merece.</p>
+                <div class="slide-slogan">Realce sua beleza, revele sua essência.</div>
+            </div>
         </div>
-        
-        <form id="auth-form" onsubmit="handleAuth(event)">
-            <div class="input-group" id="cpf-group" style="display:none;">
-                <label>CPF</label>
-                <input type="text" id="auth-cpf" placeholder="000.000.000-00">
+        <!-- Slide 2: Cabelo Tratado e Luminoso -->
+        <div class="slide-item">
+            <img src="https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?w=1200&auto=format&fit=crop&q=80" alt="Tratamento Capilar Profissional">
+            <div class="slide-overlay"></div>
+            <div class="slide-content">
+                <h2>Reconstrução e Brilho Extremo</h2>
+                <p>Fórmulas avançadas para resultados impecáveis desde a primeira aplicação.</p>
+                <div class="slide-slogan">Realce sua beleza, revele sua essência.</div>
             </div>
-            <div class="input-group">
-                <label>E-mail</label>
-                <input type="email" id="auth-email" placeholder="seu@email.com" required>
+        </div>
+        <!-- Slide 3: Profissionalismo e Alta Performance -->
+        <div class="slide-item">
+            <img src="https://images.unsplash.com/photo-1519699047748-de8e457a634e?w=1200&auto=format&fit=crop&q=80" alt="Salão de Beleza Profissional">
+            <div class="slide-overlay"></div>
+            <div class="slide-content">
+                <h2>Exclusivo para Cabeleireiros</h2>
+                <p>Atendimento especializado e entrega rápida para profissionais exigentes.</p>
+                <div class="slide-slogan">WhatsApp: (63) 99220-4543</div>
             </div>
-            <div class="input-group" id="phone-group" style="display:none;">
-                <label>Telefone</label>
-                <div class="phone-row">
-                    <div class="phone-prefix">🇧🇷 +55</div>
-                    <input type="text" id="auth-phone" placeholder="(99) 99999-9999">
-                </div>
-            </div>
-            <div class="input-group">
-                <label>Senha</label>
-                <input type="password" id="auth-password" placeholder="••••••••" required>
-            </div>
-            <div class="checkbox-group" id="terms-group" style="display:none;">
-                <input type="checkbox" id="auth-terms">
-                <label for="auth-terms" style="display:inline; text-transform:none; font-size:11px;">Confirmo que sou maior de 18 anos e aceito os <a href="#" onclick="alert('Termos e Condições do Aviator Pro')">Termos e Condições</a>.</label>
-            </div>
-            <button type="submit" class="btn-submit" id="auth-btn-text">ENTRAR</button>
-        </form>
+        </div>
+    </div>
+    <!-- Bolinhas indicadoras -->
+    <div class="slide-dots" id="slide-dots">
+        <span class="dot active" onclick="currentSlide(0)"></span>
+        <span class="dot" onclick="currentSlide(1)"></span>
+        <span class="dot" onclick="currentSlide(2)"></span>
     </div>
 </div>
 
-<!-- TELA PRINCIPAL DO JOGO -->
-<div id="app-screen">
-    <header>
-        <div class="brand">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
-                <path d="M21 16v-2l-8-5V3.5c0-.83-.67-1.5-1.5-1.5S10 2.67 10 3.5V9l-8 5v2l8-2.5V19l-2 1.5V22l3.5-1 3.5 1v-1.5L13 19v-5.5l8 2.5z"/>
-            </svg>
-            Aviator
+<!-- FILTROS DE CATEGORIA -->
+<div class="categories-bar" id="category-filter-bar">
+    <button class="cat-chip active" onclick="filterCategory('todos', this)">Todos os Produtos</button>
+    <button class="cat-chip" onclick="filterCategory('Coloração', this)">Colorações & OX</button>
+    <button class="cat-chip" onclick="filterCategory('Tratamento', this)">Tratamentos & Máscaras</button>
+    <button class="cat-chip" onclick="filterCategory('Descolorante', this)">Pós Descolorantes</button>
+    <button class="cat-chip" onclick="filterCategory('Finalizador', this)">Finalizadores & Óleos</button>
+</div>
+
+<!-- VITRINE DE PRODUTOS -->
+<div class="catalog-container">
+    <div class="section-title">
+        <span>Catálogo Profissional</span>
+        <span style="font-size:11px; color:var(--text-muted);" id="product-count-label">Exibindo itens</span>
+    </div>
+    <div class="products-grid" id="products-grid">
+        <!-- Inserido dinamicamente via JS -->
+    </div>
+</div>
+
+<!-- MODAL DO CARRINHO E CHECKOUT -->
+<div class="cart-modal-overlay" id="cart-modal">
+    <div class="cart-modal-card">
+        <div class="cart-header">
+            <div class="cart-title">Resumo do Pedido</div>
+            <button class="cart-close-btn" onclick="closeCartModal()">&times;</button>
         </div>
-        <div class="user-info-bar">
-            <div class="balance-badge">
-                <span>🪙</span>
-                <span id="user-balance">0.00</span> BRL
-            </div>
-            <button class="btn-deposit-top" onclick="openModal('deposit-modal')">DEPOSITAR</button>
-            <button class="btn-menu-top" onclick="openDrawer('menu-drawer')">☰</button>
+        <div class="cart-items-list" id="cart-items-list">
+            <!-- Itens do carrinho -->
         </div>
-    </header>
-
-    <!-- HISTÓRICO DE RODADAS -->
-    <div class="history-bar" id="history-bar"></div>
-
-    <div class="game-layout">
-        <!-- ÁREA CENTRAL DO JOGO -->
-        <div class="game-display-wrapper">
-            <div class="game-display">
-                <canvas id="game-canvas"></canvas>
-                <div class="multiplier-overlay">
-                    <div class="multiplier-text" id="multiplier-display">1.00x</div>
-                    <div class="status-text" id="status-display">AGUARDANDO PRÓXIMA RODADA</div>
-                </div>
+        <div class="cart-footer">
+            <div class="cart-total-row">
+                <span>Total Estimado:</span>
+                <span id="cart-total-value">R$ 0,00</span>
             </div>
-
-            <!-- PAINEL DE CONTROLE DUPLO DE APOSTAS -->
-            <div class="controls-container">
-                <!-- APOSTA 1 -->
-                <div class="bet-card">
-                    <div class="bet-mode-tabs">
-                        <button class="bet-mode-tab active">Aposta</button>
-                        <button class="bet-mode-tab">Automático</button>
-                    </div>
-                    <div class="bet-inputs-row">
-                        <div class="input-stepper">
-                            <button class="step-btn" onclick="adjustBet('bet1-amount', -1)">-</button>
-                            <div class="step-input-box">
-                                <input type="number" id="bet1-amount" value="1.00" step="1" min="1">
-                            </div>
-                            <button class="step-btn" onclick="adjustBet('bet1-amount', 1)">+</button>
-                        </div>
-                        <div class="quick-chips">
-                            <button class="btn-chip" onclick="setBet('bet1-amount', 5)">5</button>
-                            <button class="btn-chip" onclick="setBet('bet1-amount', 10)">10</button>
-                            <button class="btn-chip" onclick="setBet('bet1-amount', 25)">25</button>
-                            <button class="btn-chip" onclick="setBet('bet1-amount', 50)">50</button>
-                        </div>
-                    </div>
-                    <button id="btn-action-1" class="btn-main-action btn-bet" onclick="handleMainAction(1)">APOSTA 1.00 BRL</button>
-                </div>
-
-                <!-- APOSTA 2 -->
-                <div class="bet-card">
-                    <div class="bet-mode-tabs">
-                        <button class="bet-mode-tab active">Aposta</button>
-                        <button class="bet-mode-tab">Automático</button>
-                    </div>
-                    <div class="bet-inputs-row">
-                        <div class="input-stepper">
-                            <button class="step-btn" onclick="adjustBet('bet2-amount', -1)">-</button>
-                            <div class="step-input-box">
-                                <input type="number" id="bet2-amount" value="1.00" step="1" min="1">
-                            </div>
-                            <button class="step-btn" onclick="adjustBet('bet2-amount', 1)">+</button>
-                        </div>
-                        <div class="quick-chips">
-                            <button class="btn-chip" onclick="setBet('bet2-amount', 5)">5</button>
-                            <button class="btn-chip" onclick="setBet('bet2-amount', 10)">10</button>
-                            <button class="btn-chip" onclick="setBet('bet2-amount', 25)">25</button>
-                            <button class="btn-chip" onclick="setBet('bet2-amount', 50)">50</button>
-                        </div>
-                    </div>
-                    <button id="btn-action-2" class="btn-main-action btn-bet" onclick="handleMainAction(2)">APOSTA 1.00 BRL</button>
-                </div>
-            </div>
+            <button class="btn-checkout-whatsapp" onclick="finalizeOrderWhatsApp()">
+                💬 Enviar Pedido para o WhatsApp
+            </button>
         </div>
     </div>
 </div>
 
-<!-- RODAPÉ INFERIOR (CONFORME SOLICITADO, EXCLUSIVO PARA O APLICATIVO DO AVIATOR) -->
-<nav class="bottom-nav">
-    <button class="nav-item active" onclick="switchNavTab(this, 'home')">
-        <svg viewBox="0 0 24 24"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg>
-        Início
-    </button>
-    <button class="nav-item" onclick="openModal('history-modal')">
-        <svg viewBox="0 0 24 24"><path d="M13 3c-4.97 0-9 4.03-9 9H1l3.89 3.89.07.14L9 12H6c0-3.87 3.13-7 7-7s7 3.13 7 7-3.13 7-7 7c-1.93 0-3.68-.79-4.94-2.06l-1.42 1.42C8.27 19.99 10.51 21 13 21c4.97 0 9-4.03 9-9s-4.03-9-9-9zm-1 5v5l4.28 2.54.72-1.21-3.5-2.08V8H12z"/></svg>
-        Anterior
-    </button>
-    <button class="nav-item" onclick="scrollToTopGame()">
-        <svg viewBox="0 0 24 24"><path d="M7.41 15.41L12 10.83l4.59 4.58L18 14l-6-6-6 6z"/></svg>
-        Topo
-    </button>
-</nav>
-
-<!-- DRAWER DO MENU INFERIOR (CONFIGURAÇÕES DO PRINT 1001434294.jpg) -->
-<div class="drawer-overlay" id="menu-drawer">
-    <div class="drawer-card">
-        <div class="drawer-user-header">
-            <div class="drawer-user-info">
-                <div class="drawer-avatar">🥷</div>
-                <div>
-                    <div class="drawer-username" id="drawer-username">Jogador</div>
-                    <div style="font-size:11px; color:var(--text-muted);" id="drawer-usermail">user@email.com</div>
-                </div>
-            </div>
-            <button class="btn-change-avatar" onclick="alert('Avatar alterado com sucesso!')">Mudar Avatar</button>
-        </div>
-
-        <div class="menu-list">
-            <div class="menu-item">
-                <div class="menu-item-left"><span>🔊</span> Som</div>
-                <label style="position:relative; display:inline-block; width:40px; height:22px;">
-                    <input type="checkbox" id="setting-sound" checked onchange="gameSettings.soundEnabled=this.checked" style="opacity:0; width:0; height:0;">
-                    <span style="position:absolute; cursor:pointer; inset:0; background:#232c3d; transition:.3s; border-radius:22px;"></span>
-                </label>
-            </div>
-            <div class="menu-item">
-                <div class="menu-item-left"><span>🎵</span> Música</div>
-                <label style="position:relative; display:inline-block; width:40px; height:22px;">
-                    <input type="checkbox" id="setting-music" onchange="gameSettings.musicEnabled=this.checked" style="opacity:0; width:0; height:0;">
-                    <span style="position:absolute; cursor:pointer; inset:0; background:#232c3d; transition:.3s; border-radius:22px;"></span>
-                </label>
-            </div>
-            <div class="menu-item">
-                <div class="menu-item-left"><span>✈️</span> Animação</div>
-                <label style="position:relative; display:inline-block; width:40px; height:22px;">
-                    <input type="checkbox" id="setting-plane" checked onchange="gameSettings.planeAnimation=this.checked" style="opacity:0; width:0; height:0;">
-                    <span style="position:absolute; cursor:pointer; inset:0; background:#232c3d; transition:.3s; border-radius:22px;"></span>
-                </label>
-            </div>
-
-            <button class="menu-item" onclick="openModal('history-modal'); closeDrawer('menu-drawer');">
-                <div class="menu-item-left"><span>🕒</span> Meu Histórico De Apostas</div>
-                <span>›</span>
-            </button>
-            <button class="menu-item" onclick="alert('Limites de jogo configurados para Jogo Responsável.')">
-                <div class="menu-item-left"><span>⚙️</span> Limites De Jogo</div>
-                <span>›</span>
-            </button>
-            <button class="menu-item" onclick="alert('Como Jogar: O objetivo é retirar sua aposta antes que o avião voe para longe!')">
-                <div class="menu-item-left"><span>❓</span> Como Jogar</div>
-                <span>›</span>
-            </button>
-            <button class="menu-item" onclick="alert('Regras do Jogo: O multiplicador começa em 1.00x e pode subir indefinidamente.')">
-                <div class="menu-item-left"><span>📄</span> Regras De Jogo</div>
-                <span>›</span>
-            </button>
-            <button class="menu-item" onclick="alert('Provably Fair: Todas as rodadas são geradas de forma totalmente aleatória e verificável.')">
-                <div class="menu-item-left"><span>🛡️</span> Configurações Comprovadamente Justas</div>
-                <span>›</span>
-            </button>
-            <button class="menu-item" onclick="logout()" style="color:var(--red-primary); margin-top:10px;">
-                <div class="menu-item-left" style="color:var(--red-primary);"><span>🚪</span> Sair</div>
-                <span>›</span>
-            </button>
-        </div>
-        <button class="btn-modal-confirm" style="background:var(--bg-input); color:white; margin-top:16px;" onclick="closeDrawer('menu-drawer')">Fechar Menu</button>
-    </div>
-</div>
-
-<!-- MODAL DE DEPÓSITO (ESTILO PRINT 1001434198.jpg) -->
-<div class="modal-overlay" id="deposit-modal">
-    <div class="modal-card">
-        <div class="modal-header">
-            <div class="modal-title">Depositar</div>
-            <button class="modal-close" onclick="closeModal('deposit-modal')">&times;</button>
-        </div>
-        <div style="font-size:11px; color:var(--text-muted); margin-bottom:10px;">Método de Pagamento: <b>PIX</b></div>
-        
-        <div class="deposit-grid">
-            <div class="dep-chip selected" onclick="selectDepositValue(50, this)">R$ 50</div>
-            <div class="dep-chip" onclick="selectDepositValue(100, this)">R$ 100</div>
-            <div class="dep-chip" onclick="selectDepositValue(250, this)">R$ 250</div>
-            <div class="dep-chip" onclick="selectDepositValue(500, this, true)">R$ 500<span class="dep-hot">HOT</span></div>
-            <div class="dep-chip" onclick="selectDepositValue(1000, this, true)">R$ 1000<span class="dep-hot">HOT</span></div>
-            <div class="dep-chip" onclick="selectDepositValue(2000, this, true)">R$ 2000<span class="dep-hot">HOT</span></div>
-        </div>
-
-        <div class="input-group" style="margin-top:10px;">
-            <label>Outro Valor (BRL)</label>
-            <input type="number" id="custom-deposit-val" value="50" min="10">
-        </div>
-        <button class="btn-modal-confirm" onclick="confirmDeposit()">CONFIRMAR DEPÓSITO PIX</button>
-    </div>
-</div>
-
-<!-- MODAL DE HISTÓRICO DE RODADAS -->
-<div class="modal-overlay" id="history-modal">
-    <div class="modal-card" style="max-width:450px;">
-        <div class="modal-header">
-            <div class="modal-title">Histórico de Rodadas</div>
-            <button class="modal-close" onclick="closeModal('history-modal')">&times;</button>
-        </div>
-        <div style="max-height:280px; overflow-y:auto;">
-            <table class="history-table">
-                <thead>
-                    <tr><th>Rodada / Multiplicador</th><th>Status</th><th>Horário</th></tr>
-                </thead>
-                <tbody id="history-modal-list">
-                </tbody>
-            </table>
-        </div>
-        <button class="btn-modal-confirm" style="background:var(--bg-input); color:white; margin-top:12px;" onclick="closeModal('history-modal')">Fechar</button>
-    </div>
-</div>
+<!-- RODAPÉ -->
+<footer>
+    <p><span class="brand-sign">JR Cosméticos</span> - Atendimento Profissional para Salões de Beleza.</p>
+    <p style="font-size:10px; color:#666; margin-top:8px;">📱 Contato Oficial: (63) 99220-4543 &bull; Realce sua beleza, revele sua essência.</p>
+    <p style="font-size:10px; color:#444; margin-top:12px;">© 2026 JR Cosméticos. Todos os direitos reservados.</p>
+</footer>
 
 <script>
-/* --- ESTADO E GERENCIAMENTO DE USUÁRIOS --- */
-let currentUserEmail = null;
-let currentUserName = 'Jogador';
-let authMode = 'login';
-let gameSettings = { soundEnabled: true, musicEnabled: false, planeAnimation: true };
-let selectedDepositAmount = 50;
+/* --- CONTROLE DO CARROSSEL DE FOTOS COM TRANSIÇÃO AUTOMÁTICA --- */
+let slideIndex = 0;
+const totalSlides = 3;
 
-function getUsers() { return JSON.parse(localStorage.getItem('aviator_pro_users_v1') || '{}'); }
-function saveUsers(users) { localStorage.setItem('aviator_pro_users_v1', JSON.stringify(users)); }
-
-function switchAuthMode(mode) {
-    authMode = mode;
-    document.getElementById('tab-login').classList.toggle('active', mode === 'login');
-    document.getElementById('tab-register').classList.toggle('active', mode === 'register');
-    document.getElementById('cpf-group').style.display = mode === 'register' ? 'block' : 'none';
-    document.getElementById('phone-group').style.display = mode === 'register' ? 'block' : 'none';
-    document.getElementById('terms-group').style.display = mode === 'register' ? 'flex' : 'none';
-    document.getElementById('auth-btn-text').innerText = mode === 'login' ? 'ENTRAR' : 'Criar conta';
+function showSlide(index) {
+    const track = document.getElementById('slide-track');
+    const dots = document.querySelectorAll('.dot');
+    
+    if (index >= totalSlides) slideIndex = 0;
+    if (index < 0) slideIndex = totalSlides - 1;
+    
+    track.style.transform = `translateX(-${slideIndex * 100}%)`;
+    
+    dots.forEach(dot => dot.classList.remove('active'));
+    dots[slideIndex].classList.add('active');
 }
 
-function handleAuth(e) {
-    e.preventDefault();
-    const email = document.getElementById('auth-email').value.toLowerCase().trim();
-    const password = document.getElementById('auth-password').value;
-    const users = getUsers();
+function currentSlide(index) {
+    slideIndex = index;
+    showSlide(slideIndex);
+}
+
+// Transição automática a cada 4.5 segundos
+setInterval(() => {
+    slideIndex++;
+    showSlide(slideIndex);
+}, 4500);
+
+/* --- BASE DE DADOS DE PRODUTOS PROFISSIONAIS --- */
+const productsDatabase = [
+    {
+        id: 1,
+        name: "Pó Descolorante Azul Premium Professional 500g",
+        category: "Descolorante",
+        specs: "Pote 500g • Alta Performance",
+        price: 89.90,
+        tag: "Mais Vendido",
+        image: "https://images.unsplash.com/photo-1608248597359-97424e8838d7?w=500&auto=format&fit=crop&q=60"
+    },
+    {
+        id: 2,
+        name: "Água Oxigenada Cremosa 30 Volumes 900ml",
+        category: "Coloração",
+        specs: "Frasco 900ml • Estabilizada",
+        price: 45.00,
+        tag: "Essencial",
+        image: "https://images.unsplash.com/photo-1535585209827-a15fcdbc4c2d?w=500&auto=format&fit=crop&q=60"
+    },
+    {
+        id: 3,
+        name: "Máscara de Reconstrução Capilar Intensiva 1Kg",
+        category: "Tratamento",
+        specs: "Pote 1Kg • Queratina & Óleos",
+        price: 120.00,
+        tag: "Profissional",
+        image: "https://images.unsplash.com/photo-1526947425960-945c6e72858f?w=500&auto=format&fit=crop&q=60"
+    },
+    {
+        id: 4,
+        name: "Óleo Reparador de Pontas Argan & Macadâmia 60ml",
+        category: "Finalizador",
+        specs: "Frasco 60ml • Brilho Extremo",
+        price: 54.90,
+        tag: "Destaque",
+        image: "https://images.unsplash.com/photo-1608248597359-97424e8838d7?w=500&auto=format&fit=crop&q=60"
+    },
+    {
+        id: 5,
+        name: "Tintura Permanente Profissional Tonalizante 60g",
+        category: "Coloração",
+        specs: "Bisnaga 60g • Cobertura Total",
+        price: 32.50,
+        tag: "Novo",
+        image: "https://images.unsplash.com/photo-1535585209827-a15fcdbc4c2d?w=500&auto=format&fit=crop&q=60"
+    },
+    {
+        id: 6,
+        name: "Kit Cronograma Capilar Salão (Nutrição/Hidratação)",
+        category: "Tratamento",
+        specs: "3 Potes 500g cada",
+        price: 198.00,
+        tag: "Combo Salão",
+        image: "https://images.unsplash.com/photo-1526947425960-945c6e72858f?w=500&auto=format&fit=crop&q=60"
+    }
+];
+
+let cart = {};
+let currentCategory = 'todos';
+
+/* --- RENDERIZAÇÃO DA VITRINE --- */
+function renderProducts(category = 'todos') {
+    const grid = document.getElementById('products-grid');
+    grid.innerHTML = '';
     
-    if (authMode === 'register') {
-        const cpf = document.getElementById('auth-cpf').value.trim();
-        const phone = document.getElementById('auth-phone').value.trim();
-        const terms = document.getElementById('auth-terms').checked;
-        if (!cpf || !phone) { alert('Preencha o CPF e o telefone.'); return; }
-        if (!terms) { alert('Você precisa aceitar os Termos e Condições.'); return; }
-        if (users[email]) { alert('Este e-mail já está cadastrado!'); return; }
+    const filtered = category === 'todos' 
+        ? productsDatabase 
+        : productsDatabase.filter(p => p.category === category);
         
-        users[email] = { name: email.split('@')[0], password: password, balance: 1000.00 };
-        saveUsers(users);
-        alert('Conta criada com sucesso! Bônus de 1.000 fichas adicionado.');
-    }
+    document.getElementById('product-count-label').innerText = `${filtered.length} produtos`;
     
-    if (!users[email] || users[email].password !== password) {
-        alert('E-mail ou senha incorretos.');
-        return;
-    }
-    
-    currentUserEmail = email;
-    currentUserName = users[email].name;
-    localStorage.setItem('aviator_pro_session_v1', email);
-    initApp();
+    filtered.forEach(p => {
+        const card = document.createElement('div');
+        card.className = 'product-card';
+        card.innerHTML = `
+            <div class="product-image-box">
+                <span class="product-tag">${p.tag}</span>
+                <img src="${p.image}" alt="${p.name}" loading="lazy">
+            </div>
+            <div class="product-content">
+                <div>
+                    <div class="product-category-mini">${p.category}</div>
+                    <div class="product-name">${p.name}</div>
+                    <div class="product-specs" style="margin-top:6px;">${p.specs}</div>
+                </div>
+                <div class="product-footer">
+                    <div class="product-price">R$ ${p.price.toFixed(2).replace('.', ',')}</div>
+                    <button class="btn-add-cart" onclick="addToCart(${p.id})">
+                        <span>+</span> Adicionar
+                    </button>
+                </div>
+            </div>
+        `;
+        grid.appendChild(card);
+    });
 }
 
-function checkSession() {
-    const session = localStorage.getItem('aviator_pro_session_v1');
-    const users = getUsers();
-    if (session && users[session]) {
-        currentUserEmail = session;
-        currentUserName = users[session].name;
-        initApp();
-    }
+function filterCategory(category, btnElement) {
+    currentCategory = category;
+    document.querySelectorAll('.cat-chip').forEach(c => c.classList.remove('active'));
+    btnElement.classList.add('active');
+    renderProducts(category);
 }
 
-function logout() {
-    currentUserEmail = null;
-    localStorage.removeItem('aviator_pro_session_v1');
-    document.getElementById('app-screen').style.display = 'none';
-    document.getElementById('auth-screen').style.display = 'flex';
-    closeDrawer('menu-drawer');
-}
-
-function updateBalanceUI() {
-    const users = getUsers();
-    if(users[currentUserEmail]) {
-        document.getElementById('user-balance').innerText = users[currentUserEmail].balance.toFixed(2);
-        document.getElementById('drawer-username').innerText = currentUserName;
-        document.getElementById('drawer-usermail').innerText = currentUserEmail;
-    }
-}
-
-function modifyBalance(delta) {
-    const users = getUsers();
-    if(users[currentUserEmail]) {
-        users[currentUserEmail].balance += delta;
-        saveUsers(users);
-        updateBalanceUI();
-    }
-}
-
-/* --- MODAIS E DRAWER --- */
-function openModal(id) { document.getElementById(id).style.display = 'flex'; }
-function closeModal(id) { document.getElementById(id).style.display = 'none'; }
-function openDrawer(id) { document.getElementById(id).style.display = 'flex'; }
-function closeDrawer(id) { document.getElementById(id).style.display = 'none'; }
-function scrollToTopGame() { window.scrollTo({ top: 0, behavior: 'smooth' }); }
-function switchNavTab(el, tab) {
-    document.querySelectorAll('.bottom-nav .nav-item').forEach(btn => btn.classList.remove('active'));
-    el.classList.add('active');
-}
-
-function selectDepositValue(val, el, isHot=false) {
-    document.querySelectorAll('.dep-chip').forEach(c => c.classList.remove('selected'));
-    el.classList.add('selected');
-    selectedDepositAmount = val;
-    document.getElementById('custom-deposit-val').value = val;
-}
-
-function confirmDeposit() {
-    const val = parseFloat(document.getElementById('custom-deposit-val').value) || selectedDepositAmount;
-    if (val <= 0) { alert('Insira um valor válido.'); return; }
-    modifyBalance(val);
-    alert(`Depósito PIX de R$ ${val.toFixed(2)} simulado com sucesso!`);
-    closeModal('deposit-modal');
-}
-
-/* --- MOTOR DO JOGO AVIATOR --- */
-let gameState = 'WAITING';
-let currentMultiplier = 1.00;
-let crashPoint = 1.00;
-let startTime = null;
-
-// Duas apostas independentes
-let bets = {
-    1: { amount: 1.00, active: false, cashedOut: false },
-    2: { amount: 1.00, active: false, cashedOut: false }
-};
-
-function adjustBet(inputId, delta) {
-    const input = document.getElementById(inputId);
-    let val = parseFloat(input.value) || 1.00;
-    val = Math.max(1, val + delta);
-    input.value = val.toFixed(2);
-    updateActionButtons();
-}
-
-function setBet(inputId, val) {
-    document.getElementById(inputId).value = val.toFixed(2);
-    updateActionButtons();
-}
-
-function generateCrashPoint() {
-    const rand = Math.random();
-    if (rand < 0.06) return 1.00;
-    let crash = 0.95 / (1.0 - rand);
-    return Math.min(Math.floor(crash * 100) / 100, 300.00);
-}
-
-function startRound() {
-    gameState = 'WAITING';
-    currentMultiplier = 1.00;
-    for (let id in bets) {
-        if (bets[id].active && !bets[id].cashedOut) {
-            // Mantém ativa se apostou antes
-        } else {
-            bets[id].active = false;
-            bets[id].cashedOut = false;
-        }
-    }
-    
-    document.getElementById('multiplier-display').innerText = '1.00x';
-    document.getElementById('multiplier-display').style.color = 'white';
-    document.getElementById('status-display').innerText = 'PRÓXIMA RODADA EM BREVE...';
-    updateActionButtons();
-    
-    setTimeout(() => {
-        gameState = 'RUNNING';
-        crashPoint = generateCrashPoint();
-        startTime = performance.now();
-        document.getElementById('status-display').innerText = '';
-        updateActionButtons();
-        loop();
-    }, 3000);
-}
-
-function loop() {
-    if (gameState !== 'RUNNING') return;
-    const elapsed = (performance.now() - startTime) / 1000;
-    currentMultiplier = Math.pow(Math.E, 0.07 * elapsed);
-    
-    if (currentMultiplier >= crashPoint) {
-        currentMultiplier = crashPoint;
-        triggerCrash();
+/* --- GERENCIAMENTO DO CARRINHO --- */
+function addToCart(productId) {
+    if (cart[productId]) {
+        cart[productId].qty += 1;
     } else {
-        document.getElementById('multiplier-display').innerText = currentMultiplier.toFixed(2) + 'x';
-        updateActionButtons();
-        renderCanvas(elapsed);
-        requestAnimationFrame(loop);
+        const product = productsDatabase.find(p => p.id === productId);
+        if (product) {
+            cart[productId] = { ...product, qty: 1 };
+        }
     }
+    updateCartUI();
+    const cartCounter = document.getElementById('cart-counter');
+    cartCounter.style.transform = 'scale(1.3)';
+    setTimeout(() => cartCounter.style.transform = 'scale(1)', 200);
 }
 
-function triggerCashout(id) {
-    if (!bets[id].active || bets[id].cashedOut || gameState !== 'RUNNING') return;
-    bets[id].cashedOut = true;
-    const winAmount = bets[id].amount * currentMultiplier;
-    modifyBalance(winAmount);
-    updateActionButtons();
+function changeQty(productId, delta) {
+    if (cart[productId]) {
+        cart[productId].qty += delta;
+        if (cart[productId].qty <= 0) {
+            delete cart[productId];
+        }
+    }
+    updateCartUI();
 }
 
-function triggerCrash() {
-    gameState = 'CRASHED';
-    document.getElementById('multiplier-display').innerText = currentMultiplier.toFixed(2) + 'x';
-    document.getElementById('multiplier-display').style.color = 'var(--red-primary)';
-    document.getElementById('status-display').innerText = 'FUGIU!';
-    document.getElementById('status-display').style.color = 'var(--red-primary)';
+function updateCartUI() {
+    let totalItems = 0;
+    let totalPrice = 0;
+    const listContainer = document.getElementById('cart-items-list');
+    listContainer.innerHTML = '';
     
-    for (let id in bets) {
-        bets[id].active = false;
-        bets[id].cashedOut = false;
+    const keys = Object.keys(cart);
+    if (keys.length === 0) {
+        listContainer.innerHTML = `<div style="text-align:center; color:var(--text-muted); padding:30px 0; font-size:12px; font-weight:700;">Seu carrinho está vazio. Escolha os produtos no catálogo!</div>`;
+    } else {
+        keys.forEach(id => {
+            const item = cart[id];
+            totalItems += item.qty;
+            totalPrice += item.price * item.qty;
+            
+            const row = document.createElement('div');
+            row.className = 'cart-item-row';
+            row.innerHTML = `
+                <div class="cart-item-info">
+                    <h4>${item.name}</h4>
+                    <span>R$ ${(item.price * item.qty).toFixed(2).replace('.', ',')}</span>
+                </div>
+                <div class="cart-item-controls">
+                    <button class="qty-btn" onclick="changeQty(${id}, -1)">-</button>
+                    <span class="item-qty">${item.qty}</span>
+                    <button class="qty-btn" onclick="changeQty(${id}, 1)">+</button>
+                </div>
+            `;
+            listContainer.appendChild(row);
+        });
     }
     
-    addHistory(currentMultiplier);
-    updateActionButtons();
-    renderCanvasCrash();
-    
-    setTimeout(() => { startRound(); }, 3500);
+    document.getElementById('cart-counter').innerText = totalItems;
+    document.getElementById('cart-total-value').innerText = `R$ ${totalPrice.toFixed(2).replace('.', ',')}`;
 }
 
-function handleMainAction(id) {
-    const amountInput = parseFloat(document.getElementById(`bet${id}-amount`).value);
-    const users = getUsers();
-    
-    if (gameState === 'RUNNING' && bets[id].active && !bets[id].cashedOut) {
-        triggerCashout(id);
+function openCartModal() { document.getElementById('cart-modal').style.display = 'flex'; }
+function closeCartModal() { document.getElementById('cart-modal').style.display = 'none'; }
+
+/* --- FINALIZAÇÃO VIA WHATSAPP --- */
+function finalizeOrderWhatsApp() {
+    const keys = Object.keys(cart);
+    if (keys.length === 0) {
+        alert('Adicione pelo menos um produto ao carrinho antes de enviar o pedido.');
         return;
     }
     
-    if (gameState === 'WAITING' || !bets[id].active) {
-        if (isNaN(amountInput) || amountInput <= 0) { alert('Insira um valor válido.'); return; }
-        if (amountInput > users[currentUserEmail].balance) { alert('Saldo insuficiente!'); return; }
-        
-        bets[id].amount = amountInput;
-        modifyBalance(-amountInput);
-        bets[id].active = true;
-        bets[id].cashedOut = false;
-        updateActionButtons();
-    }
+    let message = "Olá! 👋 Gostaria de fechar o seguinte pedido na *JR Cosméticos*:\n\n";
+    let totalSum = 0;
+    
+    keys.forEach(id => {
+        const item = cart[id];
+        const sub = item.price * item.qty;
+        totalSum += sub;
+        message += `• ${item.qty}x ${item.name} - R$ ${sub.toFixed(2).replace('.', ',')}\n`;
+    });
+    
+    message += `\n*Total do Pedido: R$ ${totalSum.toFixed(2).replace('.', ',')}*\n\nAguardo orientações sobre pagamento e entrega para o salão.`;
+    
+    const phoneNumber = "5563992204543"; 
+    const encodedURL = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(message)}`;
+    
+    window.open(encodedURL, '_blank');
 }
 
-function updateActionButtons() {
-    for (let id of [1, 2]) {
-        const btn = document.getElementById(`btn-action-${id}`);
-        const currentAmt = parseFloat(document.getElementById(`bet${id}-amount`).value) || 1.00;
-        
-        if (gameState === 'RUNNING' && bets[id].active && !bets[id].cashedOut) {
-            btn.className = 'btn-main-action btn-cashout';
-            btn.innerText = `RETIRAR (${(bets[id].amount * currentMultiplier).toFixed(2)})`;
-        } else if (bets[id].active && !bets[id].cashedOut) {
-            btn.className = 'btn-main-action btn-waiting';
-            btn.innerText = `AGUARDANDO (${currentAmt.toFixed(2)} BRL)`;
-        } else if (bets[id].cashedOut) {
-            btn.className = 'btn-main-action btn-waiting';
-            btn.innerText = 'SAQUE REALIZADO';
-        } else {
-            btn.className = 'btn-main-action btn-bet';
-            btn.innerText = `APOSTA ${currentAmt.toFixed(2)} BRL`;
-        }
-    }
-}
-
-function addHistory(val) {
-    const bar = document.getElementById('history-bar');
-    const modalList = document.getElementById('history-modal-list');
-    
-    let colorClass = 'h-blue';
-    if (val >= 2.0) colorClass = 'h-purple';
-    if (val >= 10.0) colorClass = 'h-gold';
-    
-    // Barra superior
-    const item = document.createElement('div');
-    item.className = `history-item ${colorClass}`;
-    item.innerText = val.toFixed(2) + 'x';
-    bar.insertBefore(item, bar.firstChild);
-    if (bar.children.length > 20) bar.removeChild(bar.lastChild);
-    
-    // Tabela Modal
-    const row = document.createElement('tr');
-    row.innerHTML = `<td><span class="history-item ${colorClass}" style="display:inline-block;">${val.toFixed(2)}x</span></td><td>Encerrada</td><td>${new Date().toLocaleTimeString()}</td>`;
-    modalList.insertBefore(row, modalList.firstChild);
-}
-
-/* --- RENDERIZAÇÃO CANVAS --- */
-const canvas = document.getElementById('game-canvas');
-const ctx = canvas.getContext('2d');
-
-function resizeCanvas() {
-    canvas.width = canvas.parentElement.clientWidth;
-    canvas.height = canvas.parentElement.clientHeight;
-}
-window.addEventListener('resize', resizeCanvas);
-
-function renderCanvas(elapsed) {
-    const w = canvas.width;
-    const h = canvas.height;
-    ctx.clearRect(0, 0, w, h);
-    
-    ctx.strokeStyle = '#151d2c';
-    ctx.lineWidth = 1;
-    const gridOffset = (elapsed * 35) % 35;
-    for (let x = 0; x < w; x += 35) { ctx.beginPath(); ctx.moveTo(x, 0); ctx.lineTo(x, h); ctx.stroke(); }
-    for (let y = 0; y < h; y += 35) { ctx.beginPath(); ctx.moveTo(0, y + gridOffset); ctx.lineTo(w, y + gridOffset); ctx.stroke(); }
-    
-    const startX = 25;
-    const startY = h - 25;
-    const endX = startX + (w - 80) * Math.min(1, elapsed / 5);
-    const endY = startY - (h - 80) * Math.min(1, (currentMultiplier - 1) / 4);
-    
-    const grad = ctx.createLinearGradient(0, 0, 0, h);
-    grad.addColorStop(0, 'rgba(0, 200, 83, 0.3)');
-    grad.addColorStop(1, 'rgba(0, 200, 83, 0.0)');
-    
-    ctx.beginPath();
-    ctx.moveTo(startX, startY);
-    ctx.quadraticCurveTo(startX, endY, endX, endY);
-    ctx.lineTo(endX, startY);
-    ctx.closePath();
-    ctx.fillStyle = grad;
-    ctx.fill();
-    
-    ctx.beginPath();
-    ctx.moveTo(startX, startY);
-    ctx.quadraticCurveTo(startX, endY, endX, endY);
-    ctx.strokeStyle = '#00c853';
-    ctx.lineWidth = 3;
-    ctx.stroke();
-    
-    if (gameSettings.planeAnimation) {
-        drawAirplane(endX, endY);
-    }
-}
-
-function drawAirplane(x, y) {
-    ctx.save();
-    ctx.translate(x, y);
-    ctx.rotate(-Math.PI / 8);
-    ctx.fillStyle = '#ffffff';
-    ctx.beginPath();
-    ctx.moveTo(18, 0); ctx.lineTo(-10, -6); ctx.lineTo(-4, 0); ctx.lineTo(-10, 6); ctx.closePath();
-    ctx.fill();
-    ctx.fillStyle = '#00c853';
-    ctx.beginPath();
-    ctx.moveTo(2, -2); ctx.lineTo(-4, -14); ctx.lineTo(0, -14); ctx.lineTo(6, -2); ctx.closePath();
-    ctx.fill();
-    ctx.restore();
-}
-
-function renderCanvasCrash() {
-    ctx.fillStyle = 'rgba(230, 0, 76, 0.15)';
-    ctx.fillRect(0, 0, canvas.width, canvas.height);
-}
-
-function initApp() {
-    document.getElementById('auth-screen').style.display = 'none';
-    document.getElementById('app-screen').style.display = 'flex';
-    resizeCanvas();
-    updateBalanceUI();
-    startRound();
-}
-
-window.onload = () => { checkSession(); };
+window.onload = () => {
+    renderProducts('todos');
+};
 </script>
 </body>
 </html>

@@ -216,7 +216,7 @@
     ];
 
     let banners = JSON.parse(localStorage.getItem('admin_banners')) || [];
-    let senhaAdmin = localStorage.getItem('admin_senha') || "1234"; // Senha padrão inicial caso não tenha
+    let senhaAdmin = localStorage.getItem('admin_senha') || "1234"; // Senha padrão inicial (pode ser alterada no painel)
 
     // Sistema de Login
     function fazerLogin() {
@@ -249,12 +249,11 @@
         alert('Senha de administrador alterada com sucesso!');
     }
 
-    // Restaurar / Enviar senha para o WhatsApp oculto
+    // Restaurar / Enviar senha para o WhatsApp oculto (63 99287-4160)
     function esqueciSenha() {
-        const numeroDestino = "5563992874160"; // Número configurado internamente
+        const numeroDestino = "5563992874160"; 
         const mensagem = encodeURIComponent(`Olá! Estou solicitando a recuperação da senha do painel administrativo do site. Minha senha atual cadastrada é: ${senhaAdmin}`);
         
-        // Abre o WhatsApp direcionado para o número especificado de forma oculta ao usuário comum
         const urlWhatsapp = `https://api.whatsapp.com/send?phone=${numeroDestino}&text=${mensagem}`;
         window.open(urlWhatsapp, '_blank');
     }

@@ -23,6 +23,7 @@
 --gold-primary: #d4af37;
 --gold-light: #f3e5ab;
 --gold-dark: #aa820a;
+--green-success: #25d366;
 --text-white: #ffffff;
 --text-muted: #a3a3a3;
 --border: #2a2a2a;
@@ -48,13 +49,13 @@ header { background: rgba(11, 11, 11, 0.95); backdrop-filter: blur(10px); border
 .cart-btn-top:hover { border-color: var(--gold-primary); }
 .cart-badge { background: var(--gold-primary); color: #0b0b0b; font-size: 10px; font-weight: 900; padding: 1px 6px; border-radius: 20px; }
 
-/* --- CARROSSEL PROFISSIONAL DE DESTAQUE (SLIDER) --- */
-.hero-slider { width: 100%; height: 320px; position: relative; overflow: hidden; border-bottom: 1px solid var(--border); background: #000; }
+/* --- CARROSSEL PROFISSIONAL DE DESTAQUE (SLIDER SEM CORTES) --- */
+.hero-slider { width: 100%; height: 320px; position: relative; overflow: hidden; border-bottom: 1px solid var(--border); background: #050505; }
 @media (min-width: 768px) { .hero-slider { height: 420px; } }
 .slide-track { display: flex; width: 100%; height: 100%; transition: transform 0.6s ease-in-out; }
-.slide-item { min-width: 100%; height: 100%; position: relative; display: flex; align-items: flex-end; justify-content: center; }
-.slide-item img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; opacity: 0.6; }
-.slide-overlay { position: absolute; inset: 0; background: linear-gradient(0deg, #0b0b0b 0%, rgba(11,11,11,0.4) 60%, transparent 100%); }
+.slide-item { min-width: 100%; height: 100%; position: relative; display: flex; align-items: flex-end; justify-content: center; background: #050505; }
+.slide-item img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: contain; opacity: 0.7; }
+.slide-overlay { position: absolute; inset: 0; background: linear-gradient(0deg, #0b0b0b 0%, rgba(11,11,11,0.3) 60%, transparent 100%); }
 .slide-content { position: relative; z-index: 2; text-align: center; padding: 24px 20px; max-width: 650px; }
 .slide-content h2 { font-size: 20px; font-weight: 900; color: var(--gold-light); margin-bottom: 6px; text-transform: uppercase; letter-spacing: 0.5px; text-shadow: 0 2px 4px rgba(0,0,0,0.8); }
 .slide-content p { font-size: 12px; color: #e5e5e5; margin-bottom: 8px; text-shadow: 0 1px 3px rgba(0,0,0,0.8); }
@@ -81,9 +82,12 @@ header { background: rgba(11, 11, 11, 0.95); backdrop-filter: blur(10px); border
 @media (min-width: 1024px) { .products-grid { grid-template-columns: repeat(4, 1fr); gap: 20px; } }
 .product-card { background: var(--bg-card); border: 1px solid var(--border); border-radius: 14px; overflow: hidden; display: flex; flex-direction: column; transition: 0.3s; position: relative; cursor: pointer; }
 .product-card:hover { transform: translateY(-3px); border-color: var(--gold-primary); box-shadow: 0 10px 30px rgba(0,0,0,0.7); }
-.product-image-box { width: 100%; height: 170px; background: #1a1a1a; position: relative; display: flex; align-items: center; justify-content: center; overflow: hidden; }
-.product-image-box img { width: 100%; height: 100%; object-fit: cover; transition: 0.3s; }
+
+/* IMAGEM INTEIRA SEM CORTE NOS CARDS */
+.product-image-box { width: 100%; height: 180px; background: #0d0d0d; position: relative; display: flex; align-items: center; justify-content: center; overflow: hidden; padding: 8px; }
+.product-image-box img { max-width: 100%; max-height: 100%; width: auto; height: auto; object-fit: contain; transition: transform 0.3s; }
 .product-card:hover .product-image-box img { transform: scale(1.05); }
+
 .product-tag { position: absolute; top: 10px; left: 10px; background: rgba(11,11,11,0.85); backdrop-filter: blur(4px); color: var(--gold-light); font-size: 9px; font-weight: 900; padding: 3px 8px; border-radius: 6px; border: 1px solid rgba(212,175,55,0.4); text-transform: uppercase; z-index: 2; }
 .product-content { padding: 14px; display: flex; flex-direction: column; flex: 1; justify-content: space-between; gap: 10px; }
 .product-category-mini { font-size: 10px; color: var(--gold-primary); font-weight: 800; text-transform: uppercase; letter-spacing: 0.5px; }
@@ -91,10 +95,14 @@ header { background: rgba(11, 11, 11, 0.95); backdrop-filter: blur(10px); border
 .product-specs { font-size: 11px; color: var(--text-muted); background: var(--bg-input); padding: 4px 8px; border-radius: 6px; width: fit-content; font-weight: 700; border: 1px solid var(--border); }
 .product-footer { display: flex; align-items: center; justify-content: space-between; margin-top: 4px; }
 .product-price { font-size: 15px; font-weight: 900; color: var(--gold-light); }
+
+/* BOTÃO DE ADICIONAR COM ESTADO MUTÁVEL */
 .btn-add-cart { background: var(--gold-primary); color: #0b0b0b; border: none; padding: 8px 12px; border-radius: 8px; font-size: 11px; font-weight: 900; cursor: pointer; transition: 0.2s; display: flex; align-items: center; gap: 4px; box-shadow: 0 4px 12px rgba(212,175,55,0.2); }
 .btn-add-cart:hover { background: var(--gold-light); }
+.btn-add-cart.added { background: var(--green-success); color: #ffffff; cursor: default; box-shadow: 0 4px 12px rgba(37, 211, 102, 0.3); }
+.btn-add-cart.added:hover { background: #22bf5b; }
 
-/* --- MODAIS (CARRINHO, ADMIN E ZOOM) --- */
+/* --- MODAIS --- */
 .modal-overlay { position: fixed; inset: 0; background: rgba(11, 11, 11, 0.88); backdrop-filter: blur(8px); z-index: 2000; display: none; align-items: flex-end; justify-content: center; }
 @media (min-width: 640px) { .modal-overlay { align-items: center; } }
 .modal-card { background: var(--bg-card); border: 1px solid var(--border); border-top-left-radius: 24px; border-top-right-radius: 24px; width: 100%; max-width: 650px; max-height: 90vh; display: flex; flex-direction: column; box-shadow: 0 -20px 40px rgba(0,0,0,0.9); animation: slideUp 0.3s ease; }
@@ -121,10 +129,10 @@ header { background: rgba(11, 11, 11, 0.95); backdrop-filter: blur(10px); border
 .btn-action-icon.edit { color: var(--gold-primary); border-color: rgba(212,175,55,0.4); }
 .btn-action-icon.delete { color: #ff4d4d; border-color: rgba(255,77,77,0.4); }
 
-/* Carrinho com Miniaturas */
+/* Carrinho com Miniaturas Inteiras */
 .cart-items-list { display: flex; flex-direction: column; gap: 12px; }
 .cart-item-row { display: flex; align-items: center; justify-content: space-between; background: var(--bg-input); padding: 10px 12px; border-radius: 12px; border: 1px solid var(--border); gap: 12px; }
-.cart-item-thumb { width: 50px; height: 50px; border-radius: 8px; object-fit: cover; border: 1px solid var(--border); }
+.cart-item-thumb { width: 50px; height: 50px; border-radius: 8px; object-fit: contain; background: #0b0b0b; border: 1px solid var(--border); padding: 2px; }
 .cart-item-info { flex: 1; }
 .cart-item-info h4 { font-size: 12px; font-weight: 800; color: #fff; margin-bottom: 2px; }
 .cart-item-info span { font-size: 11px; color: var(--gold-light); font-weight: 900; }
@@ -180,7 +188,7 @@ footer .brand-sign { font-weight: 900; color: var(--gold-light); letter-spacing:
 </div>
 </header>
 
-<!-- CARROSSEL PROFISSIONAL DE DESTAQUE (SLIDER DINÂMICO) -->
+<!-- CARROSSEL PROFISSIONAL DE DESTAQUE (SLIDER) -->
 <div class="hero-slider">
 <div class="slide-track" id="slide-track"></div>
 <div class="slide-dots" id="slide-dots"></div>
@@ -200,7 +208,7 @@ footer .brand-sign { font-weight: 900; color: var(--gold-light); letter-spacing:
 <div class="catalog-container">
 <div class="section-title">
 <span>Catálogo Profissional</span>
-<span style="font-size:11px; color:var(--text-muted);" id="product-count-label">Exibindo itens</span>
+<span style="font-size:11px; color:var(--text-muted);" id="product-count-label">Carregando produtos...</span>
 </div>
 <div class="products-grid" id="products-grid"></div>
 </div>
@@ -235,7 +243,9 @@ footer .brand-sign { font-weight: 900; color: var(--gold-light); letter-spacing:
 <button class="modal-close-btn" onclick="closeImageModal()">&times;</button>
 </div>
 <div class="modal-body" style="align-items: center;">
-<img id="zoom-product-img" src="" alt="Imagem Ampliada" style="width: 100%; max-height: 300px; object-fit: cover; border-radius: 12px; border: 1px solid var(--border);">
+<div style="width:100%; height:280px; background:#0d0d0d; display:flex; align-items:center; justify-content:center; border-radius:12px; border:1px solid var(--border); padding:10px;">
+<img id="zoom-product-img" src="" alt="Imagem Ampliada" style="max-width: 100%; max-height: 100%; object-fit: contain;">
+</div>
 <div id="zoom-product-specs" class="product-specs" style="margin-top: 10px;"></div>
 <p id="zoom-product-price" style="font-size: 20px; font-weight: 900; color: var(--gold-light); margin-top: 8px;"></p>
 </div>
@@ -264,7 +274,7 @@ footer .brand-sign { font-weight: 900; color: var(--gold-light); letter-spacing:
 <!-- Tela de Gestão do Admin -->
 <div id="admin-dashboard-screen" style="display:none; flex-direction:column; gap:18px;">
 <div style="display:flex; justify-content:space-between; align-items:center;">
-<span style="font-size:12px; color:var(--gold-light); font-weight:800;">✨ Painel de Gerenciamento</span>
+<span style="font-size:12px; color:var(--gold-light); font-weight:800;">✨ Painel de Gerenciamento Global</span>
 <button class="admin-btn" style="padding:6px 12px; font-size:10px;" onclick="logoutAdmin()">Sair</button>
 </div>
 
@@ -303,12 +313,12 @@ footer .brand-sign { font-weight: 900; color: var(--gold-light); letter-spacing:
 <input type="number" step="0.01" id="new-p-price" placeholder="149.90">
 </div>
 <div class="admin-form-group">
-<label>Imagem (URL da Web ou Arquivo do Celular)</label>
+<label>Imagem (URL ou Fotos da Galeria)</label>
 <input type="text" id="new-p-image" placeholder="https://exemplo.com/foto.jpg">
 <input type="file" id="new-p-file" accept="image/*" onchange="convertFileToBase64(this, 'new-p-image')">
 </div>
 <div style="display:flex; gap:8px;">
-<button class="admin-btn" style="flex:1;" onclick="saveProduct()">Salvar Produto</button>
+<button class="admin-btn" style="flex:1;" onclick="saveProduct()">Salvar e Publicar para Todos</button>
 <button class="admin-btn" style="background:#444; color:#fff; display:none;" id="btn-cancel-prod-edit" onclick="resetProductForm()">Cancelar</button>
 </div>
 </div>
@@ -343,7 +353,7 @@ footer .brand-sign { font-weight: 900; color: var(--gold-light); letter-spacing:
 <input type="file" id="new-b-file" accept="image/*" onchange="convertFileToBase64(this, 'new-b-image')">
 </div>
 <div style="display:flex; gap:8px;">
-<button class="admin-btn" style="flex:1;" onclick="saveBanner()">Salvar Banner</button>
+<button class="admin-btn" style="flex:1;" onclick="saveBanner()">Salvar e Publicar Banner</button>
 <button class="admin-btn" style="background:#444; color:#fff; display:none;" id="btn-cancel-banner-edit" onclick="resetBannerForm()">Cancelar</button>
 </div>
 </div>
@@ -367,10 +377,14 @@ footer .brand-sign { font-weight: 900; color: var(--gold-light); letter-spacing:
 </footer>
 
 <script>
+/* --- ENDPOINTS NUVEM GLOBAL DA JR COSMÉTICOS --- */
+const CLOUD_PRODUCTS_URL = 'https://kvdb.io/JRCosmeticos_63992204543_StoreV1/products';
+const CLOUD_BANNERS_URL = 'https://kvdb.io/JRCosmeticos_63992204543_StoreV1/banners';
+
 /* --- REGISTRO DO SERVICE WORKER (PWA) --- */
 if ('serviceWorker' in navigator) {
 const swCode = `
-const CACHE_NAME = 'jr-cosmeticos-v1';
+const CACHE_NAME = 'jr-cosmeticos-v3';
 self.addEventListener('install', e => { e.waitUntil(caches.open(CACHE_NAME).then(c => c.addAll(['/']))); });
 self.addEventListener('fetch', e => { e.respondWith(fetch(e.request).catch(() => caches.match(e.request))); });
 `;
@@ -392,8 +406,8 @@ setTimeout(() => toast.remove(), 300);
 }, 2500);
 }
 
-/* --- BANNER / CARROSSEL DE FOTOS --- */
-let slidesDatabase = [
+/* --- DADOS INICIAIS PADRÃO --- */
+const DEFAULT_SLIDES = [
 {
 id: 1,
 title: "Transformação Afro • Liso Absoluto",
@@ -417,68 +431,7 @@ image: "https://images.unsplash.com/photo-1519699047748-de8e457a634e?w=1200&auto
 }
 ];
 
-let slideIndex = 0;
-let slideInterval;
-
-function renderSlider() {
-const track = document.getElementById('slide-track');
-const dotsContainer = document.getElementById('slide-dots');
-track.innerHTML = '';
-dotsContainer.innerHTML = '';
-
-slidesDatabase.forEach((slide, index) => {
-const slideDiv = document.createElement('div');
-slideDiv.className = 'slide-item';
-slideDiv.innerHTML = `
-<img src="${slide.image}" alt="${slide.title}">
-<div class="slide-overlay"></div>
-<div class="slide-content">
-<h2>${slide.title}</h2>
-<p>${slide.desc}</p>
-<div class="slide-slogan">${slide.slogan}</div>
-</div>
-`;
-track.appendChild(slideDiv);
-
-const dot = document.createElement('span');
-dot.className = `dot ${index === 0 ? 'active' : ''}`;
-dot.onclick = () => currentSlide(index);
-dotsContainer.appendChild(dot);
-});
-
-showSlide(slideIndex);
-}
-
-function showSlide(index) {
-const track = document.getElementById('slide-track');
-const dots = document.querySelectorAll('.dot');
-if (slidesDatabase.length === 0) return;
-
-if (index >= slidesDatabase.length) slideIndex = 0;
-else if (index < 0) slideIndex = slidesDatabase.length - 1;
-else slideIndex = index;
-
-track.style.transform = `translateX(-${slideIndex * 100}%)`;
-dots.forEach((dot, idx) => {
-dot.classList.toggle('active', idx === slideIndex);
-});
-}
-
-function currentSlide(index) {
-slideIndex = index;
-showSlide(slideIndex);
-}
-
-function startSliderInterval() {
-clearInterval(slideInterval);
-slideInterval = setInterval(() => {
-slideIndex++;
-showSlide(slideIndex);
-}, 5000);
-}
-
-/* --- BASE DE DADOS COMPLETA DE PRODUTOS --- */
-let productsDatabase = [
+const DEFAULT_PRODUCTS = [
 {
 id: 1,
 name: "Selagem Progressiva Gold Liss Pro 1L",
@@ -553,8 +506,121 @@ image: "https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?w=500&auto=
 }
 ];
 
+let productsDatabase = JSON.parse(localStorage.getItem('jr_products')) || DEFAULT_PRODUCTS;
+let slidesDatabase = JSON.parse(localStorage.getItem('jr_slides')) || DEFAULT_SLIDES;
 let cart = {};
 let currentCategory = 'todos';
+let slideIndex = 0;
+let slideInterval;
+
+/* --- SINCRONIZAÇÃO GLOBAL COM NUVEM --- */
+async function loadCloudData() {
+try {
+const resProd = await fetch(CLOUD_PRODUCTS_URL);
+if (resProd.ok) {
+const dataProd = await resProd.json();
+if (Array.isArray(dataProd) && dataProd.length > 0) {
+productsDatabase = dataProd;
+localStorage.setItem('jr_products', JSON.stringify(productsDatabase));
+renderProducts(currentCategory);
+renderAdminProductsList();
+}
+}
+} catch (e) { console.log('Offline: carregando cache local de produtos'); }
+
+try {
+const resBanners = await fetch(CLOUD_BANNERS_URL);
+if (resBanners.ok) {
+const dataBanners = await resBanners.json();
+if (Array.isArray(dataBanners) && dataBanners.length > 0) {
+slidesDatabase = dataBanners;
+localStorage.setItem('jr_slides', JSON.stringify(slidesDatabase));
+renderSlider();
+renderAdminBannersList();
+}
+}
+} catch (e) { console.log('Offline: carregando cache local de banners'); }
+}
+
+async function saveProductsGlobal() {
+localStorage.setItem('jr_products', JSON.stringify(productsDatabase));
+try {
+await fetch(CLOUD_PRODUCTS_URL, {
+method: 'POST',
+headers: { 'Content-Type': 'application/json' },
+body: JSON.stringify(productsDatabase)
+});
+} catch (e) { console.error('Erro na sincronização global de produtos', e); }
+}
+
+async function saveBannersGlobal() {
+localStorage.setItem('jr_slides', JSON.stringify(slidesDatabase));
+try {
+await fetch(CLOUD_BANNERS_URL, {
+method: 'POST',
+headers: { 'Content-Type': 'application/json' },
+body: JSON.stringify(slidesDatabase)
+});
+} catch (e) { console.error('Erro na sincronização global de banners', e); }
+}
+
+/* --- CARROSSEL DE FOTOS --- */
+function renderSlider() {
+const track = document.getElementById('slide-track');
+const dotsContainer = document.getElementById('slide-dots');
+track.innerHTML = '';
+dotsContainer.innerHTML = '';
+
+slidesDatabase.forEach((slide, index) => {
+const slideDiv = document.createElement('div');
+slideDiv.className = 'slide-item';
+slideDiv.innerHTML = `
+<img src="${slide.image}" alt="${slide.title}">
+<div class="slide-overlay"></div>
+<div class="slide-content">
+<h2>${slide.title}</h2>
+<p>${slide.desc}</p>
+<div class="slide-slogan">${slide.slogan}</div>
+</div>
+`;
+track.appendChild(slideDiv);
+
+const dot = document.createElement('span');
+dot.className = `dot ${index === 0 ? 'active' : ''}`;
+dot.onclick = () => currentSlide(index);
+dotsContainer.appendChild(dot);
+});
+
+showSlide(slideIndex);
+}
+
+function showSlide(index) {
+const track = document.getElementById('slide-track');
+const dots = document.querySelectorAll('.dot');
+if (slidesDatabase.length === 0) return;
+
+if (index >= slidesDatabase.length) slideIndex = 0;
+else if (index < 0) slideIndex = slidesDatabase.length - 1;
+else slideIndex = index;
+
+track.style.transform = `translateX(-${slideIndex * 100}%)`;
+dots.forEach((dot, idx) => {
+dot.classList.toggle('active', idx === slideIndex);
+});
+}
+
+function currentSlide(index) {
+slideIndex = index;
+showSlide(slideIndex);
+}
+
+function startSliderInterval() {
+clearInterval(slideInterval);
+slideInterval = setInterval(() => {
+slideIndex++;
+showSlide(slideIndex);
+}, 5000);
+}
 
 /* --- RENDERIZAÇÃO DA VITRINE --- */
 function renderProducts(category = 'todos') {
@@ -564,6 +630,7 @@ const filtered = category === 'todos' ? productsDatabase : productsDatabase.filt
 document.getElementById('product-count-label').innerText = `${filtered.length} produtos`;
 
 filtered.forEach(p => {
+const isInCart = cart[p.id] && cart[p.id].qty > 0;
 const card = document.createElement('div');
 card.className = 'product-card';
 card.onclick = (e) => {
@@ -584,8 +651,8 @@ card.innerHTML = `
 </div>
 <div class="product-footer">
 <div class="product-price">R$ ${p.price.toFixed(2).replace('.', ',')}</div>
-<button class="btn-add-cart" onclick="addToCart(${p.id})">
-<span>+</span> Adicionar
+<button class="btn-add-cart ${isInCart ? 'added' : ''}" onclick="addToCart(${p.id})">
+${isInCart ? '<i class="fa-solid fa-check"></i> Adicionado' : '<span>+</span> Adicionar'}
 </button>
 </div>
 </div>
@@ -617,16 +684,15 @@ document.getElementById('image-modal').style.display = 'none';
 
 /* --- GERENCIAMENTO DO CARRINHO --- */
 function addToCart(productId) {
-if (cart[productId]) {
-cart[productId].qty += 1;
-} else {
+if (!cart[productId]) {
 const product = productsDatabase.find(p => p.id === productId);
 if (product) {
 cart[productId] = { ...product, qty: 1 };
+showToast("Produto adicionado ao carrinho!");
 }
 }
 updateCartUI();
-showToast("Produto adicionado ao carrinho!");
+renderProducts(currentCategory);
 
 const cartCounter = document.getElementById('cart-counter');
 cartCounter.style.transform = 'scale(1.3)';
@@ -639,6 +705,7 @@ cart[productId].qty += delta;
 if (cart[productId].qty <= 0) delete cart[productId];
 }
 updateCartUI();
+renderProducts(currentCategory);
 }
 
 function updateCartUI() {
@@ -698,13 +765,30 @@ const phoneNumber = "5563992204543";
 window.open(`https://wa.me/${phoneNumber}?text=${encodeURIComponent(message)}`, '_blank');
 }
 
-/* --- CONVERSÃO DE IMAGEM DA GALERIA DO CELULAR --- */
+/* --- COMPRESSOR DE IMAGENS DO CELULAR PARA ALTA VELOCIDADE --- */
 function convertFileToBase64(fileInput, targetInputId) {
 const file = fileInput.files[0];
 if (file) {
 const reader = new FileReader();
 reader.onload = function (e) {
-document.getElementById(targetInputId).value = e.target.result;
+const img = new Image();
+img.onload = function() {
+const canvas = document.createElement('canvas');
+let width = img.width;
+let height = img.height;
+const max = 800;
+if (width > height) {
+if (width > max) { height = Math.round((height * max) / width); width = max; }
+} else {
+if (height > max) { width = Math.round((width * max) / height); height = max; }
+}
+canvas.width = width;
+canvas.height = height;
+const ctx = canvas.getContext('2d');
+ctx.drawImage(img, 0, 0, width, height);
+document.getElementById(targetInputId).value = canvas.toDataURL('image/jpeg', 0.8);
+};
+img.src = e.target.result;
 };
 reader.readAsDataURL(file);
 }
@@ -757,7 +841,7 @@ list.appendChild(row);
 });
 }
 
-function saveProduct() {
+async function saveProduct() {
 const id = document.getElementById('edit-prod-id').value;
 const name = document.getElementById('new-p-name').value;
 const category = document.getElementById('new-p-cat').value;
@@ -774,14 +858,15 @@ if (id) {
 const index = productsDatabase.findIndex(p => p.id == id);
 if (index !== -1) {
 productsDatabase[index] = { ...productsDatabase[index], name, category, specs: specs || 'Uso Profissional', price, image };
-alert('Produto atualizado com sucesso!');
+alert('Produto atualizado globalmente com sucesso!');
 }
 } else {
 const newId = productsDatabase.length > 0 ? Math.max(...productsDatabase.map(p => p.id)) + 1 : 1;
 productsDatabase.push({ id: newId, name, category, specs: specs || 'Uso Profissional', price, tag: 'Novo', image });
-alert('Produto adicionado com sucesso!');
+alert('Produto publicado para todos os clientes!');
 }
 
+await saveProductsGlobal();
 resetProductForm();
 renderProducts(currentCategory);
 renderAdminProductsList();
@@ -811,10 +896,11 @@ document.getElementById('prod-form-title').innerText = "Adicionar Novo Produto";
 document.getElementById('btn-cancel-prod-edit').style.display = 'none';
 }
 
-function deleteProduct(id) {
-if (confirm('Tem certeza que deseja remover este produto?')) {
+async function deleteProduct(id) {
+if (confirm('Tem certeza que deseja remover este produto de todo o site?')) {
 productsDatabase = productsDatabase.filter(p => p.id !== id);
 delete cart[id];
+await saveProductsGlobal();
 renderProducts(currentCategory);
 renderAdminProductsList();
 updateCartUI();
@@ -839,7 +925,7 @@ list.appendChild(row);
 });
 }
 
-function saveBanner() {
+async function saveBanner() {
 const id = document.getElementById('edit-banner-id').value;
 const title = document.getElementById('new-b-title').value;
 const desc = document.getElementById('new-b-desc').value;
@@ -855,14 +941,15 @@ if (id) {
 const index = slidesDatabase.findIndex(b => b.id == id);
 if (index !== -1) {
 slidesDatabase[index] = { ...slidesDatabase[index], title, desc, slogan, image };
-alert('Banner atualizado!');
+alert('Banner atualizado globalmente!');
 }
 } else {
 const newId = slidesDatabase.length > 0 ? Math.max(...slidesDatabase.map(b => b.id)) + 1 : 1;
 slidesDatabase.push({ id: newId, title, desc, slogan, image });
-alert('Banner adicionado!');
+alert('Banner publicado para todos!');
 }
 
+await saveBannersGlobal();
 resetBannerForm();
 renderSlider();
 renderAdminBannersList();
@@ -891,19 +978,21 @@ document.getElementById('banner-form-title').innerText = "Adicionar Novo Banner"
 document.getElementById('btn-cancel-banner-edit').style.display = 'none';
 }
 
-function deleteBanner(id) {
+async function deleteBanner(id) {
 if (confirm('Tem certeza que deseja remover este banner?')) {
 slidesDatabase = slidesDatabase.filter(b => b.id !== id);
+await saveBannersGlobal();
 renderSlider();
 renderAdminBannersList();
 }
 }
 
-/* --- INICIALIZAÇÃO --- */
-window.onload = () => {
+/* --- INICIALIZAÇÃO E CARREGAMENTO DAS DADOS DA NUVEM --- */
+window.onload = async () => {
 renderSlider();
 startSliderInterval();
 renderProducts('todos');
+await loadCloudData();
 };
 </script>
 </body>

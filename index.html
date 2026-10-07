@@ -4,20 +4,29 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <meta name="theme-color" content="#0b0b0b">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <title>JR Cosméticos | Profissional</title>
+
+<!-- PWA Manifest Embutido -->
+<link rel="manifest" href='data:application/manifest+json,{"name":"JR Cosméticos","short_name":"JR Cosméticos","start_url":".","display":"standalone","background_color":"#0b0b0b","theme_color":"#0b0b0b","icons":[{"src":"https://cdn-icons-png.flaticon.com/512/3050/3050239.png","sizes":"512x512","type":"image/png"}]}'>
+
+<!-- FontAwesome para Ícones Profissionais -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
 <style>
 :root {
-    --bg-main: #0b0b0b;
-    --bg-card: #141414;
-    --bg-card-hover: #1c1c1c;
-    --bg-input: #1a1a1a;
-    --gold-primary: #d4af37;
-    --gold-light: #f3e5ab;
-    --gold-dark: #aa820a;
-    --text-white: #ffffff;
-    --text-muted: #a3a3a3;
-    --border: #2a2a2a;
-    --font: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+--bg-main: #0b0b0b;
+--bg-card: #141414;
+--bg-card-hover: #1c1c1c;
+--bg-input: #1a1a1a;
+--gold-primary: #d4af37;
+--gold-light: #f3e5ab;
+--gold-dark: #aa820a;
+--text-white: #ffffff;
+--text-muted: #a3a3a3;
+--border: #2a2a2a;
+--font: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
 }
 * { box-sizing: border-box; margin: 0; padding: 0; font-family: var(--font); -webkit-tap-highlight-color: transparent; }
 body { background-color: var(--bg-main); color: var(--text-white); min-height: 100vh; display: flex; flex-direction: column; overflow-x: hidden; padding-bottom: 90px; }
@@ -31,11 +40,10 @@ header { background: rgba(11, 11, 11, 0.95); backdrop-filter: blur(10px); border
 .brand-logo-circle { width: 42px; height: 42px; border: 2px solid var(--gold-primary); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 900; color: var(--gold-primary); font-size: 16px; background: #000; box-shadow: 0 0 15px rgba(212, 175, 55, 0.2); }
 .brand-texts h1 { font-size: 15px; font-weight: 900; letter-spacing: 1px; color: var(--gold-light); line-height: 1.1; text-transform: uppercase; }
 .brand-texts span { font-size: 9px; color: var(--text-muted); font-weight: 700; text-transform: uppercase; letter-spacing: 1.5px; }
-
 .header-actions { display: flex; align-items: center; gap: 8px; }
-.admin-login-btn { background: transparent; border: 1px solid var(--border); padding: 8px 12px; border-radius: 10px; color: var(--text-muted); font-weight: 800; font-size: 11px; cursor: pointer; transition: 0.2s; }
-.admin-login-btn:hover { color: var(--gold-light); border-color: var(--gold-primary); }
 
+.admin-login-btn { background: transparent; border: 1px solid var(--border); padding: 8px 12px; border-radius: 10px; color: var(--text-muted); font-weight: 800; font-size: 11px; cursor: pointer; transition: 0.2s; display: flex; align-items: center; gap: 5px; }
+.admin-login-btn:hover { color: var(--gold-light); border-color: var(--gold-primary); }
 .cart-btn-top { background: var(--bg-input); border: 1px solid var(--border); padding: 8px 14px; border-radius: 10px; color: var(--gold-light); font-weight: 800; font-size: 12px; display: flex; align-items: center; gap: 6px; cursor: pointer; position: relative; transition: 0.2s; }
 .cart-btn-top:hover { border-color: var(--gold-primary); }
 .cart-badge { background: var(--gold-primary); color: #0b0b0b; font-size: 10px; font-weight: 900; padding: 1px 6px; border-radius: 20px; }
@@ -51,14 +59,12 @@ header { background: rgba(11, 11, 11, 0.95); backdrop-filter: blur(10px); border
 .slide-content h2 { font-size: 20px; font-weight: 900; color: var(--gold-light); margin-bottom: 6px; text-transform: uppercase; letter-spacing: 0.5px; text-shadow: 0 2px 4px rgba(0,0,0,0.8); }
 .slide-content p { font-size: 12px; color: #e5e5e5; margin-bottom: 8px; text-shadow: 0 1px 3px rgba(0,0,0,0.8); }
 .slide-slogan { font-size: 10px; color: var(--gold-primary); font-weight: 800; text-transform: uppercase; letter-spacing: 2px; text-shadow: 0 1px 2px rgba(0,0,0,0.9); }
-
-/* Indicadores de Slide */
 .slide-dots { position: absolute; bottom: 12px; left: 50%; transform: translateX(-50%); display: flex; gap: 6px; z-index: 10; }
 .dot { width: 8px; height: 8px; border-radius: 50%; background: rgba(255,255,255,0.4); cursor: pointer; transition: 0.3s; }
 .dot.active { background: var(--gold-primary); width: 22px; border-radius: 4px; }
 
 /* --- BOTÃO FLUTUANTE DO WHATSAPP --- */
-.whatsapp-float { position: fixed; bottom: 24px; right: 20px; background: #25d366; color: #fff; width: 56px; height: 56px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 28px; box-shadow: 0 4px 20px rgba(37, 211, 102, 0.4); z-index: 1500; text-decoration: none; transition: 0.3s; }
+.whatsapp-float { position: fixed; bottom: 24px; right: 20px; background: #25d366; color: #fff; width: 56px; height: 56px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 30px; box-shadow: 0 4px 20px rgba(37, 211, 102, 0.4); z-index: 1500; text-decoration: none; transition: 0.3s; }
 .whatsapp-float:hover { transform: scale(1.1); background: #22bf5b; }
 
 /* --- FILTROS DE CATEGORIA --- */
@@ -73,14 +79,12 @@ header { background: rgba(11, 11, 11, 0.95); backdrop-filter: blur(10px); border
 .products-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 14px; }
 @media (min-width: 768px) { .products-grid { grid-template-columns: repeat(3, 1fr); gap: 20px; } }
 @media (min-width: 1024px) { .products-grid { grid-template-columns: repeat(4, 1fr); gap: 20px; } }
-
-.product-card { background: var(--bg-card); border: 1px solid var(--border); border-radius: 14px; overflow: hidden; display: flex; flex-direction: column; transition: 0.3s; position: relative; }
+.product-card { background: var(--bg-card); border: 1px solid var(--border); border-radius: 14px; overflow: hidden; display: flex; flex-direction: column; transition: 0.3s; position: relative; cursor: pointer; }
 .product-card:hover { transform: translateY(-3px); border-color: var(--gold-primary); box-shadow: 0 10px 30px rgba(0,0,0,0.7); }
 .product-image-box { width: 100%; height: 170px; background: #1a1a1a; position: relative; display: flex; align-items: center; justify-content: center; overflow: hidden; }
 .product-image-box img { width: 100%; height: 100%; object-fit: cover; transition: 0.3s; }
 .product-card:hover .product-image-box img { transform: scale(1.05); }
-.product-tag { position: absolute; top: 10px; left: 10px; background: rgba(11,11,11,0.85); backdrop-filter: blur(4px); color: var(--gold-light); font-size: 9px; font-weight: 900; padding: 3px 8px; border-radius: 6px; border: 1px solid rgba(212,175,55,0.4); text-transform: uppercase; }
-
+.product-tag { position: absolute; top: 10px; left: 10px; background: rgba(11,11,11,0.85); backdrop-filter: blur(4px); color: var(--gold-light); font-size: 9px; font-weight: 900; padding: 3px 8px; border-radius: 6px; border: 1px solid rgba(212,175,55,0.4); text-transform: uppercase; z-index: 2; }
 .product-content { padding: 14px; display: flex; flex-direction: column; flex: 1; justify-content: space-between; gap: 10px; }
 .product-category-mini { font-size: 10px; color: var(--gold-primary); font-weight: 800; text-transform: uppercase; letter-spacing: 0.5px; }
 .product-name { font-size: 13px; font-weight: 800; color: #fff; line-height: 1.3; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
@@ -90,41 +94,53 @@ header { background: rgba(11, 11, 11, 0.95); backdrop-filter: blur(10px); border
 .btn-add-cart { background: var(--gold-primary); color: #0b0b0b; border: none; padding: 8px 12px; border-radius: 8px; font-size: 11px; font-weight: 900; cursor: pointer; transition: 0.2s; display: flex; align-items: center; gap: 4px; box-shadow: 0 4px 12px rgba(212,175,55,0.2); }
 .btn-add-cart:hover { background: var(--gold-light); }
 
-/* --- MODAIS (CARRINHO E ADMIN) --- */
+/* --- MODAIS (CARRINHO, ADMIN E ZOOM) --- */
 .modal-overlay { position: fixed; inset: 0; background: rgba(11, 11, 11, 0.88); backdrop-filter: blur(8px); z-index: 2000; display: none; align-items: flex-end; justify-content: center; }
 @media (min-width: 640px) { .modal-overlay { align-items: center; } }
-.modal-card { background: var(--bg-card); border: 1px solid var(--border); border-top-left-radius: 24px; border-top-right-radius: 24px; width: 100%; max-width: 550px; max-height: 90vh; display: flex; flex-direction: column; box-shadow: 0 -20px 40px rgba(0,0,0,0.9); animation: slideUp 0.3s ease; }
+.modal-card { background: var(--bg-card); border: 1px solid var(--border); border-top-left-radius: 24px; border-top-right-radius: 24px; width: 100%; max-width: 650px; max-height: 90vh; display: flex; flex-direction: column; box-shadow: 0 -20px 40px rgba(0,0,0,0.9); animation: slideUp 0.3s ease; }
 @media (min-width: 640px) { .modal-card { border-radius: 20px; } }
 @keyframes slideUp { from { transform: translateY(100%); } to { transform: translateY(0); } }
-
 .modal-header { padding: 18px 20px; border-bottom: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; }
 .modal-title { font-size: 15px; font-weight: 900; color: var(--gold-light); text-transform: uppercase; letter-spacing: 0.5px; }
 .modal-close-btn { background: transparent; border: none; color: var(--text-muted); font-size: 22px; font-weight: bold; cursor: pointer; }
-
 .modal-body { padding: 20px; overflow-y: auto; display: flex; flex-direction: column; gap: 14px; max-height: 60vh; }
 
-/* Estilos específicos do Painel Admin */
+/* Estilos do Painel Admin */
+.admin-tabs { display: flex; gap: 8px; border-bottom: 1px solid var(--border); padding-bottom: 10px; margin-bottom: 10px; }
+.admin-tab-btn { background: var(--bg-input); border: 1px solid var(--border); color: var(--text-muted); padding: 6px 14px; border-radius: 6px; font-size: 11px; font-weight: 800; cursor: pointer; }
+.admin-tab-btn.active { background: var(--gold-primary); color: #0b0b0b; border-color: var(--gold-primary); }
 .admin-form-group { display: flex; flex-direction: column; gap: 6px; }
 .admin-form-group label { font-size: 11px; font-weight: 800; color: var(--gold-light); text-transform: uppercase; }
 .admin-form-group input, .admin-form-group select { background: var(--bg-input); border: 1px solid var(--border); border-radius: 8px; padding: 10px; color: #fff; font-size: 12px; }
-.admin-btn { background: var(--gold-primary); color: #0b0b0b; font-weight: 900; border: none; padding: 12px; border-radius: 8px; cursor: pointer; text-transform: uppercase; font-size: 12px; }
-.admin-product-row { display: flex; align-items: center; justify-content: space-between; background: var(--bg-input); padding: 10px; border-radius: 8px; border: 1px solid var(--border); font-size: 12px; }
-.btn-delete-prod { background: #ff4d4d; color: #fff; border: none; padding: 6px 10px; border-radius: 6px; font-weight: bold; cursor: pointer; font-size: 10px; }
+.admin-form-group input[type="file"] { padding: 6px; font-size: 11px; }
+.admin-btn { background: var(--gold-primary); color: #0b0b0b; font-weight: 900; border: none; padding: 12px; border-radius: 8px; cursor: pointer; text-transform: uppercase; font-size: 12px; transition: 0.2s; }
+.admin-btn:hover { background: var(--gold-light); }
+.admin-item-row { display: flex; align-items: center; justify-content: space-between; background: var(--bg-input); padding: 10px; border-radius: 8px; border: 1px solid var(--border); font-size: 12px; gap: 10px; }
+.admin-item-actions { display: flex; gap: 6px; }
+.btn-action-icon { background: transparent; border: 1px solid var(--border); color: #fff; width: 30px; height: 30px; border-radius: 6px; cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 12px; }
+.btn-action-icon.edit { color: var(--gold-primary); border-color: rgba(212,175,55,0.4); }
+.btn-action-icon.delete { color: #ff4d4d; border-color: rgba(255,77,77,0.4); }
 
-/* Carrinho */
+/* Carrinho com Miniaturas */
 .cart-items-list { display: flex; flex-direction: column; gap: 12px; }
-.cart-item-row { display: flex; align-items: center; justify-content: space-between; background: var(--bg-input); padding: 10px 12px; border-radius: 12px; border: 1px solid var(--border); }
+.cart-item-row { display: flex; align-items: center; justify-content: space-between; background: var(--bg-input); padding: 10px 12px; border-radius: 12px; border: 1px solid var(--border); gap: 12px; }
+.cart-item-thumb { width: 50px; height: 50px; border-radius: 8px; object-fit: cover; border: 1px solid var(--border); }
+.cart-item-info { flex: 1; }
 .cart-item-info h4 { font-size: 12px; font-weight: 800; color: #fff; margin-bottom: 2px; }
 .cart-item-info span { font-size: 11px; color: var(--gold-light); font-weight: 900; }
 .cart-item-controls { display: flex; align-items: center; gap: 8px; }
 .qty-btn { background: #2a2a2a; border: 1px solid var(--border); color: white; width: 24px; height: 24px; border-radius: 6px; font-weight: bold; cursor: pointer; display: flex; align-items: center; justify-content: center; }
 .item-qty { font-size: 12px; font-weight: 900; width: 20px; text-align: center; }
-
 .modal-footer { padding: 20px; border-top: 1px solid var(--border); background: #0e0e0e; }
 .cart-total-row { display: flex; justify-content: space-between; font-size: 14px; font-weight: 900; margin-bottom: 14px; color: var(--text-muted); }
 .cart-total-row span:last-child { color: var(--gold-light); font-size: 18px; }
 .btn-checkout-whatsapp { width: 100%; padding: 14px; background: linear-gradient(90deg, #25d366, #1ebe5d); border: none; border-radius: 12px; color: #fff; font-size: 13px; font-weight: 900; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; box-shadow: 0 6px 20px rgba(37,211,102,0.3); transition: 0.2s; text-transform: uppercase; letter-spacing: 0.5px; }
 .btn-checkout-whatsapp:hover { transform: translateY(-2px); filter: brightness(1.1); }
+
+/* --- TOAST NOTIFICATION --- */
+.toast-container { position: fixed; top: 20px; right: 20px; z-index: 9999; display: flex; flex-direction: column; gap: 10px; pointer-events: none; }
+.toast { background: linear-gradient(90deg, #aa820a, #d4af37); color: #0b0b0b; padding: 12px 20px; border-radius: 8px; font-weight: 900; font-size: 12px; box-shadow: 0 4px 20px rgba(0,0,0,0.6); transform: translateY(-20px); opacity: 0; transition: all 0.3s ease; display: flex; align-items: center; gap: 8px; text-transform: uppercase; letter-spacing: 0.5px; }
+.toast.show { transform: translateY(0); opacity: 1; }
 
 /* --- RODAPÉ INSTITUCIONAL --- */
 footer { background: #050505; border-top: 1px solid var(--border); padding: 30px 20px; text-align: center; margin-top: auto; }
@@ -134,298 +150,407 @@ footer .brand-sign { font-weight: 900; color: var(--gold-light); letter-spacing:
 </head>
 <body>
 
+<!-- NOTIFICAÇÃO TOAST FLUTUANTE -->
+<div id="toast-container" class="toast-container"></div>
+
 <!-- BOTÃO FLUTUANTE DO WHATSAPP -->
 <a href="https://wa.me/5563992204543?text=Olá!%20Gostaria%20de%20falar%20com%20o%20vendedor%20da%20JR%20Cosméticos." class="whatsapp-float" target="_blank" title="Falar com o Vendedor">
-    💬
+<i class="fa-brands fa-whatsapp"></i>
 </a>
 
 <!-- BARRA SUPERIOR DE AVISO -->
 <div class="top-announcement">
-    ✨ Produtos Profissionais para Salões de Beleza &bull; Atendimento Exclusivo
+✨ Produtos Profissionais para Salões de Beleza &bull; Atendimento Exclusivo
 </div>
 
 <!-- HEADER PRINCIPAL -->
 <header>
-    <div class="brand-wrapper">
-        <div class="brand-logo-circle">JR</div>
-        <div class="brand-texts">
-            <h1>JR Cosméticos</h1>
-            <span>Profissional</span>
-        </div>
-    </div>
-    <div class="header-actions">
-        <button class="admin-login-btn" onclick="openAdminModal()">⚙️ Admin</button>
-        <button class="cart-btn-top" onclick="openCartModal()">
-            🛒 Carrinho <span class="cart-badge" id="cart-counter">0</span>
-        </button>
-    </div>
+<div class="brand-wrapper">
+<div class="brand-logo-circle">JR</div>
+<div class="brand-texts">
+<h1>JR Cosméticos</h1>
+<span>Profissional</span>
+</div>
+</div>
+<div class="header-actions">
+<button class="admin-login-btn" onclick="openAdminModal()"><i class="fa-solid fa-gear"></i> Admin</button>
+<button class="cart-btn-top" onclick="openCartModal()">
+<i class="fa-solid fa-cart-shopping"></i> Carrinho <span class="cart-badge" id="cart-counter">0</span>
+</button>
+</div>
 </header>
 
-<!-- CARROSSEL PROFISSIONAL DE DESTAQUE (SLIDER COM TRANSIÇÃO & CABELO AFRO ANTES/DEPOIS) -->
+<!-- CARROSSEL PROFISSIONAL DE DESTAQUE (SLIDER DINÂMICO) -->
 <div class="hero-slider">
-    <div class="slide-track" id="slide-track">
-        <!-- Slide 1: Cabelo Afro Antes e Depois da Selagem Progressiva -->
-        <div class="slide-item">
-            <img src="https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?w=1200&auto=format&fit=crop&q=80" alt="Transformação Cabelo Afro para Liso Perfeito">
-            <div class="slide-overlay"></div>
-            <div class="slide-content">
-                <h2>Transformação Afro &bull; Liso Absoluto</h2>
-                <p>Resultado profissional impecável após a aplicação da Selagem Progressiva de alto desempenho.</p>
-                <div class="slide-slogan">Realce sua beleza, revele sua essência.</div>
-            </div>
-        </div>
-        <!-- Slide 2: Cabelo Liso Extremo e Brilhoso -->
-        <div class="slide-item">
-            <img src="https://images.unsplash.com/photo-1560869713-7d0a29430803?w=1200&auto=format&fit=crop&q=80" alt="Cabelo Liso Profissional">
-            <div class="slide-overlay"></div>
-            <div class="slide-content">
-                <h2>Tecnologia e Liso Perfeito</h2>
-                <p>O padrão de excelência que o seu salão de beleza merece.</p>
-                <div class="slide-slogan">Brilho espelhado e toque sedoso.</div>
-            </div>
-        </div>
-        <!-- Slide 3: Profissionalismo e Alta Performance -->
-        <div class="slide-item">
-            <img src="https://images.unsplash.com/photo-1519699047748-de8e457a634e?w=1200&auto=format&fit=crop&q=80" alt="Salão de Beleza Profissional">
-            <div class="slide-overlay"></div>
-            <div class="slide-content">
-                <h2>Exclusivo para Cabeleireiros</h2>
-                <p>Atendimento especializado e entrega rápida para profissionais exigentes.</p>
-                <div class="slide-slogan">WhatsApp: (63) 99220-4543</div>
-            </div>
-        </div>
-    </div>
-    <!-- Bolinhas indicadoras -->
-    <div class="slide-dots" id="slide-dots">
-        <span class="dot active" onclick="currentSlide(0)"></span>
-        <span class="dot" onclick="currentSlide(1)"></span>
-        <span class="dot" onclick="currentSlide(2)"></span>
-    </div>
+<div class="slide-track" id="slide-track"></div>
+<div class="slide-dots" id="slide-dots"></div>
 </div>
 
-<!-- FILTROS DE CATEGORIA (ATUALIZADOS) -->
+<!-- FILTROS DE CATEGORIA -->
 <div class="categories-bar" id="category-filter-bar">
-    <button class="cat-chip active" onclick="filterCategory('todos', this)">Todos os Produtos</button>
-    <button class="cat-chip" onclick="filterCategory('Selagem Progressiva', this)">Selagem Progressiva</button>
-    <button class="cat-chip" onclick="filterCategory('Hidratação', this)">Hidratação</button>
-    <button class="cat-chip" onclick="filterCategory('Coloração', this)">Coloração</button>
-    <button class="cat-chip" onclick="filterCategory('Descolorante', this)">Descolorante</button>
-    <button class="cat-chip" onclick="filterCategory('Finalizador', this)">Finalizador</button>
+<button class="cat-chip active" onclick="filterCategory('todos', this)">Todos os Produtos</button>
+<button class="cat-chip" onclick="filterCategory('Selagem Progressiva', this)">Selagem Progressiva</button>
+<button class="cat-chip" onclick="filterCategory('Hidratação', this)">Hidratação</button>
+<button class="cat-chip" onclick="filterCategory('Coloração', this)">Coloração</button>
+<button class="cat-chip" onclick="filterCategory('Descolorante', this)">Descolorante</button>
+<button class="cat-chip" onclick="filterCategory('Finalizador', this)">Finalizador</button>
 </div>
 
 <!-- VITRINE DE PRODUTOS -->
 <div class="catalog-container">
-    <div class="section-title">
-        <span>Catálogo Profissional</span>
-        <span style="font-size:11px; color:var(--text-muted);" id="product-count-label">Exibindo itens</span>
-    </div>
-    <div class="products-grid" id="products-grid">
-        <!-- Inserido dinamicamente via JS -->
-    </div>
+<div class="section-title">
+<span>Catálogo Profissional</span>
+<span style="font-size:11px; color:var(--text-muted);" id="product-count-label">Exibindo itens</span>
+</div>
+<div class="products-grid" id="products-grid"></div>
 </div>
 
 <!-- MODAL DO CARRINHO E CHECKOUT -->
 <div class="modal-overlay" id="cart-modal">
-    <div class="modal-card">
-        <div class="modal-header">
-            <div class="modal-title">Resumo do Pedido</div>
-            <button class="modal-close-btn" onclick="closeCartModal()">&times;</button>
-        </div>
-        <div class="modal-body">
-            <div class="cart-items-list" id="cart-items-list">
-                <!-- Itens do carrinho -->
-            </div>
-        </div>
-        <div class="modal-footer">
-            <div class="cart-total-row">
-                <span>Total Estimado:</span>
-                <span id="cart-total-value">R$ 0,00</span>
-            </div>
-            <button class="btn-checkout-whatsapp" onclick="finalizeOrderWhatsApp()">
-                💬 Enviar Pedido via WhatsApp
-            </button>
-        </div>
-    </div>
+<div class="modal-card">
+<div class="modal-header">
+<div class="modal-title"><i class="fa-solid fa-basket-shopping"></i> Resumo do Pedido</div>
+<button class="modal-close-btn" onclick="closeCartModal()">&times;</button>
+</div>
+<div class="modal-body">
+<div class="cart-items-list" id="cart-items-list"></div>
+</div>
+<div class="modal-footer">
+<div class="cart-total-row">
+<span>Total Estimado:</span>
+<span id="cart-total-value">R$ 0,00</span>
+</div>
+<button class="btn-checkout-whatsapp" onclick="finalizeOrderWhatsApp()">
+<i class="fa-brands fa-whatsapp"></i> Enviar Pedido via WhatsApp
+</button>
+</div>
+</div>
 </div>
 
-<!-- MODAL DO PAINEL ADMINISTRADOR / DESENVOLVEDOR -->
+<!-- MODAL DE ZOOM / AMPLIAÇÃO DA IMAGEM DO PRODUTO -->
+<div class="modal-overlay" id="image-modal">
+<div class="modal-card" style="max-width: 450px; text-align: center;">
+<div class="modal-header">
+<div class="modal-title" id="zoom-product-title">Detalhes do Produto</div>
+<button class="modal-close-btn" onclick="closeImageModal()">&times;</button>
+</div>
+<div class="modal-body" style="align-items: center;">
+<img id="zoom-product-img" src="" alt="Imagem Ampliada" style="width: 100%; max-height: 300px; object-fit: cover; border-radius: 12px; border: 1px solid var(--border);">
+<div id="zoom-product-specs" class="product-specs" style="margin-top: 10px;"></div>
+<p id="zoom-product-price" style="font-size: 20px; font-weight: 900; color: var(--gold-light); margin-top: 8px;"></p>
+</div>
+</div>
+</div>
+
+<!-- MODAL DO PAINEL ADMINISTRADOR -->
 <div class="modal-overlay" id="admin-modal">
-    <div class="modal-card" style="max-width: 600px;">
-        <div class="modal-header">
-            <div class="modal-title">Painel do Administrador</div>
-            <button class="modal-close-btn" onclick="closeAdminModal()">&times;</button>
-        </div>
-        <div class="modal-body" id="admin-modal-content">
-            <!-- Tela de Login do Admin -->
-            <div id="admin-login-screen" style="display:flex; flex-direction:column; gap:14px; padding: 10px 0;">
-                <p style="font-size:12px; color:var(--text-muted);">Área restrita para gerenciamento do catálogo e fotos do site.</p>
-                <div class="admin-form-group">
-                    <label>Senha de Acesso</label>
-                    <input type="password" id="admin-password-input" placeholder="Digite a senha (ex: admin123)">
-                </div>
-                <button class="admin-btn" onclick="verifyAdminLogin()">Entrar no Painel</button>
-            </div>
+<div class="modal-card" style="max-width: 650px;">
+<div class="modal-header">
+<div class="modal-title"><i class="fa-solid fa-user-shield"></i> Painel do Administrador</div>
+<button class="modal-close-btn" onclick="closeAdminModal()">&times;</button>
+</div>
+<div class="modal-body" id="admin-modal-content">
 
-            <!-- Tela de Gestão do Admin (Oculta até logar) -->
-            <div id="admin-dashboard-screen" style="display:none; flex-direction:column; gap:18px;">
-                <div style="display:flex; justify-content:space-between; align-items:center;">
-                    <span style="font-size:12px; color:var(--gold-light); font-weight:800;">✨ Gerenciar Produtos</span>
-                    <button class="admin-btn" style="padding:6px 12px; font-size:10px;" onclick="logoutAdmin()">Sair</button>
-                </div>
-                
-                <!-- Formulário para Adicionar Novo Produto -->
-                <div style="background:var(--bg-input); padding:14px; border-radius:12px; border:1px solid var(--border); display:flex; flex-direction:column; gap:10px;">
-                    <h4 style="font-size:12px; color:#fff; font-weight:900;">Adicionar Novo Produto</h4>
-                    <div class="admin-form-group">
-                        <label>Nome do Produto</label>
-                        <input type="text" id="new-p-name" placeholder="Ex: Selagem Térmica Liss 1L">
-                    </div>
-                    <div class="admin-form-group">
-                        <label>Categoria</label>
-                        <select id="new-p-cat">
-                            <option value="Selagem Progressiva">Selagem Progressiva</option>
-                            <option value="Hidratação">Hidratação</option>
-                            <option value="Coloração">Coloração</option>
-                            <option value="Descolorante">Descolorante</option>
-                            <option value="Finalizador">Finalizador</option>
-                        </select>
-                    </div>
-                    <div class="admin-form-group">
-                        <label>Especificações (Volume / Peso)</label>
-                        <input type="text" id="new-p-specs" placeholder="Ex: Frasco 1 Litro">
-                    </div>
-                    <div class="admin-form-group">
-                        <label>Preço (R$)</label>
-                        <input type="number" step="0.01" id="new-p-price" placeholder="149.90">
-                    </div>
-                    <div class="admin-form-group">
-                        <label>URL da Imagem (Foto)</label>
-                        <input type="text" id="new-p-image" placeholder="https://exemplo.com/foto.jpg">
-                    </div>
-                    <button class="admin-btn" onclick="addNewProduct()">Salvar e Publicar Produto</button>
-                </div>
-
-                <!-- Lista de Produtos Existentes para Gerenciar/Excluir -->
-                <div style="display:flex; flex-direction:column; gap:8px;">
-                    <h4 style="font-size:12px; color:#fff; font-weight:900;">Produtos Cadastrados</h4>
-                    <div id="admin-products-list" style="display:flex; flex-direction:column; gap:8px; max-height:220px; overflow-y:auto;">
-                        <!-- Gerado via JS -->
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
+<!-- Tela de Login Admin -->
+<div id="admin-login-screen" style="display:flex; flex-direction:column; gap:14px; padding: 10px 0;">
+<p style="font-size:12px; color:var(--text-muted);">Área restrita para gerenciamento do catálogo e banners do site.</p>
+<div class="admin-form-group">
+<label>Senha de Acesso</label>
+<input type="password" id="admin-password-input" placeholder="Digite a senha de acesso">
+</div>
+<button class="admin-btn" onclick="verifyAdminLogin()">Entrar no Painel</button>
 </div>
 
-<!-- RODAPÉ -->
+<!-- Tela de Gestão do Admin -->
+<div id="admin-dashboard-screen" style="display:none; flex-direction:column; gap:18px;">
+<div style="display:flex; justify-content:space-between; align-items:center;">
+<span style="font-size:12px; color:var(--gold-light); font-weight:800;">✨ Painel de Gerenciamento</span>
+<button class="admin-btn" style="padding:6px 12px; font-size:10px;" onclick="logoutAdmin()">Sair</button>
+</div>
+
+<!-- Tabs do Admin -->
+<div class="admin-tabs">
+<button class="admin-tab-btn active" id="tab-btn-products" onclick="switchAdminTab('products')">Gerenciar Produtos</button>
+<button class="admin-tab-btn" id="tab-btn-banners" onclick="switchAdminTab('banners')">Gerenciar Banners</button>
+</div>
+
+<!-- SEÇÃO: GERENCIAR PRODUTOS -->
+<div id="admin-section-products" style="display:flex; flex-direction:column; gap:16px;">
+<div style="background:var(--bg-input); padding:14px; border-radius:12px; border:1px solid var(--border); display:flex; flex-direction:column; gap:10px;">
+<h4 id="prod-form-title" style="font-size:12px; color:#fff; font-weight:900;">Adicionar / Editar Produto</h4>
+<input type="hidden" id="edit-prod-id">
+
+<div class="admin-form-group">
+<label>Nome do Produto</label>
+<input type="text" id="new-p-name" placeholder="Ex: Selagem Térmica Liss 1L">
+</div>
+<div class="admin-form-group">
+<label>Categoria</label>
+<select id="new-p-cat">
+<option value="Selagem Progressiva">Selagem Progressiva</option>
+<option value="Hidratação">Hidratação</option>
+<option value="Coloração">Coloração</option>
+<option value="Descolorante">Descolorante</option>
+<option value="Finalizador">Finalizador</option>
+</select>
+</div>
+<div class="admin-form-group">
+<label>Especificações (Volume / Peso)</label>
+<input type="text" id="new-p-specs" placeholder="Ex: Frasco 1 Litro">
+</div>
+<div class="admin-form-group">
+<label>Preço (R$)</label>
+<input type="number" step="0.01" id="new-p-price" placeholder="149.90">
+</div>
+<div class="admin-form-group">
+<label>Imagem (URL da Web ou Arquivo do Celular)</label>
+<input type="text" id="new-p-image" placeholder="https://exemplo.com/foto.jpg">
+<input type="file" id="new-p-file" accept="image/*" onchange="convertFileToBase64(this, 'new-p-image')">
+</div>
+<div style="display:flex; gap:8px;">
+<button class="admin-btn" style="flex:1;" onclick="saveProduct()">Salvar Produto</button>
+<button class="admin-btn" style="background:#444; color:#fff; display:none;" id="btn-cancel-prod-edit" onclick="resetProductForm()">Cancelar</button>
+</div>
+</div>
+
+<div style="display:flex; flex-direction:column; gap:8px;">
+<h4 style="font-size:12px; color:#fff; font-weight:900;">Produtos Cadastrados</h4>
+<div id="admin-products-list" style="display:flex; flex-direction:column; gap:8px; max-height:200px; overflow-y:auto;"></div>
+</div>
+</div>
+
+<!-- SEÇÃO: GERENCIAR BANNERS -->
+<div id="admin-section-banners" style="display:none; flex-direction:column; gap:16px;">
+<div style="background:var(--bg-input); padding:14px; border-radius:12px; border:1px solid var(--border); display:flex; flex-direction:column; gap:10px;">
+<h4 id="banner-form-title" style="font-size:12px; color:#fff; font-weight:900;">Adicionar / Editar Banner</h4>
+<input type="hidden" id="edit-banner-id">
+
+<div class="admin-form-group">
+<label>Título Principal</label>
+<input type="text" id="new-b-title" placeholder="Ex: Transformação Afro">
+</div>
+<div class="admin-form-group">
+<label>Descrição</label>
+<input type="text" id="new-b-desc" placeholder="Ex: Resultado profissional impecável...">
+</div>
+<div class="admin-form-group">
+<label>Slogan / Rodapé do Banner</label>
+<input type="text" id="new-b-slogan" placeholder="Ex: Realce sua beleza...">
+</div>
+<div class="admin-form-group">
+<label>Imagem (URL ou Galeria)</label>
+<input type="text" id="new-b-image" placeholder="https://exemplo.com/banner.jpg">
+<input type="file" id="new-b-file" accept="image/*" onchange="convertFileToBase64(this, 'new-b-image')">
+</div>
+<div style="display:flex; gap:8px;">
+<button class="admin-btn" style="flex:1;" onclick="saveBanner()">Salvar Banner</button>
+<button class="admin-btn" style="background:#444; color:#fff; display:none;" id="btn-cancel-banner-edit" onclick="resetBannerForm()">Cancelar</button>
+</div>
+</div>
+
+<div style="display:flex; flex-direction:column; gap:8px;">
+<h4 style="font-size:12px; color:#fff; font-weight:900;">Banners Cadastrados</h4>
+<div id="admin-banners-list" style="display:flex; flex-direction:column; gap:8px; max-height:200px; overflow-y:auto;"></div>
+</div>
+</div>
+
+</div>
+</div>
+</div>
+</div>
+
+<!-- RODAPÉ INSTITUCIONAL -->
 <footer>
-    <p><span class="brand-sign">JR Cosméticos</span> - Atendimento Profissional para Salões de Beleza.</p>
-    <p style="font-size:10px; color:#666; margin-top:8px;">📱 Contato Oficial / WhatsApp: (63) 99220-4543 &bull; Realce sua beleza, revele sua essência.</p>
-    <p style="font-size:10px; color:#444; margin-top:12px;">© 2026 JR Cosméticos. Todos os direitos reservados.</p>
+<p><span class="brand-sign">JR Cosméticos</span> - Atendimento Profissional para Salões de Beleza.</p>
+<p style="font-size:10px; color:#666; margin-top:8px;"><i class="fa-brands fa-whatsapp"></i> Contato Oficial / WhatsApp: (63) 99220-4543 &bull; Realce sua beleza, revele sua essência.</p>
+<p style="font-size:10px; color:#444; margin-top:12px;">© 2026 JR Cosméticos. Todos os direitos reservados.</p>
 </footer>
 
 <script>
-/* --- CONTROLE DO CARROSSEL DE FOTOS --- */
+/* --- REGISTRO DO SERVICE WORKER (PWA) --- */
+if ('serviceWorker' in navigator) {
+const swCode = `
+const CACHE_NAME = 'jr-cosmeticos-v1';
+self.addEventListener('install', e => { e.waitUntil(caches.open(CACHE_NAME).then(c => c.addAll(['/']))); });
+self.addEventListener('fetch', e => { e.respondWith(fetch(e.request).catch(() => caches.match(e.request))); });
+`;
+const blob = new Blob([swCode], { type: 'application/javascript' });
+navigator.serviceWorker.register(URL.createObjectURL(blob)).catch(() => {});
+}
+
+/* --- TOAST NOTIFICATIONS --- */
+function showToast(message) {
+const container = document.getElementById('toast-container');
+const toast = document.createElement('div');
+toast.className = 'toast';
+toast.innerHTML = `<i class="fa-solid fa-circle-check"></i> ${message}`;
+container.appendChild(toast);
+setTimeout(() => toast.classList.add('show'), 10);
+setTimeout(() => {
+toast.classList.remove('show');
+setTimeout(() => toast.remove(), 300);
+}, 2500);
+}
+
+/* --- BANNER / CARROSSEL DE FOTOS --- */
+let slidesDatabase = [
+{
+id: 1,
+title: "Transformação Afro • Liso Absoluto",
+desc: "Resultado profissional impecável após a aplicação da Selagem Progressiva de alto desempenho.",
+slogan: "Realce sua beleza, revele sua essência.",
+image: "https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?w=1200&auto=format&fit=crop&q=80"
+},
+{
+id: 2,
+title: "Tecnologia e Liso Perfeito",
+desc: "O padrão de excelência que o seu salão de beleza merece.",
+slogan: "Brilho espelhado e toque sedoso.",
+image: "https://images.unsplash.com/photo-1560869713-7d0a29430803?w=1200&auto=format&fit=crop&q=80"
+},
+{
+id: 3,
+title: "Exclusivo para Cabeleireiros",
+desc: "Atendimento especializado e entrega rápida para profissionais exigentes.",
+slogan: "WhatsApp: (63) 99220-4543",
+image: "https://images.unsplash.com/photo-1519699047748-de8e457a634e?w=1200&auto=format&fit=crop&q=80"
+}
+];
+
 let slideIndex = 0;
-const totalSlides = 3;
+let slideInterval;
+
+function renderSlider() {
+const track = document.getElementById('slide-track');
+const dotsContainer = document.getElementById('slide-dots');
+track.innerHTML = '';
+dotsContainer.innerHTML = '';
+
+slidesDatabase.forEach((slide, index) => {
+const slideDiv = document.createElement('div');
+slideDiv.className = 'slide-item';
+slideDiv.innerHTML = `
+<img src="${slide.image}" alt="${slide.title}">
+<div class="slide-overlay"></div>
+<div class="slide-content">
+<h2>${slide.title}</h2>
+<p>${slide.desc}</p>
+<div class="slide-slogan">${slide.slogan}</div>
+</div>
+`;
+track.appendChild(slideDiv);
+
+const dot = document.createElement('span');
+dot.className = `dot ${index === 0 ? 'active' : ''}`;
+dot.onclick = () => currentSlide(index);
+dotsContainer.appendChild(dot);
+});
+
+showSlide(slideIndex);
+}
 
 function showSlide(index) {
-    const track = document.getElementById('slide-track');
-    const dots = document.querySelectorAll('.dot');
-    
-    if (index >= totalSlides) slideIndex = 0;
-    if (index < 0) slideIndex = totalSlides - 1;
-    
-    track.style.transform = `translateX(-${slideIndex * 100}%)`;
-    
-    dots.forEach(dot => dot.classList.remove('active'));
-    dots[slideIndex].classList.add('active');
+const track = document.getElementById('slide-track');
+const dots = document.querySelectorAll('.dot');
+if (slidesDatabase.length === 0) return;
+
+if (index >= slidesDatabase.length) slideIndex = 0;
+else if (index < 0) slideIndex = slidesDatabase.length - 1;
+else slideIndex = index;
+
+track.style.transform = `translateX(-${slideIndex * 100}%)`;
+dots.forEach((dot, idx) => {
+dot.classList.toggle('active', idx === slideIndex);
+});
 }
 
 function currentSlide(index) {
-    slideIndex = index;
-    showSlide(slideIndex);
+slideIndex = index;
+showSlide(slideIndex);
 }
 
-setInterval(() => {
-    slideIndex++;
-    showSlide(slideIndex);
+function startSliderInterval() {
+clearInterval(slideInterval);
+slideInterval = setInterval(() => {
+slideIndex++;
+showSlide(slideIndex);
 }, 5000);
+}
 
-/* --- BASE DE DADOS COMPLETA DE PRODUTOS PROFISSIONAIS --- */
+/* --- BASE DE DADOS COMPLETA DE PRODUTOS --- */
 let productsDatabase = [
-    {
-        id: 1,
-        name: "Selagem Progressiva Gold Liss Pro 1L",
-        category: "Selagem Progressiva",
-        specs: "Frasco 1 Litro • Zero Formol",
-        price: 159.90,
-        tag: "Mais Vendido",
-        image: "https://images.unsplash.com/photo-1608248597359-97424e8838d7?w=500&auto=format&fit=crop&q=60"
-    },
-    {
-        id: 2,
-        name: "Máscara de Hidratação Profunda Óleo de Argan 1Kg",
-        category: "Hidratação",
-        specs: "Pote 1Kg • Alta Nutrição",
-        price: 110.00,
-        tag: "Essencial",
-        image: "https://images.unsplash.com/photo-1526947425960-945c6e72858f?w=500&auto=format&fit=crop&q=60"
-    },
-    {
-        id: 3,
-        name: "Pó Descolorante Azul Premium Professional 500g",
-        category: "Descolorante",
-        specs: "Pote 500g • Abertura Rápida",
-        price: 89.90,
-        tag: "Destaque",
-        image: "https://images.unsplash.com/photo-1608248597359-97424e8838d7?w=500&auto=format&fit=crop&q=60"
-    },
-    {
-        id: 4,
-        name: "Água Oxigenada Cremosa 30 Volumes 900ml",
-        category: "Coloração",
-        specs: "Frasco 900ml • Estabilizada",
-        price: 45.00,
-        tag: "Salão",
-        image: "https://images.unsplash.com/photo-1535585209827-a15fcdbc4c2d?w=500&auto=format&fit=crop&q=60"
-    },
-    {
-        id: 5,
-        name: "Kit Cronograma Capilar Completo Salão",
-        category: "Hidratação",
-        specs: "3 Potes 500g cada",
-        price: 198.00,
-        tag: "Combo",
-        image: "https://images.unsplash.com/photo-1526947425960-945c6e72858f?w=500&auto=format&fit=crop&q=60"
-    },
-    {
-        id: 6,
-        name: "Óleo Reparador de Pontas Finalizador 60ml",
-        category: "Finalizador",
-        specs: "Frasco 60ml • Brilho Extremo",
-        price: 54.90,
-        tag: "Essencial",
-        image: "https://images.unsplash.com/photo-1608248597359-97424e8838d7?w=500&auto=format&fit=crop&q=60"
-    },
-    {
-        id: 7,
-        name: "Tintura Permanente Profissional Tonalizante 60g",
-        category: "Coloração",
-        specs: "Bisnaga 60g • Cobertura Total",
-        price: 32.50,
-        tag: "Novo",
-        image: "https://images.unsplash.com/photo-1535585209827-a15fcdbc4c2d?w=500&auto=format&fit=crop&q=60"
-    },
-    {
-        id: 8,
-        name: "Gloss Redutor de Volume Selagem Orgânica 1L",
-        category: "Selagem Progressiva",
-        specs: "Frasco 1 Litro • Efeito Espelhado",
-        price: 179.00,
-        tag: "Profissional",
-        image: "https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?w=500&auto=format&fit=crop&q=60"
-    }
+{
+id: 1,
+name: "Selagem Progressiva Gold Liss Pro 1L",
+category: "Selagem Progressiva",
+specs: "Frasco 1 Litro • Zero Formol",
+price: 159.90,
+tag: "Mais Vendido",
+image: "https://images.unsplash.com/photo-1608248597359-97424e8838d7?w=500&auto=format&fit=crop&q=60"
+},
+{
+id: 2,
+name: "Máscara de Hidratação Profunda Óleo de Argan 1Kg",
+category: "Hidratação",
+specs: "Pote 1Kg • Alta Nutrição",
+price: 110.00,
+tag: "Essencial",
+image: "https://images.unsplash.com/photo-1526947425960-945c6e72858f?w=500&auto=format&fit=crop&q=60"
+},
+{
+id: 3,
+name: "Pó Descolorante Azul Premium Professional 500g",
+category: "Descolorante",
+specs: "Pote 500g • Abertura Rápida",
+price: 89.90,
+tag: "Destaque",
+image: "https://images.unsplash.com/photo-1608248597359-97424e8838d7?w=500&auto=format&fit=crop&q=60"
+},
+{
+id: 4,
+name: "Água Oxigenada Cremosa 30 Volumes 900ml",
+category: "Coloração",
+specs: "Frasco 900ml • Estabilizada",
+price: 45.00,
+tag: "Salão",
+image: "https://images.unsplash.com/photo-1535585209827-a15fcdbc4c2d?w=500&auto=format&fit=crop&q=60"
+},
+{
+id: 5,
+name: "Kit Cronograma Capilar Completo Salão",
+category: "Hidratação",
+specs: "3 Potes 500g cada",
+price: 198.00,
+tag: "Combo",
+image: "https://images.unsplash.com/photo-1526947425960-945c6e72858f?w=500&auto=format&fit=crop&q=60"
+},
+{
+id: 6,
+name: "Óleo Reparador de Pontas Finalizador 60ml",
+category: "Finalizador",
+specs: "Frasco 60ml • Brilho Extremo",
+price: 54.90,
+tag: "Essencial",
+image: "https://images.unsplash.com/photo-1608248597359-97424e8838d7?w=500&auto=format&fit=crop&q=60"
+},
+{
+id: 7,
+name: "Tintura Permanente Profissional Tonalizante 60g",
+category: "Coloração",
+specs: "Bisnaga 60g • Cobertura Total",
+price: 32.50,
+tag: "Novo",
+image: "https://images.unsplash.com/photo-1535585209827-a15fcdbc4c2d?w=500&auto=format&fit=crop&q=60"
+},
+{
+id: 8,
+name: "Gloss Redutor de Volume Selagem Orgânica 1L",
+category: "Selagem Progressiva",
+specs: "Frasco 1 Litro • Efeito Espelhado",
+price: 179.00,
+tag: "Profissional",
+image: "https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?w=500&auto=format&fit=crop&q=60"
+}
 ];
 
 let cart = {};
@@ -433,223 +558,352 @@ let currentCategory = 'todos';
 
 /* --- RENDERIZAÇÃO DA VITRINE --- */
 function renderProducts(category = 'todos') {
-    const grid = document.getElementById('products-grid');
-    grid.innerHTML = '';
-    
-    const filtered = category === 'todos' 
-        ? productsDatabase 
-        : productsDatabase.filter(p => p.category === category);
-        
-    document.getElementById('product-count-label').innerText = `${filtered.length} produtos`;
-    
-    filtered.forEach(p => {
-        const card = document.createElement('div');
-        card.className = 'product-card';
-        card.innerHTML = `
-            <div class="product-image-box">
-                <span class="product-tag">${p.tag}</span>
-                <img src="${p.image}" alt="${p.name}" loading="lazy">
-            </div>
-            <div class="product-content">
-                <div>
-                    <div class="product-category-mini">${p.category}</div>
-                    <div class="product-name">${p.name}</div>
-                    <div class="product-specs" style="margin-top:6px;">${p.specs}</div>
-                </div>
-                <div class="product-footer">
-                    <div class="product-price">R$ ${p.price.toFixed(2).replace('.', ',')}</div>
-                    <button class="btn-add-cart" onclick="addToCart(${p.id})">
-                        <span>+</span> Adicionar
-                    </button>
-                </div>
-            </div>
-        `;
-        grid.appendChild(card);
-    });
+const grid = document.getElementById('products-grid');
+grid.innerHTML = '';
+const filtered = category === 'todos' ? productsDatabase : productsDatabase.filter(p => p.category === category);
+document.getElementById('product-count-label').innerText = `${filtered.length} produtos`;
+
+filtered.forEach(p => {
+const card = document.createElement('div');
+card.className = 'product-card';
+card.onclick = (e) => {
+if (!e.target.closest('.btn-add-cart')) {
+openImageModal(p.id);
+}
+};
+card.innerHTML = `
+<div class="product-image-box">
+<span class="product-tag">${p.tag}</span>
+<img src="${p.image}" alt="${p.name}" loading="lazy">
+</div>
+<div class="product-content">
+<div>
+<div class="product-category-mini">${p.category}</div>
+<div class="product-name">${p.name}</div>
+<div class="product-specs" style="margin-top:6px;">${p.specs}</div>
+</div>
+<div class="product-footer">
+<div class="product-price">R$ ${p.price.toFixed(2).replace('.', ',')}</div>
+<button class="btn-add-cart" onclick="addToCart(${p.id})">
+<span>+</span> Adicionar
+</button>
+</div>
+</div>
+`;
+grid.appendChild(card);
+});
 }
 
 function filterCategory(category, btnElement) {
-    currentCategory = category;
-    document.querySelectorAll('.cat-chip').forEach(c => c.classList.remove('active'));
-    btnElement.classList.add('active');
-    renderProducts(category);
+currentCategory = category;
+document.querySelectorAll('.cat-chip').forEach(c => c.classList.remove('active'));
+btnElement.classList.add('active');
+renderProducts(category);
+}
+
+/* --- ZOOM DO PRODUTO (MODAL) --- */
+function openImageModal(productId) {
+const prod = productsDatabase.find(p => p.id === productId);
+if (!prod) return;
+document.getElementById('zoom-product-title').innerText = prod.name;
+document.getElementById('zoom-product-img').src = prod.image;
+document.getElementById('zoom-product-specs').innerText = prod.specs;
+document.getElementById('zoom-product-price').innerText = `R$ ${prod.price.toFixed(2).replace('.', ',')}`;
+document.getElementById('image-modal').style.display = 'flex';
+}
+function closeImageModal() {
+document.getElementById('image-modal').style.display = 'none';
 }
 
 /* --- GERENCIAMENTO DO CARRINHO --- */
 function addToCart(productId) {
-    if (cart[productId]) {
-        cart[productId].qty += 1;
-    } else {
-        const product = productsDatabase.find(p => p.id === productId);
-        if (product) {
-            cart[productId] = { ...product, qty: 1 };
-        }
-    }
-    updateCartUI();
-    const cartCounter = document.getElementById('cart-counter');
-    cartCounter.style.transform = 'scale(1.3)';
-    setTimeout(() => cartCounter.style.transform = 'scale(1)', 200);
+if (cart[productId]) {
+cart[productId].qty += 1;
+} else {
+const product = productsDatabase.find(p => p.id === productId);
+if (product) {
+cart[productId] = { ...product, qty: 1 };
+}
+}
+updateCartUI();
+showToast("Produto adicionado ao carrinho!");
+
+const cartCounter = document.getElementById('cart-counter');
+cartCounter.style.transform = 'scale(1.3)';
+setTimeout(() => cartCounter.style.transform = 'scale(1)', 200);
 }
 
 function changeQty(productId, delta) {
-    if (cart[productId]) {
-        cart[productId].qty += delta;
-        if (cart[productId].qty <= 0) {
-            delete cart[productId];
-        }
-    }
-    updateCartUI();
+if (cart[productId]) {
+cart[productId].qty += delta;
+if (cart[productId].qty <= 0) delete cart[productId];
+}
+updateCartUI();
 }
 
 function updateCartUI() {
-    let totalItems = 0;
-    let totalPrice = 0;
-    const listContainer = document.getElementById('cart-items-list');
-    listContainer.innerHTML = '';
-    
-    const keys = Object.keys(cart);
-    if (keys.length === 0) {
-        listContainer.innerHTML = `<div style="text-align:center; color:var(--text-muted); padding:30px 0; font-size:12px; font-weight:700;">Seu carrinho está vazio. Escolha os produtos no catálogo!</div>`;
-    } else {
-        keys.forEach(id => {
-            const item = cart[id];
-            totalItems += item.qty;
-            totalPrice += item.price * item.qty;
-            
-            const row = document.createElement('div');
-            row.className = 'cart-item-row';
-            row.innerHTML = `
-                <div class="cart-item-info">
-                    <h4>${item.name}</h4>
-                    <span>R$ ${(item.price * item.qty).toFixed(2).replace('.', ',')}</span>
-                </div>
-                <div class="cart-item-controls">
-                    <button class="qty-btn" onclick="changeQty(${id}, -1)">-</button>
-                    <span class="item-qty">${item.qty}</span>
-                    <button class="qty-btn" onclick="changeQty(${id}, 1)">+</button>
-                </div>
-            `;
-            listContainer.appendChild(row);
-        });
-    }
-    
-    document.getElementById('cart-counter').innerText = totalItems;
-    document.getElementById('cart-total-value').innerText = `R$ ${totalPrice.toFixed(2).replace('.', ',')}`;
+let totalItems = 0;
+let totalPrice = 0;
+const listContainer = document.getElementById('cart-items-list');
+listContainer.innerHTML = '';
+const keys = Object.keys(cart);
+
+if (keys.length === 0) {
+listContainer.innerHTML = `<div style="text-align:center; color:var(--text-muted); padding:30px 0; font-size:12px; font-weight:700;">Seu carrinho está vazio. Escolha os produtos no catálogo!</div>`;
+} else {
+keys.forEach(id => {
+const item = cart[id];
+totalItems += item.qty;
+totalPrice += item.price * item.qty;
+const row = document.createElement('div');
+row.className = 'cart-item-row';
+row.innerHTML = `
+<img src="${item.image}" class="cart-item-thumb" alt="${item.name}">
+<div class="cart-item-info">
+<h4>${item.name}</h4>
+<span>R$ ${(item.price * item.qty).toFixed(2).replace('.', ',')}</span>
+</div>
+<div class="cart-item-controls">
+<button class="qty-btn" onclick="changeQty(${id}, -1)">-</button>
+<span class="item-qty">${item.qty}</span>
+<button class="qty-btn" onclick="changeQty(${id}, 1)">+</button>
+</div>
+`;
+listContainer.appendChild(row);
+});
+}
+document.getElementById('cart-counter').innerText = totalItems;
+document.getElementById('cart-total-value').innerText = `R$ ${totalPrice.toFixed(2).replace('.', ',')}`;
 }
 
 function openCartModal() { document.getElementById('cart-modal').style.display = 'flex'; }
 function closeCartModal() { document.getElementById('cart-modal').style.display = 'none'; }
 
-/* --- FINALIZAÇÃO VIA WHATSAPP --- */
 function finalizeOrderWhatsApp() {
-    const keys = Object.keys(cart);
-    if (keys.length === 0) {
-        alert('Adicione pelo menos um produto ao carrinho antes de enviar o pedido.');
-        return;
-    }
-    
-    let message = "Olá! 👋 Gostaria de fechar o seguinte pedido na *JR Cosméticos*:\n\n";
-    let totalSum = 0;
-    
-    keys.forEach(id => {
-        const item = cart[id];
-        const sub = item.price * item.qty;
-        totalSum += sub;
-        message += `• ${item.qty}x ${item.name} - R$ ${sub.toFixed(2).replace('.', ',')}\n`;
-    });
-    
-    message += `\n*Total do Pedido: R$ ${totalSum.toFixed(2).replace('.', ',')}*\n\nAguardo orientações sobre pagamento e entrega para o salão.`;
-    
-    const phoneNumber = "5563992204543"; 
-    const encodedURL = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(message)}`;
-    
-    window.open(encodedURL, '_blank');
+const keys = Object.keys(cart);
+if (keys.length === 0) {
+alert('Adicione pelo menos um produto ao carrinho antes de enviar o pedido.');
+return;
+}
+let message = "Olá! 👋 Gostaria de fechar o seguinte pedido na *JR Cosméticos*:\n\n";
+let totalSum = 0;
+keys.forEach(id => {
+const item = cart[id];
+const sub = item.price * item.qty;
+totalSum += sub;
+message += `• ${item.qty}x ${item.name} - R$ ${sub.toFixed(2).replace('.', ',')}\n`;
+});
+message += `\n*Total do Pedido: R$ ${totalSum.toFixed(2).replace('.', ',')}*\n\nAguardo orientações sobre pagamento e entrega para o salão.`;
+const phoneNumber = "5563992204543";
+window.open(`https://wa.me/${phoneNumber}?text=${encodeURIComponent(message)}`, '_blank');
 }
 
-/* --- PAINEL ADMINISTRADOR / DESENVOLVEDOR --- */
+/* --- CONVERSÃO DE IMAGEM DA GALERIA DO CELULAR --- */
+function convertFileToBase64(fileInput, targetInputId) {
+const file = fileInput.files[0];
+if (file) {
+const reader = new FileReader();
+reader.onload = function (e) {
+document.getElementById(targetInputId).value = e.target.result;
+};
+reader.readAsDataURL(file);
+}
+}
+
+/* --- PAINEL ADMINISTRADOR --- */
 function openAdminModal() { document.getElementById('admin-modal').style.display = 'flex'; }
 function closeAdminModal() { document.getElementById('admin-modal').style.display = 'none'; }
 
 function verifyAdminLogin() {
-    const pass = document.getElementById('admin-password-input').value;
-    // Senha padrão de desenvolvedor/administrador (pode alterar aqui se quiser)
-    if (pass === 'admin123') {
-        document.getElementById('admin-login-screen').style.display = 'none';
-        document.getElementById('admin-dashboard-screen').style.display = 'flex';
-        renderAdminProductsList();
-    } else {
-        alert('Senha incorreta! Use: admin123');
-    }
+const pass = document.getElementById('admin-password-input').value;
+if (pass === 'araujo18') {
+document.getElementById('admin-login-screen').style.display = 'none';
+document.getElementById('admin-dashboard-screen').style.display = 'flex';
+renderAdminProductsList();
+renderAdminBannersList();
+} else {
+alert('Senha incorreta!');
+}
 }
 
 function logoutAdmin() {
-    document.getElementById('admin-password-input').value = '';
-    document.getElementById('admin-dashboard-screen').style.display = 'none';
-    document.getElementById('admin-login-screen').style.display = 'flex';
+document.getElementById('admin-password-input').value = '';
+document.getElementById('admin-dashboard-screen').style.display = 'none';
+document.getElementById('admin-login-screen').style.display = 'flex';
 }
 
+function switchAdminTab(tab) {
+document.getElementById('admin-section-products').style.display = tab === 'products' ? 'flex' : 'none';
+document.getElementById('admin-section-banners').style.display = tab === 'banners' ? 'flex' : 'none';
+document.getElementById('tab-btn-products').classList.toggle('active', tab === 'products');
+document.getElementById('tab-btn-banners').classList.toggle('active', tab === 'banners');
+}
+
+/* --- CRUD PRODUTOS ADMIN --- */
 function renderAdminProductsList() {
-    const list = document.getElementById('admin-products-list');
-    list.innerHTML = '';
-    
-    productsDatabase.forEach(p => {
-        const row = document.createElement('div');
-        row.className = 'admin-product-row';
-        row.innerHTML = `
-            <span><b>${p.name}</b> (${p.category}) - R$ ${p.price.toFixed(2)}</span>
-            <button class="btn-delete-prod" onclick="deleteProduct(${p.id})">Excluir</button>
-        `;
-        list.appendChild(row);
-    });
+const list = document.getElementById('admin-products-list');
+list.innerHTML = '';
+productsDatabase.forEach(p => {
+const row = document.createElement('div');
+row.className = 'admin-item-row';
+row.innerHTML = `
+<span style="flex:1;"><b>${p.name}</b> - R$ ${p.price.toFixed(2)}</span>
+<div class="admin-item-actions">
+<button class="btn-action-icon edit" onclick="editProduct(${p.id})"><i class="fa-solid fa-pen"></i></button>
+<button class="btn-action-icon delete" onclick="deleteProduct(${p.id})"><i class="fa-solid fa-trash"></i></button>
+</div>
+`;
+list.appendChild(row);
+});
 }
 
-function addNewProduct() {
-    const name = document.getElementById('new-p-name').value;
-    const category = document.getElementById('new-p-cat').value;
-    const specs = document.getElementById('new-p-specs').value;
-    const price = parseFloat(document.getElementById('new-p-price').value);
-    const image = document.getElementById('new-p-image').value;
-    
-    if (!name || !price || !image) {
-        alert('Preencha os campos obrigatórios (Nome, Preço e Imagem)!');
-        return;
-    }
-    
-    const newId = productsDatabase.length > 0 ? Math.max(...productsDatabase.map(p => p.id)) + 1 : 1;
-    
-    productsDatabase.push({
-        id: newId,
-        name: name,
-        category: category,
-        specs: specs || 'Uso Profissional',
-        price: price,
-        tag: 'Novo',
-        image: image
-    });
-    
-    // Limpar campos
-    document.getElementById('new-p-name').value = '';
-    document.getElementById('new-p-specs').value = '';
-    document.getElementById('new-p-price').value = '';
-    document.getElementById('new-p-image').value = '';
-    
-    renderProducts(currentCategory);
-    renderAdminProductsList();
-    alert('Produto adicionado com sucesso!');
+function saveProduct() {
+const id = document.getElementById('edit-prod-id').value;
+const name = document.getElementById('new-p-name').value;
+const category = document.getElementById('new-p-cat').value;
+const specs = document.getElementById('new-p-specs').value;
+const price = parseFloat(document.getElementById('new-p-price').value);
+const image = document.getElementById('new-p-image').value;
+
+if (!name || !price || !image) {
+alert('Preencha os campos obrigatórios (Nome, Preço e Imagem)!');
+return;
+}
+
+if (id) {
+const index = productsDatabase.findIndex(p => p.id == id);
+if (index !== -1) {
+productsDatabase[index] = { ...productsDatabase[index], name, category, specs: specs || 'Uso Profissional', price, image };
+alert('Produto atualizado com sucesso!');
+}
+} else {
+const newId = productsDatabase.length > 0 ? Math.max(...productsDatabase.map(p => p.id)) + 1 : 1;
+productsDatabase.push({ id: newId, name, category, specs: specs || 'Uso Profissional', price, tag: 'Novo', image });
+alert('Produto adicionado com sucesso!');
+}
+
+resetProductForm();
+renderProducts(currentCategory);
+renderAdminProductsList();
+}
+
+function editProduct(id) {
+const prod = productsDatabase.find(p => p.id === id);
+if (!prod) return;
+document.getElementById('edit-prod-id').value = prod.id;
+document.getElementById('new-p-name').value = prod.name;
+document.getElementById('new-p-cat').value = prod.category;
+document.getElementById('new-p-specs').value = prod.specs;
+document.getElementById('new-p-price').value = prod.price;
+document.getElementById('new-p-image').value = prod.image;
+document.getElementById('prod-form-title').innerText = "Editar Produto";
+document.getElementById('btn-cancel-prod-edit').style.display = 'block';
+}
+
+function resetProductForm() {
+document.getElementById('edit-prod-id').value = '';
+document.getElementById('new-p-name').value = '';
+document.getElementById('new-p-specs').value = '';
+document.getElementById('new-p-price').value = '';
+document.getElementById('new-p-image').value = '';
+document.getElementById('new-p-file').value = '';
+document.getElementById('prod-form-title').innerText = "Adicionar Novo Produto";
+document.getElementById('btn-cancel-prod-edit').style.display = 'none';
 }
 
 function deleteProduct(id) {
-    if (confirm('Tem certeza que deseja remover este produto?')) {
-        productsDatabase = productsDatabase.filter(p => p.id !== id);
-        delete cart[id];
-        renderProducts(currentCategory);
-        renderAdminProductsList();
-        updateCartUI();
-    }
+if (confirm('Tem certeza que deseja remover este produto?')) {
+productsDatabase = productsDatabase.filter(p => p.id !== id);
+delete cart[id];
+renderProducts(currentCategory);
+renderAdminProductsList();
+updateCartUI();
+}
 }
 
+/* --- CRUD BANNERS ADMIN --- */
+function renderAdminBannersList() {
+const list = document.getElementById('admin-banners-list');
+list.innerHTML = '';
+slidesDatabase.forEach(b => {
+const row = document.createElement('div');
+row.className = 'admin-item-row';
+row.innerHTML = `
+<span style="flex:1;"><b>${b.title}</b></span>
+<div class="admin-item-actions">
+<button class="btn-action-icon edit" onclick="editBanner(${b.id})"><i class="fa-solid fa-pen"></i></button>
+<button class="btn-action-icon delete" onclick="deleteBanner(${b.id})"><i class="fa-solid fa-trash"></i></button>
+</div>
+`;
+list.appendChild(row);
+});
+}
+
+function saveBanner() {
+const id = document.getElementById('edit-banner-id').value;
+const title = document.getElementById('new-b-title').value;
+const desc = document.getElementById('new-b-desc').value;
+const slogan = document.getElementById('new-b-slogan').value;
+const image = document.getElementById('new-b-image').value;
+
+if (!title || !image) {
+alert('Preencha os campos obrigatórios (Título e Imagem)!');
+return;
+}
+
+if (id) {
+const index = slidesDatabase.findIndex(b => b.id == id);
+if (index !== -1) {
+slidesDatabase[index] = { ...slidesDatabase[index], title, desc, slogan, image };
+alert('Banner atualizado!');
+}
+} else {
+const newId = slidesDatabase.length > 0 ? Math.max(...slidesDatabase.map(b => b.id)) + 1 : 1;
+slidesDatabase.push({ id: newId, title, desc, slogan, image });
+alert('Banner adicionado!');
+}
+
+resetBannerForm();
+renderSlider();
+renderAdminBannersList();
+}
+
+function editBanner(id) {
+const banner = slidesDatabase.find(b => b.id === id);
+if (!banner) return;
+document.getElementById('edit-banner-id').value = banner.id;
+document.getElementById('new-b-title').value = banner.title;
+document.getElementById('new-b-desc').value = banner.desc;
+document.getElementById('new-b-slogan').value = banner.slogan;
+document.getElementById('new-b-image').value = banner.image;
+document.getElementById('banner-form-title').innerText = "Editar Banner";
+document.getElementById('btn-cancel-banner-edit').style.display = 'block';
+}
+
+function resetBannerForm() {
+document.getElementById('edit-banner-id').value = '';
+document.getElementById('new-b-title').value = '';
+document.getElementById('new-b-desc').value = '';
+document.getElementById('new-b-slogan').value = '';
+document.getElementById('new-b-image').value = '';
+document.getElementById('new-b-file').value = '';
+document.getElementById('banner-form-title').innerText = "Adicionar Novo Banner";
+document.getElementById('btn-cancel-banner-edit').style.display = 'none';
+}
+
+function deleteBanner(id) {
+if (confirm('Tem certeza que deseja remover este banner?')) {
+slidesDatabase = slidesDatabase.filter(b => b.id !== id);
+renderSlider();
+renderAdminBannersList();
+}
+}
+
+/* --- INICIALIZAÇÃO --- */
 window.onload = () => {
-    renderProducts('todos');
+renderSlider();
+startSliderInterval();
+renderProducts('todos');
 };
 </script>
 </body>

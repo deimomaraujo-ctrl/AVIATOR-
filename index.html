@@ -766,7 +766,7 @@ const GAS_URL = 'https://script.google.com/macros/s/AKfycbwYJoTrgh-I4iOuM4ZP28rR
 /* --- REGISTRO DO SERVICE WORKER (PWA) --- */
 if ('serviceWorker' in navigator) {
   const swCode = `
-    const CACHE_NAME = 'jr-cosmeticos-v55';
+    const CACHE_NAME = 'jr-cosmeticos-v58';
     self.addEventListener('install', e => { self.skipWaiting(); });
     self.addEventListener('activate', e => { e.waitUntil(clients.claim()); });
     self.addEventListener('fetch', e => {
@@ -811,7 +811,7 @@ function showToast(message) {
   }, 2500);
 }
 
-/* --- BANCO DE DADOS EXCLUSIVO DA NUVEM (SEM LOCALSTORAGE COMO FONTE) --- */
+/* --- ESTADO E MEMÓRIA DA APLICAÇÃO --- */
 let productsDatabase = [];
 let slidesDatabase = [];
 let cart = {};
@@ -820,7 +820,7 @@ let slideIndex = 0;
 let slideInterval;
 
 /* --- COMPRESSÃO ULTRA-LEVE DE IMAGENS --- */
-function compressImageIfNeeded(imageSrc, maxDimension = 200, quality = 0.30) {
+function compressImageIfNeeded(imageSrc, maxDimension = 180, quality = 0.25) {
   if (!imageSrc) return Promise.resolve('');
   if (imageSrc.startsWith('http://') || imageSrc.startsWith('https://')) {
     return Promise.resolve(imageSrc);
@@ -865,7 +865,7 @@ function compressImageIfNeeded(imageSrc, maxDimension = 200, quality = 0.30) {
   });
 }
 
-/* --- CARREGAMENTO OBRIGATÓRIO DIRETO DA PLANILHA DO GOOGLE --- */
+/* --- CARREGAMENTO DIRETO DA PLANILHA DO GOOGLE --- */
 async function loadCloudData() {
   const countLabel = document.getElementById('product-count-label');
   if (countLabel) countLabel.innerText = "Sincronizando com a nuvem Google...";
@@ -893,9 +893,8 @@ async function loadCloudData() {
       else if (result.data && Array.isArray(result.data.banners)) fetchedBanners = result.data.banners;
     }
 
-    // Atribuição direta da planilha (sem cache local fantasma)
-    productsDatabase = fetchedProducts;
-    slidesDatabase = fetchedBanners;
+    if (fetchedProducts.length > 0) productsDatabase = fetchedProducts;
+    if (fetchedBanners.length > 0) slidesDatabase = fetchedBanners;
 
     renderProducts(currentCategory);
     renderSlider();
@@ -908,7 +907,7 @@ async function loadCloudData() {
   }
 }
 
-/* --- SALVAMENTO DEFINITIVO NA PLANILHA DO GOOGLE --- */
+/* --- SALVAMENTO ROBUSTO NA PLANILHA DO GOOGLE --- */
 async function saveCloudGlobal() {
   const payload = {
     action: 'saveAll',
@@ -926,13 +925,12 @@ async function saveCloudGlobal() {
     
     if (response.ok) {
       showToast("✨ Salvo permanentemente na Planilha!");
-      await loadCloudData(); // Recarrega imediatamente da nuvem para garantir sincronia em todos os aparelhos
     } else {
       throw new Error('Falha no salvamento remoto');
     }
   } catch (e) {
     console.error('Erro ao gravar na nuvem:', e);
-    alert('Erro ao salvar na Planilha do Google. Verifique sua conexão.');
+    alert('Erro ao sincronizar com a Planilha do Google.');
   }
 }
 
@@ -1198,7 +1196,7 @@ function convertFileToBase64(fileInput, targetInputId) {
   if (file) {
     const reader = new FileReader();
     reader.onload = function (e) {
-      compressImageIfNeeded(e.target.result, 200, 0.30).then(compressedBase64 => {
+      compressImageIfNeeded(e.target.result, 180, 0.25).then(compressedBase64 => {
         document.getElementById(targetInputId).value = compressedBase64;
       });
     };
@@ -1271,7 +1269,7 @@ async function saveProduct() {
   btn.innerText = "Processando Imagem...";
   btn.disabled = true;
 
-  const image = await compressImageIfNeeded(rawImage, 200, 0.30);
+  const image = await compressImageIfNeeded(rawImage, 180, 0.25);
 
   if (id) {
     const index = productsDatabase.findIndex(p => p.id == id);
@@ -1279,9 +1277,13 @@ async function saveProduct() {
       productsDatabase[index] = { ...productsDatabase[index], name, category, specs: specs || 'Uso Profissional', price, image };
     }
   } else {
-    const newId = Date.now();
+    const newId = 'p_' + Date.now();
     productsDatabase.push({ id: newId, name, category, specs: specs || 'Uso Profissional', price, tag: 'Novo', image });
   }
+
+  // Atualiza imediatamente a tela local para exibição instantânea
+  renderProducts(currentCategory);
+  renderAdminProductsList();
 
   btn.innerText = "Enviando para a Planilha Google...";
   await saveCloudGlobal();
@@ -1320,6 +1322,8 @@ async function deleteProduct(id) {
   if (confirm('Tem certeza que deseja remover este produto da Planilha?')) {
     productsDatabase = productsDatabase.filter(p => p.id != id);
     delete cart[id];
+    renderProducts(currentCategory);
+    renderAdminProductsList();
     await saveCloudGlobal();
   }
 }
@@ -1359,7 +1363,7 @@ async function saveBanner() {
   btn.innerText = "Processando Imagem...";
   btn.disabled = true;
 
-  const image = await compressImageIfNeeded(rawImage, 200, 0.30);
+  const image = await compressImageIfNeeded(rawImage, 180, 0.25);
 
   if (id) {
     const index = slidesDatabase.findIndex(b => b.id == id);
@@ -1367,9 +1371,13 @@ async function saveBanner() {
       slidesDatabase[index] = { ...slidesDatabase[index], title, desc, slogan, image };
     }
   } else {
-    const newId = Date.now();
+    const newId = 'b_' + Date.now();
     slidesDatabase.push({ id: newId, title, desc, slogan, image });
   }
+
+  // Atualiza imediatamente o slider local
+  renderSlider();
+  renderAdminBannersList();
 
   btn.innerText = "Enviando Banner para a Planilha...";
   await saveCloudGlobal();
@@ -1406,11 +1414,13 @@ function resetBannerForm() {
 async function deleteBanner(id) {
   if (confirm('Tem certeza que deseja remover este banner da Planilha?')) {
     slidesDatabase = slidesDatabase.filter(b => b.id != id);
+    renderSlider();
+    renderAdminBannersList();
     await saveCloudGlobal();
   }
 }
 
-/* --- INICIALIZAÇÃO UNIVERSAL NA NUVEM --- */
+/* --- INICIALIZAÇÃO NA NUVEM --- */
 window.onload = async () => {
   startSliderInterval();
   await loadCloudData();

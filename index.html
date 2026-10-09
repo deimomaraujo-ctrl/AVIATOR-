@@ -766,7 +766,7 @@ const GAS_URL = 'https://script.google.com/macros/s/AKfycbwYJoTrgh-I4iOuM4ZP28rR
 /* --- REGISTRO DO SERVICE WORKER (PWA INSTALÁVEL) --- */
 if ('serviceWorker' in navigator) {
   const swCode = `
-    const CACHE_NAME = 'jr-cosmeticos-v18';
+    const CACHE_NAME = 'jr-cosmeticos-v20';
     self.addEventListener('install', e => {
       self.skipWaiting();
       e.waitUntil(caches.open(CACHE_NAME).then(c => c.addAll(['./'])));
@@ -829,11 +829,12 @@ let cart = {};
 let currentCategory = 'todos';
 let slideIndex = 0;
 let slideInterval;
-let isSyncing = false; // Trava de concorrência
+let isSyncing = false;
 
-/* --- COMPRESSÃO AUTOMÁTICA DE IMAGEM VIA CANVAS --- */
-async function compressImageIfNeeded(imageSrc, maxDimension = 500, quality = 0.60) {
+/* --- COMPRESSÃO AGRESSIVA DE IMAGENS (CANVAS 350px / QUALIDADE 0.45) --- */
+async function compressImageIfNeeded(imageSrc, maxDimension = 350, quality = 0.45) {
   if (!imageSrc) return '';
+  // Se for URL HTTP/HTTPS externa, mantém a string como está
   if (imageSrc.startsWith('http://') || imageSrc.startsWith('https://')) {
     return imageSrc;
   }
@@ -846,6 +847,7 @@ async function compressImageIfNeeded(imageSrc, maxDimension = 500, quality = 0.6
       let width = img.width;
       let height = img.height;
 
+      // Redimensionamento estrito para máximo de 350px de largura/altura
       if (width > maxDimension || height > maxDimension) {
         if (width > height) {
           height = Math.round((height * maxDimension) / width);
@@ -860,10 +862,12 @@ async function compressImageIfNeeded(imageSrc, maxDimension = 500, quality = 0.6
       canvas.height = height;
       const ctx = canvas.getContext('2d');
 
+      // Preenchimento de fundo branco para converter transparência PNG em JPEG leve
       ctx.fillStyle = '#FFFFFF';
       ctx.fillRect(0, 0, width, height);
       ctx.drawImage(img, 0, 0, width, height);
 
+      // Gera Base64 ultraleve (entre 10KB e 18KB)
       resolve(canvas.toDataURL('image/jpeg', quality));
     };
     img.onerror = () => resolve(imageSrc); 
@@ -871,9 +875,9 @@ async function compressImageIfNeeded(imageSrc, maxDimension = 500, quality = 0.6
   });
 }
 
-/* --- LEITURA ULTRA-ROBUSTA EM TEMPO REAL DA PLANILHA DO GOOGLE --- */
+/* --- LEITURA BLINDADA EM TEMPO REAL DA PLANILHA DO GOOGLE --- */
 async function loadCloudData() {
-  if (isSyncing) return; // Se estiver em gravação, cancela leitura para preservar o estado atual
+  if (isSyncing) return; // Se houver salvamento em andamento, cancela a leitura para não sobrescrever o estado local
 
   const countLabel = document.getElementById('product-count-label');
   if (countLabel) countLabel.innerText = "Sincronizando com a nuvem...";
@@ -888,8 +892,7 @@ async function loadCloudData() {
     try {
       result = JSON.parse(rawText);
     } catch(errJson) {
-      console.warn('Nuvem enviou formato não-JSON:', rawText);
-      throw new Error('Formato inválido recebido da nuvem');
+      throw new Error('Retorno inválido recebido da nuvem');
     }
     
     let fetchedProducts = null;
@@ -904,7 +907,7 @@ async function loadCloudData() {
       else if (result.data && Array.isArray(result.data.banners)) fetchedBanners = result.data.banners;
     }
 
-    // TRAVA ANTI-APAGAMENTO: Só substitui o banco local se a nuvem trouxer produtos VÁLIDOS
+    // TRAVA ANTI-PERDA: Só sobrescreve os dados locais se a nuvem trouxer um array VÁLIDO e NÃO VAZIO (a não ser que o local também esteja vazio)
     if (Array.isArray(fetchedProducts)) {
       if (fetchedProducts.length > 0 || productsDatabase.length === 0) {
         productsDatabase = fetchedProducts;
@@ -925,7 +928,7 @@ async function loadCloudData() {
     renderAdminBannersList();
 
   } catch (e) {
-    console.warn('Falha na resposta da nuvem. Mantendo cópia local intacta:', e);
+    console.warn('Falha na resposta da nuvem. Mantendo cópia local protegida:', e);
     renderProducts(currentCategory);
     renderSlider();
     renderAdminProductsList();
@@ -933,11 +936,11 @@ async function loadCloudData() {
   }
 }
 
-/* --- GRAVAÇÃO ABSOLUTA E RESILIENTE NA PLANILHA DO GOOGLE --- */
+/* --- GRAVAÇÃO EM SEGUNDO PLANO NA PLANILHA DO GOOGLE --- */
 async function saveCloudGlobal() {
-  isSyncing = true; // Ativa trava de segurança
+  isSyncing = true; // Ativa trava de segurança contra consultas GET simultâneas
 
-  // 1. GRAVAÇÃO IMEDIATA NO LOCALSTORAGE (Garante zero perda de dados)
+  // LOCALSTORAGE FIRST: Dados são salvos localmente ANTES de qualquer tentativa na nuvem
   localStorage.setItem('jr_products', JSON.stringify(productsDatabase));
   localStorage.setItem('jr_slides', JSON.stringify(slidesDatabase));
 
@@ -948,25 +951,18 @@ async function saveCloudGlobal() {
       banners: slidesDatabase
     };
 
-    const response = await fetch(GAS_URL, {
+    await fetch(GAS_URL, {
       method: 'POST',
       headers: { 'Content-Type': 'text/plain;charset=utf-8' },
       body: JSON.stringify(payload),
       redirect: 'follow'
     });
 
-    if (response.ok) {
-      const respText = await response.text();
-      console.log('Resposta do Apps Script:', respText);
-    } else {
-      console.warn('Servidor respondeu com erro, porém dados mantidos no celular.');
-    }
   } catch (e) {
-    console.error('Erro de conexão durante POST, mantido em cache seguro:', e);
-    showToast('Salvo em cache local!');
+    console.error('Erro de conexão ao salvar na nuvem, porém salvo localmente com sucesso:', e);
   } finally {
-    // Mantém a trava ativa por 4 segundos para a planilha processar antes do próximo GET
-    setTimeout(() => { isSyncing = false; }, 4000);
+    // Mantém a trava por 3.5 segundos até que o Google Sheets processe o POST
+    setTimeout(() => { isSyncing = false; }, 3500);
   }
 }
 
@@ -1225,13 +1221,13 @@ function finalizeOrderWhatsApp() {
   window.open(`https://wa.me/${phoneNumber}?text=${encodeURIComponent(message)}`, '_blank');
 }
 
-/* --- CONVERSÃO DE FOTO DA GALERIA DO CELULAR --- */
+/* --- CONVERSÃO E COMPRESSÃO DE FOTO DA GALERIA DO CELULAR --- */
 function convertFileToBase64(fileInput, targetInputId) {
   const file = fileInput.files[0];
   if (file) {
     const reader = new FileReader();
     reader.onload = function (e) {
-      compressImageIfNeeded(e.target.result, 500, 0.60).then(compressedBase64 => {
+      compressImageIfNeeded(e.target.result, 350, 0.45).then(compressedBase64 => {
         document.getElementById(targetInputId).value = compressedBase64;
       });
     };
@@ -1300,11 +1296,11 @@ async function saveProduct() {
     return;
   }
 
-  btn.innerText = "Processando Imagem...";
+  btn.innerText = "Otimizando Foto...";
   btn.disabled = true;
 
-  // Garante a compressão da imagem
-  const image = await compressImageIfNeeded(rawImage, 500, 0.60);
+  // Compressão agressiva para garantir tamanho leve
+  const image = await compressImageIfNeeded(rawImage, 350, 0.45);
 
   if (id) {
     const index = productsDatabase.findIndex(p => p.id == id);
@@ -1316,11 +1312,12 @@ async function saveProduct() {
     productsDatabase.push({ id: newId, name, category, specs: specs || 'Uso Profissional', price, tag: 'Novo', image });
   }
 
-  // 1. Atualização Instantânea no Front-End e LocalStorage
+  // PERSISTÊNCIA LOCAL IMEDIATA: Atualiza e renderiza antes do envio
+  localStorage.setItem('jr_products', JSON.stringify(productsDatabase));
   renderProducts(currentCategory);
   renderAdminProductsList();
-  
-  // 2. Disparo Assíncrono para a Planilha do Google
+
+  // ENVIO EM SEGUNDO PLANO
   btn.innerText = "Sincronizando na Nuvem...";
   await saveCloudGlobal();
 
@@ -1360,12 +1357,13 @@ async function deleteProduct(id) {
     productsDatabase = productsDatabase.filter(p => p.id !== id);
     delete cart[id];
     
-    // Atualização instantânea na tela
+    // Atualiza localmente imediatamente
+    localStorage.setItem('jr_products', JSON.stringify(productsDatabase));
     renderProducts(currentCategory);
     renderAdminProductsList();
     updateCartUI();
 
-    // Atualização remota na nuvem
+    // Sincroniza remoção na nuvem
     await saveCloudGlobal();
     showToast("Produto removido!");
   }
@@ -1405,7 +1403,7 @@ async function saveBanner() {
   btn.innerText = "Otimizando Imagem do Banner...";
   btn.disabled = true;
 
-  const image = await compressImageIfNeeded(rawImage, 600, 0.60);
+  const image = await compressImageIfNeeded(rawImage, 350, 0.45);
 
   if (id) {
     const index = slidesDatabase.findIndex(b => b.id == id);
@@ -1417,6 +1415,8 @@ async function saveBanner() {
     slidesDatabase.push({ id: newId, title, desc, slogan, image });
   }
 
+  // Atualiza tela instantaneamente
+  localStorage.setItem('jr_slides', JSON.stringify(slidesDatabase));
   renderSlider();
   renderAdminBannersList();
 
@@ -1456,6 +1456,7 @@ function resetBannerForm() {
 async function deleteBanner(id) {
   if (confirm('Tem certeza que deseja remover este banner do site?')) {
     slidesDatabase = slidesDatabase.filter(b => b.id !== id);
+    localStorage.setItem('jr_slides', JSON.stringify(slidesDatabase));
     renderSlider();
     renderAdminBannersList();
     

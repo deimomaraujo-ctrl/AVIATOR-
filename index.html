@@ -1,999 +1,1261 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<meta name="theme-color" content="#0b0b0b">
-<meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<title>JR Cosméticos | Profissional</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta name="theme-color" content="#0b0b0b">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <title>JR Cosméticos | Profissional</title>
 
-<!-- PWA Manifest Embutido -->
-<link rel="manifest" href='data:application/manifest+json,{"name":"JR Cosméticos","short_name":"JR Cosméticos","start_url":".","display":"standalone","background_color":"#0b0b0b","theme_color":"#0b0b0b","icons":[{"src":"https://cdn-icons-png.flaticon.com/512/3050/3050239.png","sizes":"512x512","type":"image/png"}]}'>
+  <link rel="manifest" href='data:application/manifest+json,{"name":"JR Cosméticos","short_name":"JR Cosméticos","start_url":".","display":"standalone","background_color":"#0b0b0b","theme_color":"#0b0b0b","icons":[{"src":"https://cdn-icons-png.flaticon.com/512/3050/3050239.png","sizes":"512x512","type":"image/png"}]}'>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
 
-<!-- FontAwesome para Ícones Profissionais -->
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    :root{
+      --bg:#0b0b0b;
+      --card:#141414;
+      --input:#1a1a1a;
+      --gold:#d4af37;
+      --gold-light:#f3e5ab;
+      --green:#25d366;
+      --muted:#a3a3a3;
+      --border:#2a2a2a;
+      --danger:#ff4d4d;
+      --font:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif;
+    }
 
-<style>
-:root {
---bg-main: #0b0b0b;
---bg-card: #141414;
---bg-card-hover: #1c1c1c;
---bg-input: #1a1a1a;
---gold-primary: #d4af37;
---gold-light: #f3e5ab;
---gold-dark: #aa820a;
---green-success: #25d366;
---text-white: #ffffff;
---text-muted: #a3a3a3;
---border: #2a2a2a;
---font: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-}
-* { box-sizing: border-box; margin: 0; padding: 0; font-family: var(--font); -webkit-tap-highlight-color: transparent; }
-body { background-color: var(--bg-main); color: var(--text-white); min-height: 100vh; display: flex; flex-direction: column; overflow-x: hidden; padding-bottom: 90px; }
+    *{box-sizing:border-box;margin:0;padding:0;font-family:var(--font);-webkit-tap-highlight-color:transparent}
+    body{background:var(--bg);color:#fff;min-height:100vh;padding-bottom:90px;overflow-x:hidden}
+    button,input,select{font:inherit}
+    button{cursor:pointer}
 
-/* --- BARRA DE ANÚNCIOS / TOPO LUXURY --- */
-.top-announcement { background: linear-gradient(90deg, #aa820a, #d4af37, #f3e5ab); color: #0b0b0b; font-size: 11px; font-weight: 900; text-align: center; padding: 7px 12px; letter-spacing: 1px; text-transform: uppercase; }
+    .top-announcement{
+      background:linear-gradient(90deg,#aa820a,var(--gold),var(--gold-light));
+      color:#0b0b0b;padding:8px 12px;text-align:center;text-transform:uppercase;
+      font-size:10px;font-weight:900;letter-spacing:1px;
+    }
 
-/* --- HEADER / NAVEGAÇÃO SUPERIOR --- */
-header { background: rgba(11, 11, 11, 0.95); backdrop-filter: blur(10px); border-bottom: 1px solid var(--border); position: sticky; top: 0; z-index: 1000; padding: 12px 20px; display: flex; align-items: center; justify-content: space-between; }
-.brand-wrapper { display: flex; align-items: center; gap: 12px; }
-.brand-logo-circle { width: 42px; height: 42px; border: 2px solid var(--gold-primary); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 900; color: var(--gold-primary); font-size: 16px; background: #000; box-shadow: 0 0 15px rgba(212, 175, 55, 0.2); }
-.brand-texts h1 { font-size: 15px; font-weight: 900; letter-spacing: 1px; color: var(--gold-light); line-height: 1.1; text-transform: uppercase; }
-.brand-texts span { font-size: 9px; color: var(--text-muted); font-weight: 700; text-transform: uppercase; letter-spacing: 1.5px; }
-.header-actions { display: flex; align-items: center; gap: 8px; }
+    header{
+      position:sticky;top:0;z-index:1000;background:rgba(11,11,11,.96);
+      backdrop-filter:blur(12px);border-bottom:1px solid var(--border);
+      padding:12px 20px;display:flex;align-items:center;justify-content:space-between;
+    }
 
-.admin-login-btn { background: transparent; border: 1px solid var(--border); padding: 8px 12px; border-radius: 10px; color: var(--text-muted); font-weight: 800; font-size: 11px; cursor: pointer; transition: 0.2s; display: flex; align-items: center; gap: 5px; }
-.admin-login-btn:hover { color: var(--gold-light); border-color: var(--gold-primary); }
-.cart-btn-top { background: var(--bg-input); border: 1px solid var(--border); padding: 8px 14px; border-radius: 10px; color: var(--gold-light); font-weight: 800; font-size: 12px; display: flex; align-items: center; gap: 6px; cursor: pointer; position: relative; transition: 0.2s; }
-.cart-btn-top:hover { border-color: var(--gold-primary); }
-.cart-badge { background: var(--gold-primary); color: #0b0b0b; font-size: 10px; font-weight: 900; padding: 1px 6px; border-radius: 20px; }
+    .brand-wrapper{display:flex;align-items:center;gap:11px}
+    .brand-logo-circle{
+      width:42px;height:42px;border:2px solid var(--gold);border-radius:50%;
+      display:flex;align-items:center;justify-content:center;color:var(--gold);
+      background:#000;font-size:16px;font-weight:900;
+    }
 
-/* --- CARROSSEL PROFISSIONAL DE DESTAQUE (SLIDER SEM CORTES) --- */
-.hero-slider { width: 100%; height: 320px; position: relative; overflow: hidden; border-bottom: 1px solid var(--border); background: #050505; }
-@media (min-width: 768px) { .hero-slider { height: 420px; } }
-.slide-track { display: flex; width: 100%; height: 100%; transition: transform 0.6s ease-in-out; }
-.slide-item { min-width: 100%; height: 100%; position: relative; display: flex; align-items: flex-end; justify-content: center; background: #050505; }
-.slide-item img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: contain; opacity: 0.7; }
-.slide-overlay { position: absolute; inset: 0; background: linear-gradient(0deg, #0b0b0b 0%, rgba(11,11,11,0.3) 60%, transparent 100%); }
-.slide-content { position: relative; z-index: 2; text-align: center; padding: 24px 20px; max-width: 650px; }
-.slide-content h2 { font-size: 20px; font-weight: 900; color: var(--gold-light); margin-bottom: 6px; text-transform: uppercase; letter-spacing: 0.5px; text-shadow: 0 2px 4px rgba(0,0,0,0.8); }
-.slide-content p { font-size: 12px; color: #e5e5e5; margin-bottom: 8px; text-shadow: 0 1px 3px rgba(0,0,0,0.8); }
-.slide-slogan { font-size: 10px; color: var(--gold-primary); font-weight: 800; text-transform: uppercase; letter-spacing: 2px; text-shadow: 0 1px 2px rgba(0,0,0,0.9); }
-.slide-dots { position: absolute; bottom: 12px; left: 50%; transform: translateX(-50%); display: flex; gap: 6px; z-index: 10; }
-.dot { width: 8px; height: 8px; border-radius: 50%; background: rgba(255,255,255,0.4); cursor: pointer; transition: 0.3s; }
-.dot.active { background: var(--gold-primary); width: 22px; border-radius: 4px; }
+    .brand-texts h1{font-size:15px;color:var(--gold-light);letter-spacing:1px;text-transform:uppercase}
+    .brand-texts span{font-size:9px;color:var(--muted);font-weight:800;letter-spacing:1.5px;text-transform:uppercase}
 
-/* --- BOTÃO FLUTUANTE DO WHATSAPP --- */
-.whatsapp-float { position: fixed; bottom: 24px; right: 20px; background: #25d366; color: #fff; width: 56px; height: 56px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 30px; box-shadow: 0 4px 20px rgba(37, 211, 102, 0.4); z-index: 1500; text-decoration: none; transition: 0.3s; }
-.whatsapp-float:hover { transform: scale(1.1); background: #22bf5b; }
+    .header-actions{display:flex;gap:8px;align-items:center}
+    .admin-login-btn,.cart-btn-top{
+      border:1px solid var(--border);background:var(--input);color:var(--gold-light);
+      padding:9px 11px;border-radius:10px;font-size:11px;font-weight:800;
+    }
 
-/* --- FILTROS DE CATEGORIA --- */
-.categories-bar { display: flex; gap: 8px; padding: 16px 20px; overflow-x: auto; scrollbar-width: none; background: var(--bg-main); }
-.categories-bar::-webkit-scrollbar { display: none; }
-.cat-chip { background: var(--bg-card); border: 1px solid var(--border); color: var(--text-muted); padding: 8px 16px; border-radius: 20px; font-size: 12px; font-weight: 800; white-space: nowrap; cursor: pointer; transition: 0.2s; }
-.cat-chip.active { background: var(--gold-primary); color: #0b0b0b; border-color: var(--gold-primary); box-shadow: 0 4px 15px rgba(212,175,55,0.25); }
+    .admin-login-btn{color:var(--muted);background:transparent}
+    .cart-badge{
+      background:var(--gold);color:#111;border-radius:20px;padding:1px 6px;
+      margin-left:3px;font-size:10px;font-weight:900;display:inline-block;
+    }
 
-/* --- VITRINE DE PRODUTOS --- */
-.catalog-container { max-width: 1200px; margin: 0 auto; width: 100%; padding: 0 20px 40px 20px; }
-.section-title { font-size: 13px; font-weight: 900; text-transform: uppercase; letter-spacing: 1.5px; color: var(--gold-light); margin-bottom: 14px; display: flex; align-items: center; justify-content: space-between; }
-.products-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 14px; }
-@media (min-width: 768px) { .products-grid { grid-template-columns: repeat(3, 1fr); gap: 20px; } }
-@media (min-width: 1024px) { .products-grid { grid-template-columns: repeat(4, 1fr); gap: 20px; } }
-.product-card { background: var(--bg-card); border: 1px solid var(--border); border-radius: 14px; overflow: hidden; display: flex; flex-direction: column; transition: 0.3s; position: relative; cursor: pointer; }
-.product-card:hover { transform: translateY(-3px); border-color: var(--gold-primary); box-shadow: 0 10px 30px rgba(0,0,0,0.7); }
+    .hero-slider{height:320px;background:#050505;position:relative;overflow:hidden;border-bottom:1px solid var(--border)}
+    .slide-track{height:100%;display:flex;transition:transform .6s ease}
+    .slide-item{
+      min-width:100%;height:100%;position:relative;display:flex;
+      align-items:flex-end;justify-content:center;background:#050505;
+    }
 
-/* IMAGEM INTEIRA SEM CORTE NOS CARDS */
-.product-image-box { width: 100%; height: 180px; background: #0d0d0d; position: relative; display: flex; align-items: center; justify-content: center; overflow: hidden; padding: 8px; }
-.product-image-box img { max-width: 100%; max-height: 100%; width: auto; height: auto; object-fit: contain; transition: transform 0.3s; }
-.product-card:hover .product-image-box img { transform: scale(1.05); }
+    .slide-item img{
+      position:absolute;inset:0;width:100%;height:100%;object-fit:contain;
+      opacity:.72;background:#050505;
+    }
 
-.product-tag { position: absolute; top: 10px; left: 10px; background: rgba(11,11,11,0.85); backdrop-filter: blur(4px); color: var(--gold-light); font-size: 9px; font-weight: 900; padding: 3px 8px; border-radius: 6px; border: 1px solid rgba(212,175,55,0.4); text-transform: uppercase; z-index: 2; }
-.product-content { padding: 14px; display: flex; flex-direction: column; flex: 1; justify-content: space-between; gap: 10px; }
-.product-category-mini { font-size: 10px; color: var(--gold-primary); font-weight: 800; text-transform: uppercase; letter-spacing: 0.5px; }
-.product-name { font-size: 13px; font-weight: 800; color: #fff; line-height: 1.3; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
-.product-specs { font-size: 11px; color: var(--text-muted); background: var(--bg-input); padding: 4px 8px; border-radius: 6px; width: fit-content; font-weight: 700; border: 1px solid var(--border); }
-.product-footer { display: flex; align-items: center; justify-content: space-between; margin-top: 4px; }
-.product-price { font-size: 15px; font-weight: 900; color: var(--gold-light); }
+    .slide-overlay{
+      position:absolute;inset:0;
+      background:linear-gradient(0deg,#0b0b0b 0%,rgba(11,11,11,.25) 65%,transparent 100%);
+    }
 
-/* BOTÃO DE ADICIONAR COM ESTADO MUTÁVEL */
-.btn-add-cart { background: var(--gold-primary); color: #0b0b0b; border: none; padding: 8px 12px; border-radius: 8px; font-size: 11px; font-weight: 900; cursor: pointer; transition: 0.2s; display: flex; align-items: center; gap: 4px; box-shadow: 0 4px 12px rgba(212,175,55,0.2); }
-.btn-add-cart:hover { background: var(--gold-light); }
-.btn-add-cart.added { background: var(--green-success); color: #ffffff; cursor: default; box-shadow: 0 4px 12px rgba(37, 211, 102, 0.3); }
-.btn-add-cart.added:hover { background: #22bf5b; }
+    .slide-content{position:relative;z-index:2;text-align:center;padding:25px 20px;max-width:680px}
+    .slide-content h2{font-size:20px;color:var(--gold-light);text-transform:uppercase;font-weight:900;text-shadow:0 2px 4px #000}
+    .slide-content p{font-size:12px;color:#eee;margin:7px 0;text-shadow:0 1px 3px #000}
+    .slide-slogan{font-size:10px;color:var(--gold);font-weight:900;text-transform:uppercase;letter-spacing:1.5px}
+    .slide-dots{position:absolute;z-index:5;bottom:12px;left:50%;transform:translateX(-50%);display:flex;gap:7px}
+    .dot{width:8px;height:8px;border-radius:50%;background:#888;border:none}
+    .dot.active{background:var(--gold);width:22px;border-radius:8px}
 
-/* --- MODAIS --- */
-.modal-overlay { position: fixed; inset: 0; background: rgba(11, 11, 11, 0.88); backdrop-filter: blur(8px); z-index: 2000; display: none; align-items: flex-end; justify-content: center; }
-@media (min-width: 640px) { .modal-overlay { align-items: center; } }
-.modal-card { background: var(--bg-card); border: 1px solid var(--border); border-top-left-radius: 24px; border-top-right-radius: 24px; width: 100%; max-width: 650px; max-height: 90vh; display: flex; flex-direction: column; box-shadow: 0 -20px 40px rgba(0,0,0,0.9); animation: slideUp 0.3s ease; }
-@media (min-width: 640px) { .modal-card { border-radius: 20px; } }
-@keyframes slideUp { from { transform: translateY(100%); } to { transform: translateY(0); } }
-.modal-header { padding: 18px 20px; border-bottom: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; }
-.modal-title { font-size: 15px; font-weight: 900; color: var(--gold-light); text-transform: uppercase; letter-spacing: 0.5px; }
-.modal-close-btn { background: transparent; border: none; color: var(--text-muted); font-size: 22px; font-weight: bold; cursor: pointer; }
-.modal-body { padding: 20px; overflow-y: auto; display: flex; flex-direction: column; gap: 14px; max-height: 60vh; }
+    .whatsapp-float{
+      position:fixed;right:20px;bottom:24px;z-index:1500;width:56px;height:56px;
+      display:flex;align-items:center;justify-content:center;text-decoration:none;
+      color:#fff;background:var(--green);border-radius:50%;font-size:30px;
+      box-shadow:0 4px 20px rgba(37,211,102,.4);
+    }
 
-/* Estilos do Painel Admin */
-.admin-tabs { display: flex; gap: 8px; border-bottom: 1px solid var(--border); padding-bottom: 10px; margin-bottom: 10px; }
-.admin-tab-btn { background: var(--bg-input); border: 1px solid var(--border); color: var(--text-muted); padding: 6px 14px; border-radius: 6px; font-size: 11px; font-weight: 800; cursor: pointer; }
-.admin-tab-btn.active { background: var(--gold-primary); color: #0b0b0b; border-color: var(--gold-primary); }
-.admin-form-group { display: flex; flex-direction: column; gap: 6px; }
-.admin-form-group label { font-size: 11px; font-weight: 800; color: var(--gold-light); text-transform: uppercase; }
-.admin-form-group input, .admin-form-group select { background: var(--bg-input); border: 1px solid var(--border); border-radius: 8px; padding: 10px; color: #fff; font-size: 12px; }
-.admin-form-group input[type="file"] { padding: 6px; font-size: 11px; }
-.admin-btn { background: var(--gold-primary); color: #0b0b0b; font-weight: 900; border: none; padding: 12px; border-radius: 8px; cursor: pointer; text-transform: uppercase; font-size: 12px; transition: 0.2s; }
-.admin-btn:hover { background: var(--gold-light); }
-.admin-item-row { display: flex; align-items: center; justify-content: space-between; background: var(--bg-input); padding: 10px; border-radius: 8px; border: 1px solid var(--border); font-size: 12px; gap: 10px; }
-.admin-item-actions { display: flex; gap: 6px; }
-.btn-action-icon { background: transparent; border: 1px solid var(--border); color: #fff; width: 30px; height: 30px; border-radius: 6px; cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 12px; }
-.btn-action-icon.edit { color: var(--gold-primary); border-color: rgba(212,175,55,0.4); }
-.btn-action-icon.delete { color: #ff4d4d; border-color: rgba(255,77,77,0.4); }
+    .categories-bar{display:flex;gap:8px;padding:16px 20px;overflow-x:auto;scrollbar-width:none}
+    .categories-bar::-webkit-scrollbar{display:none}
+    .cat-chip{
+      white-space:nowrap;padding:8px 15px;border-radius:20px;border:1px solid var(--border);
+      background:var(--card);color:var(--muted);font-size:12px;font-weight:800;
+    }
 
-/* Carrinho com Miniaturas Inteiras */
-.cart-items-list { display: flex; flex-direction: column; gap: 12px; }
-.cart-item-row { display: flex; align-items: center; justify-content: space-between; background: var(--bg-input); padding: 10px 12px; border-radius: 12px; border: 1px solid var(--border); gap: 12px; }
-.cart-item-thumb { width: 50px; height: 50px; border-radius: 8px; object-fit: contain; background: #0b0b0b; border: 1px solid var(--border); padding: 2px; }
-.cart-item-info { flex: 1; }
-.cart-item-info h4 { font-size: 12px; font-weight: 800; color: #fff; margin-bottom: 2px; }
-.cart-item-info span { font-size: 11px; color: var(--gold-light); font-weight: 900; }
-.cart-item-controls { display: flex; align-items: center; gap: 8px; }
-.qty-btn { background: #2a2a2a; border: 1px solid var(--border); color: white; width: 24px; height: 24px; border-radius: 6px; font-weight: bold; cursor: pointer; display: flex; align-items: center; justify-content: center; }
-.item-qty { font-size: 12px; font-weight: 900; width: 20px; text-align: center; }
-.modal-footer { padding: 20px; border-top: 1px solid var(--border); background: #0e0e0e; }
-.cart-total-row { display: flex; justify-content: space-between; font-size: 14px; font-weight: 900; margin-bottom: 14px; color: var(--text-muted); }
-.cart-total-row span:last-child { color: var(--gold-light); font-size: 18px; }
-.btn-checkout-whatsapp { width: 100%; padding: 14px; background: linear-gradient(90deg, #25d366, #1ebe5d); border: none; border-radius: 12px; color: #fff; font-size: 13px; font-weight: 900; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; box-shadow: 0 6px 20px rgba(37,211,102,0.3); transition: 0.2s; text-transform: uppercase; letter-spacing: 0.5px; }
-.btn-checkout-whatsapp:hover { transform: translateY(-2px); filter: brightness(1.1); }
+    .cat-chip.active{background:var(--gold);color:#111;border-color:var(--gold)}
+    .catalog-container{max-width:1200px;margin:auto;padding:0 20px 40px}
+    .section-title{display:flex;justify-content:space-between;color:var(--gold-light);font-size:13px;font-weight:900;text-transform:uppercase;letter-spacing:1px;margin-bottom:15px}
+    .section-title small{color:var(--muted);font-size:10px}
 
-/* --- TOAST NOTIFICATION --- */
-.toast-container { position: fixed; top: 20px; right: 20px; z-index: 9999; display: flex; flex-direction: column; gap: 10px; pointer-events: none; }
-.toast { background: linear-gradient(90deg, #aa820a, #d4af37); color: #0b0b0b; padding: 12px 20px; border-radius: 8px; font-weight: 900; font-size: 12px; box-shadow: 0 4px 20px rgba(0,0,0,0.6); transform: translateY(-20px); opacity: 0; transition: all 0.3s ease; display: flex; align-items: center; gap: 8px; text-transform: uppercase; letter-spacing: 0.5px; }
-.toast.show { transform: translateY(0); opacity: 1; }
+    .products-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:14px}
+    .product-card{
+      overflow:hidden;background:var(--card);border:1px solid var(--border);
+      border-radius:14px;display:flex;flex-direction:column;cursor:pointer;
+    }
 
-/* --- RODAPÉ INSTITUCIONAL --- */
-footer { background: #050505; border-top: 1px solid var(--border); padding: 30px 20px; text-align: center; margin-top: auto; }
-footer p { font-size: 12px; color: var(--text-muted); line-height: 1.5; margin-bottom: 8px; }
-footer .brand-sign { font-weight: 900; color: var(--gold-light); letter-spacing: 1px; text-transform: uppercase; }
-</style>
+    .product-image-box{
+      height:180px;padding:8px;background:#0d0d0d;position:relative;
+      display:flex;align-items:center;justify-content:center;
+    }
+
+    .product-image-box img{
+      max-width:100%;max-height:100%;width:auto;height:auto;object-fit:contain;
+    }
+
+    .product-tag{
+      position:absolute;top:9px;left:9px;z-index:2;background:rgba(0,0,0,.8);
+      border:1px solid rgba(212,175,55,.4);border-radius:6px;padding:3px 7px;
+      color:var(--gold-light);font-size:9px;font-weight:900;text-transform:uppercase;
+    }
+
+    .product-content{display:flex;flex:1;flex-direction:column;justify-content:space-between;gap:10px;padding:13px}
+    .product-category-mini{font-size:10px;color:var(--gold);font-weight:900;text-transform:uppercase}
+    .product-name{font-size:13px;font-weight:800;line-height:1.3;margin-top:3px;min-height:34px}
+    .product-specs{display:inline-block;margin-top:6px;padding:4px 7px;border:1px solid var(--border);border-radius:6px;background:var(--input);color:var(--muted);font-size:10px;font-weight:700}
+    .product-footer{display:flex;align-items:center;justify-content:space-between;gap:6px}
+    .product-price{font-size:14px;color:var(--gold-light);font-weight:900}
+    .btn-add-cart{
+      border:none;border-radius:8px;padding:8px 9px;background:var(--gold);color:#111;
+      font-size:10px;font-weight:900;white-space:nowrap;
+    }
+
+    .btn-add-cart.added{background:var(--green);color:#fff;cursor:default}
+    .modal-overlay{
+      display:none;position:fixed;z-index:3000;inset:0;background:rgba(0,0,0,.87);
+      backdrop-filter:blur(7px);align-items:flex-end;justify-content:center;
+    }
+
+    .modal-card{
+      width:100%;max-width:650px;max-height:90vh;overflow:hidden;display:flex;flex-direction:column;
+      background:var(--card);border:1px solid var(--border);border-radius:22px 22px 0 0;
+    }
+
+    .modal-header{padding:17px 20px;border-bottom:1px solid var(--border);display:flex;justify-content:space-between;align-items:center}
+    .modal-title{color:var(--gold-light);font-size:14px;font-weight:900;text-transform:uppercase}
+    .modal-close-btn{border:none;background:none;color:var(--muted);font-size:25px}
+    .modal-body{padding:18px 20px;overflow:auto;display:flex;flex-direction:column;gap:12px}
+    .modal-footer{padding:18px 20px;background:#0d0d0d;border-top:1px solid var(--border)}
+    .cart-total-row{display:flex;justify-content:space-between;margin-bottom:12px;color:var(--muted);font-weight:900}
+    .cart-total-row strong{color:var(--gold-light);font-size:18px}
+    .btn-checkout-whatsapp{
+      width:100%;border:0;border-radius:11px;padding:14px;background:linear-gradient(90deg,#25d366,#1ebe5d);
+      color:#fff;font-weight:900;text-transform:uppercase;font-size:12px;
+    }
+
+    .cart-items-list{display:flex;flex-direction:column;gap:10px}
+    .cart-item-row{display:flex;align-items:center;gap:10px;padding:10px;border:1px solid var(--border);border-radius:10px;background:var(--input)}
+    .cart-item-thumb{width:52px;height:52px;padding:2px;object-fit:contain;background:#0b0b0b;border:1px solid var(--border);border-radius:8px}
+    .cart-item-info{flex:1}
+    .cart-item-info h4{font-size:12px;margin-bottom:3px}
+    .cart-item-info span{font-size:11px;color:var(--gold-light);font-weight:900}
+    .cart-item-controls{display:flex;align-items:center;gap:7px}
+    .qty-btn{width:25px;height:25px;border:1px solid var(--border);border-radius:6px;background:#292929;color:#fff;font-weight:900}
+    .item-qty{width:18px;text-align:center;font-size:12px;font-weight:900}
+
+    .zoom-box{height:300px;padding:10px;background:#0d0d0d;border:1px solid var(--border);border-radius:12px;display:flex;align-items:center;justify-content:center}
+    .zoom-box img{max-width:100%;max-height:100%;object-fit:contain}
+
+    .admin-tabs{display:flex;gap:8px;border-bottom:1px solid var(--border);padding-bottom:10px}
+    .admin-tab-btn{border:1px solid var(--border);border-radius:7px;padding:8px 10px;background:var(--input);color:var(--muted);font-weight:800;font-size:10px}
+    .admin-tab-btn.active{background:var(--gold);color:#111;border-color:var(--gold)}
+    .admin-form-group{display:flex;flex-direction:column;gap:5px}
+    .admin-form-group label{color:var(--gold-light);font-size:10px;font-weight:900;text-transform:uppercase}
+    .admin-form-group input,.admin-form-group select{
+      width:100%;padding:10px;background:var(--input);border:1px solid var(--border);
+      color:#fff;border-radius:8px;font-size:12px;
+    }
+
+    .admin-btn{border:none;border-radius:8px;background:var(--gold);color:#111;padding:11px;font-size:11px;font-weight:900;text-transform:uppercase}
+    .admin-item-row{display:flex;align-items:center;gap:8px;padding:9px;background:var(--input);border:1px solid var(--border);border-radius:8px;font-size:11px}
+    .admin-item-row span{flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+    .btn-action-icon{width:30px;height:30px;border-radius:6px;background:transparent;border:1px solid var(--border);color:#fff}
+    .btn-action-icon.edit{color:var(--gold)}
+    .btn-action-icon.delete{color:var(--danger)}
+
+    .toast-container{position:fixed;z-index:5000;top:18px;right:18px;display:flex;flex-direction:column;gap:8px;pointer-events:none}
+    .toast{
+      opacity:0;transform:translateY(-15px);transition:.3s;background:var(--gold);color:#111;
+      padding:12px 15px;border-radius:8px;font-size:11px;font-weight:900;box-shadow:0 5px 20px #000;
+    }
+    .toast.show{opacity:1;transform:translateY(0)}
+
+    footer{padding:30px 20px;text-align:center;background:#050505;border-top:1px solid var(--border)}
+    footer p{font-size:11px;color:var(--muted);margin-bottom:7px}
+    .brand-sign{color:var(--gold-light);font-weight:900;text-transform:uppercase}
+
+    @media(min-width:640px){
+      .modal-overlay{align-items:center}
+      .modal-card{border-radius:18px}
+    }
+
+    @media(min-width:768px){
+      .hero-slider{height:420px}
+      .products-grid{grid-template-columns:repeat(3,1fr);gap:18px}
+    }
+
+    @media(min-width:1024px){
+      .products-grid{grid-template-columns:repeat(4,1fr)}
+    }
+  </style>
 </head>
+
 <body>
 
-<!-- NOTIFICAÇÃO TOAST FLUTUANTE -->
-<div id="toast-container" class="toast-container"></div>
-
-<!-- BOTÃO FLUTUANTE DO WHATSAPP -->
-<a href="https://wa.me/5563992204543?text=Olá!%20Gostaria%20de%20falar%20com%20o%20vendedor%20da%20JR%20Cosméticos." class="whatsapp-float" target="_blank" title="Falar com o Vendedor">
-<i class="fa-brands fa-whatsapp"></i>
-</a>
-
-<!-- BARRA SUPERIOR DE AVISO -->
-<div class="top-announcement">
-✨ Produtos Profissionais para Salões de Beleza &bull; Atendimento Exclusivo
-</div>
-
-<!-- HEADER PRINCIPAL -->
-<header>
-<div class="brand-wrapper">
-<div class="brand-logo-circle">JR</div>
-<div class="brand-texts">
-<h1>JR Cosméticos</h1>
-<span>Profissional</span>
-</div>
-</div>
-<div class="header-actions">
-<button class="admin-login-btn" onclick="openAdminModal()"><i class="fa-solid fa-gear"></i> Admin</button>
-<button class="cart-btn-top" onclick="openCartModal()">
-<i class="fa-solid fa-cart-shopping"></i> Carrinho <span class="cart-badge" id="cart-counter">0</span>
-</button>
-</div>
-</header>
-
-<!-- CARROSSEL PROFISSIONAL DE DESTAQUE (SLIDER) -->
-<div class="hero-slider">
-<div class="slide-track" id="slide-track"></div>
-<div class="slide-dots" id="slide-dots"></div>
-</div>
-
-<!-- FILTROS DE CATEGORIA -->
-<div class="categories-bar" id="category-filter-bar">
-<button class="cat-chip active" onclick="filterCategory('todos', this)">Todos os Produtos</button>
-<button class="cat-chip" onclick="filterCategory('Selagem Progressiva', this)">Selagem Progressiva</button>
-<button class="cat-chip" onclick="filterCategory('Hidratação', this)">Hidratação</button>
-<button class="cat-chip" onclick="filterCategory('Coloração', this)">Coloração</button>
-<button class="cat-chip" onclick="filterCategory('Descolorante', this)">Descolorante</button>
-<button class="cat-chip" onclick="filterCategory('Finalizador', this)">Finalizador</button>
-</div>
-
-<!-- VITRINE DE PRODUTOS -->
-<div class="catalog-container">
-<div class="section-title">
-<span>Catálogo Profissional</span>
-<span style="font-size:11px; color:var(--text-muted);" id="product-count-label">Carregando produtos...</span>
-</div>
-<div class="products-grid" id="products-grid"></div>
-</div>
-
-<!-- MODAL DO CARRINHO E CHECKOUT -->
-<div class="modal-overlay" id="cart-modal">
-<div class="modal-card">
-<div class="modal-header">
-<div class="modal-title"><i class="fa-solid fa-basket-shopping"></i> Resumo do Pedido</div>
-<button class="modal-close-btn" onclick="closeCartModal()">&times;</button>
-</div>
-<div class="modal-body">
-<div class="cart-items-list" id="cart-items-list"></div>
-</div>
-<div class="modal-footer">
-<div class="cart-total-row">
-<span>Total Estimado:</span>
-<span id="cart-total-value">R$ 0,00</span>
-</div>
-<button class="btn-checkout-whatsapp" onclick="finalizeOrderWhatsApp()">
-<i class="fa-brands fa-whatsapp"></i> Enviar Pedido via WhatsApp
-</button>
-</div>
-</div>
-</div>
-
-<!-- MODAL DE ZOOM / AMPLIAÇÃO DA IMAGEM DO PRODUTO -->
-<div class="modal-overlay" id="image-modal">
-<div class="modal-card" style="max-width: 450px; text-align: center;">
-<div class="modal-header">
-<div class="modal-title" id="zoom-product-title">Detalhes do Produto</div>
-<button class="modal-close-btn" onclick="closeImageModal()">&times;</button>
-</div>
-<div class="modal-body" style="align-items: center;">
-<div style="width:100%; height:280px; background:#0d0d0d; display:flex; align-items:center; justify-content:center; border-radius:12px; border:1px solid var(--border); padding:10px;">
-<img id="zoom-product-img" src="" alt="Imagem Ampliada" style="max-width: 100%; max-height: 100%; object-fit: contain;">
-</div>
-<div id="zoom-product-specs" class="product-specs" style="margin-top: 10px;"></div>
-<p id="zoom-product-price" style="font-size: 20px; font-weight: 900; color: var(--gold-light); margin-top: 8px;"></p>
-</div>
-</div>
-</div>
-
-<!-- MODAL DO PAINEL ADMINISTRADOR -->
-<div class="modal-overlay" id="admin-modal">
-<div class="modal-card" style="max-width: 650px;">
-<div class="modal-header">
-<div class="modal-title"><i class="fa-solid fa-user-shield"></i> Painel do Administrador</div>
-<button class="modal-close-btn" onclick="closeAdminModal()">&times;</button>
-</div>
-<div class="modal-body" id="admin-modal-content">
-
-<!-- Tela de Login Admin -->
-<div id="admin-login-screen" style="display:flex; flex-direction:column; gap:14px; padding: 10px 0;">
-<p style="font-size:12px; color:var(--text-muted);">Área restrita para gerenciamento do catálogo e banners do site.</p>
-<div class="admin-form-group">
-<label>Senha de Acesso</label>
-<input type="password" id="admin-password-input" placeholder="Digite a senha de acesso">
-</div>
-<button class="admin-btn" onclick="verifyAdminLogin()">Entrar no Painel</button>
-</div>
-
-<!-- Tela de Gestão do Admin -->
-<div id="admin-dashboard-screen" style="display:none; flex-direction:column; gap:18px;">
-<div style="display:flex; justify-content:space-between; align-items:center;">
-<span style="font-size:12px; color:var(--gold-light); font-weight:800;">✨ Painel de Gerenciamento Global</span>
-<button class="admin-btn" style="padding:6px 12px; font-size:10px;" onclick="logoutAdmin()">Sair</button>
-</div>
-
-<!-- Tabs do Admin -->
-<div class="admin-tabs">
-<button class="admin-tab-btn active" id="tab-btn-products" onclick="switchAdminTab('products')">Gerenciar Produtos</button>
-<button class="admin-tab-btn" id="tab-btn-banners" onclick="switchAdminTab('banners')">Gerenciar Banners</button>
-</div>
-
-<!-- SEÇÃO: GERENCIAR PRODUTOS -->
-<div id="admin-section-products" style="display:flex; flex-direction:column; gap:16px;">
-<div style="background:var(--bg-input); padding:14px; border-radius:12px; border:1px solid var(--border); display:flex; flex-direction:column; gap:10px;">
-<h4 id="prod-form-title" style="font-size:12px; color:#fff; font-weight:900;">Adicionar / Editar Produto</h4>
-<input type="hidden" id="edit-prod-id">
-
-<div class="admin-form-group">
-<label>Nome do Produto</label>
-<input type="text" id="new-p-name" placeholder="Ex: Selagem Térmica Liss 1L">
-</div>
-<div class="admin-form-group">
-<label>Categoria</label>
-<select id="new-p-cat">
-<option value="Selagem Progressiva">Selagem Progressiva</option>
-<option value="Hidratação">Hidratação</option>
-<option value="Coloração">Coloração</option>
-<option value="Descolorante">Descolorante</option>
-<option value="Finalizador">Finalizador</option>
-</select>
-</div>
-<div class="admin-form-group">
-<label>Especificações (Volume / Peso)</label>
-<input type="text" id="new-p-specs" placeholder="Ex: Frasco 1 Litro">
-</div>
-<div class="admin-form-group">
-<label>Preço (R$)</label>
-<input type="number" step="0.01" id="new-p-price" placeholder="149.90">
-</div>
-<div class="admin-form-group">
-<label>Imagem (URL ou Fotos da Galeria)</label>
-<input type="text" id="new-p-image" placeholder="https://exemplo.com/foto.jpg">
-<input type="file" id="new-p-file" accept="image/*" onchange="convertFileToBase64(this, 'new-p-image')">
-</div>
-<div style="display:flex; gap:8px;">
-<button class="admin-btn" style="flex:1;" onclick="saveProduct()">Salvar e Publicar para Todos</button>
-<button class="admin-btn" style="background:#444; color:#fff; display:none;" id="btn-cancel-prod-edit" onclick="resetProductForm()">Cancelar</button>
-</div>
-</div>
-
-<div style="display:flex; flex-direction:column; gap:8px;">
-<h4 style="font-size:12px; color:#fff; font-weight:900;">Produtos Cadastrados</h4>
-<div id="admin-products-list" style="display:flex; flex-direction:column; gap:8px; max-height:200px; overflow-y:auto;"></div>
-</div>
-</div>
-
-<!-- SEÇÃO: GERENCIAR BANNERS -->
-<div id="admin-section-banners" style="display:none; flex-direction:column; gap:16px;">
-<div style="background:var(--bg-input); padding:14px; border-radius:12px; border:1px solid var(--border); display:flex; flex-direction:column; gap:10px;">
-<h4 id="banner-form-title" style="font-size:12px; color:#fff; font-weight:900;">Adicionar / Editar Banner</h4>
-<input type="hidden" id="edit-banner-id">
-
-<div class="admin-form-group">
-<label>Título Principal</label>
-<input type="text" id="new-b-title" placeholder="Ex: Transformação Afro">
-</div>
-<div class="admin-form-group">
-<label>Descrição</label>
-<input type="text" id="new-b-desc" placeholder="Ex: Resultado profissional impecável...">
-</div>
-<div class="admin-form-group">
-<label>Slogan / Rodapé do Banner</label>
-<input type="text" id="new-b-slogan" placeholder="Ex: Realce sua beleza...">
-</div>
-<div class="admin-form-group">
-<label>Imagem (URL ou Galeria)</label>
-<input type="text" id="new-b-image" placeholder="https://exemplo.com/banner.jpg">
-<input type="file" id="new-b-file" accept="image/*" onchange="convertFileToBase64(this, 'new-b-image')">
-</div>
-<div style="display:flex; gap:8px;">
-<button class="admin-btn" style="flex:1;" onclick="saveBanner()">Salvar e Publicar Banner</button>
-<button class="admin-btn" style="background:#444; color:#fff; display:none;" id="btn-cancel-banner-edit" onclick="resetBannerForm()">Cancelar</button>
-</div>
-</div>
-
-<div style="display:flex; flex-direction:column; gap:8px;">
-<h4 style="font-size:12px; color:#fff; font-weight:900;">Banners Cadastrados</h4>
-<div id="admin-banners-list" style="display:flex; flex-direction:column; gap:8px; max-height:200px; overflow-y:auto;"></div>
-</div>
-</div>
-
-</div>
-</div>
-</div>
-</div>
-
-<!-- RODAPÉ INSTITUCIONAL -->
-<footer>
-<p><span class="brand-sign">JR Cosméticos</span> - Atendimento Profissional para Salões de Beleza.</p>
-<p style="font-size:10px; color:#666; margin-top:8px;"><i class="fa-brands fa-whatsapp"></i> Contato Oficial / WhatsApp: (63) 99220-4543 &bull; Realce sua beleza, revele sua essência.</p>
-<p style="font-size:10px; color:#444; margin-top:12px;">© 2026 JR Cosméticos. Todos os direitos reservados.</p>
-</footer>
-
-<script>
-/* --- ENDPOINTS NUVEM GLOBAL DA JR COSMÉTICOS --- */
-const CLOUD_PRODUCTS_URL = 'https://kvdb.io/JRCosmeticos_63992204543_StoreV1/products';
-const CLOUD_BANNERS_URL = 'https://kvdb.io/JRCosmeticos_63992204543_StoreV1/banners';
-
-/* --- REGISTRO DO SERVICE WORKER (PWA) --- */
-if ('serviceWorker' in navigator) {
-const swCode = `
-const CACHE_NAME = 'jr-cosmeticos-v3';
-self.addEventListener('install', e => { e.waitUntil(caches.open(CACHE_NAME).then(c => c.addAll(['/']))); });
-self.addEventListener('fetch', e => { e.respondWith(fetch(e.request).catch(() => caches.match(e.request))); });
-`;
-const blob = new Blob([swCode], { type: 'application/javascript' });
-navigator.serviceWorker.register(URL.createObjectURL(blob)).catch(() => {});
-}
-
-/* --- TOAST NOTIFICATIONS --- */
-function showToast(message) {
-const container = document.getElementById('toast-container');
-const toast = document.createElement('div');
-toast.className = 'toast';
-toast.innerHTML = `<i class="fa-solid fa-circle-check"></i> ${message}`;
-container.appendChild(toast);
-setTimeout(() => toast.classList.add('show'), 10);
-setTimeout(() => {
-toast.classList.remove('show');
-setTimeout(() => toast.remove(), 300);
-}, 2500);
-}
-
-/* --- DADOS INICIAIS PADRÃO --- */
-const DEFAULT_SLIDES = [
-{
-id: 1,
-title: "Transformação Afro • Liso Absoluto",
-desc: "Resultado profissional impecável após a aplicação da Selagem Progressiva de alto desempenho.",
-slogan: "Realce sua beleza, revele sua essência.",
-image: "https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?w=1200&auto=format&fit=crop&q=80"
-},
-{
-id: 2,
-title: "Tecnologia e Liso Perfeito",
-desc: "O padrão de excelência que o seu salão de beleza merece.",
-slogan: "Brilho espelhado e toque sedoso.",
-image: "https://images.unsplash.com/photo-1560869713-7d0a29430803?w=1200&auto=format&fit=crop&q=80"
-},
-{
-id: 3,
-title: "Exclusivo para Cabeleireiros",
-desc: "Atendimento especializado e entrega rápida para profissionais exigentes.",
-slogan: "WhatsApp: (63) 99220-4543",
-image: "https://images.unsplash.com/photo-1519699047748-de8e457a634e?w=1200&auto=format&fit=crop&q=80"
-}
-];
-
-const DEFAULT_PRODUCTS = [
-{
-id: 1,
-name: "Selagem Progressiva Gold Liss Pro 1L",
-category: "Selagem Progressiva",
-specs: "Frasco 1 Litro • Zero Formol",
-price: 159.90,
-tag: "Mais Vendido",
-image: "https://images.unsplash.com/photo-1608248597359-97424e8838d7?w=500&auto=format&fit=crop&q=60"
-},
-{
-id: 2,
-name: "Máscara de Hidratação Profunda Óleo de Argan 1Kg",
-category: "Hidratação",
-specs: "Pote 1Kg • Alta Nutrição",
-price: 110.00,
-tag: "Essencial",
-image: "https://images.unsplash.com/photo-1526947425960-945c6e72858f?w=500&auto=format&fit=crop&q=60"
-},
-{
-id: 3,
-name: "Pó Descolorante Azul Premium Professional 500g",
-category: "Descolorante",
-specs: "Pote 500g • Abertura Rápida",
-price: 89.90,
-tag: "Destaque",
-image: "https://images.unsplash.com/photo-1608248597359-97424e8838d7?w=500&auto=format&fit=crop&q=60"
-},
-{
-id: 4,
-name: "Água Oxigenada Cremosa 30 Volumes 900ml",
-category: "Coloração",
-specs: "Frasco 900ml • Estabilizada",
-price: 45.00,
-tag: "Salão",
-image: "https://images.unsplash.com/photo-1535585209827-a15fcdbc4c2d?w=500&auto=format&fit=crop&q=60"
-},
-{
-id: 5,
-name: "Kit Cronograma Capilar Completo Salão",
-category: "Hidratação",
-specs: "3 Potes 500g cada",
-price: 198.00,
-tag: "Combo",
-image: "https://images.unsplash.com/photo-1526947425960-945c6e72858f?w=500&auto=format&fit=crop&q=60"
-},
-{
-id: 6,
-name: "Óleo Reparador de Pontas Finalizador 60ml",
-category: "Finalizador",
-specs: "Frasco 60ml • Brilho Extremo",
-price: 54.90,
-tag: "Essencial",
-image: "https://images.unsplash.com/photo-1608248597359-97424e8838d7?w=500&auto=format&fit=crop&q=60"
-},
-{
-id: 7,
-name: "Tintura Permanente Profissional Tonalizante 60g",
-category: "Coloração",
-specs: "Bisnaga 60g • Cobertura Total",
-price: 32.50,
-tag: "Novo",
-image: "https://images.unsplash.com/photo-1535585209827-a15fcdbc4c2d?w=500&auto=format&fit=crop&q=60"
-},
-{
-id: 8,
-name: "Gloss Redutor de Volume Selagem Orgânica 1L",
-category: "Selagem Progressiva",
-specs: "Frasco 1 Litro • Efeito Espelhado",
-price: 179.00,
-tag: "Profissional",
-image: "https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?w=500&auto=format&fit=crop&q=60"
-}
-];
-
-let productsDatabase = JSON.parse(localStorage.getItem('jr_products')) || DEFAULT_PRODUCTS;
-let slidesDatabase = JSON.parse(localStorage.getItem('jr_slides')) || DEFAULT_SLIDES;
-let cart = {};
-let currentCategory = 'todos';
-let slideIndex = 0;
-let slideInterval;
-
-/* --- SINCRONIZAÇÃO GLOBAL COM NUVEM --- */
-async function loadCloudData() {
-try {
-const resProd = await fetch(CLOUD_PRODUCTS_URL);
-if (resProd.ok) {
-const dataProd = await resProd.json();
-if (Array.isArray(dataProd) && dataProd.length > 0) {
-productsDatabase = dataProd;
-localStorage.setItem('jr_products', JSON.stringify(productsDatabase));
-renderProducts(currentCategory);
-renderAdminProductsList();
-}
-}
-} catch (e) { console.log('Offline: carregando cache local de produtos'); }
-
-try {
-const resBanners = await fetch(CLOUD_BANNERS_URL);
-if (resBanners.ok) {
-const dataBanners = await resBanners.json();
-if (Array.isArray(dataBanners) && dataBanners.length > 0) {
-slidesDatabase = dataBanners;
-localStorage.setItem('jr_slides', JSON.stringify(slidesDatabase));
-renderSlider();
-renderAdminBannersList();
-}
-}
-} catch (e) { console.log('Offline: carregando cache local de banners'); }
-}
-
-async function saveProductsGlobal() {
-localStorage.setItem('jr_products', JSON.stringify(productsDatabase));
-try {
-await fetch(CLOUD_PRODUCTS_URL, {
-method: 'POST',
-headers: { 'Content-Type': 'application/json' },
-body: JSON.stringify(productsDatabase)
-});
-} catch (e) { console.error('Erro na sincronização global de produtos', e); }
-}
-
-async function saveBannersGlobal() {
-localStorage.setItem('jr_slides', JSON.stringify(slidesDatabase));
-try {
-await fetch(CLOUD_BANNERS_URL, {
-method: 'POST',
-headers: { 'Content-Type': 'application/json' },
-body: JSON.stringify(slidesDatabase)
-});
-} catch (e) { console.error('Erro na sincronização global de banners', e); }
-}
-
-/* --- CARROSSEL DE FOTOS --- */
-function renderSlider() {
-const track = document.getElementById('slide-track');
-const dotsContainer = document.getElementById('slide-dots');
-track.innerHTML = '';
-dotsContainer.innerHTML = '';
-
-slidesDatabase.forEach((slide, index) => {
-const slideDiv = document.createElement('div');
-slideDiv.className = 'slide-item';
-slideDiv.innerHTML = `
-<img src="${slide.image}" alt="${slide.title}">
-<div class="slide-overlay"></div>
-<div class="slide-content">
-<h2>${slide.title}</h2>
-<p>${slide.desc}</p>
-<div class="slide-slogan">${slide.slogan}</div>
-</div>
-`;
-track.appendChild(slideDiv);
-
-const dot = document.createElement('span');
-dot.className = `dot ${index === 0 ? 'active' : ''}`;
-dot.onclick = () => currentSlide(index);
-dotsContainer.appendChild(dot);
-});
-
-showSlide(slideIndex);
-}
-
-function showSlide(index) {
-const track = document.getElementById('slide-track');
-const dots = document.querySelectorAll('.dot');
-if (slidesDatabase.length === 0) return;
-
-if (index >= slidesDatabase.length) slideIndex = 0;
-else if (index < 0) slideIndex = slidesDatabase.length - 1;
-else slideIndex = index;
-
-track.style.transform = `translateX(-${slideIndex * 100}%)`;
-dots.forEach((dot, idx) => {
-dot.classList.toggle('active', idx === slideIndex);
-});
-}
-
-function currentSlide(index) {
-slideIndex = index;
-showSlide(slideIndex);
-}
-
-function startSliderInterval() {
-clearInterval(slideInterval);
-slideInterval = setInterval(() => {
-slideIndex++;
-showSlide(slideIndex);
-}, 5000);
-}
-
-/* --- RENDERIZAÇÃO DA VITRINE --- */
-function renderProducts(category = 'todos') {
-const grid = document.getElementById('products-grid');
-grid.innerHTML = '';
-const filtered = category === 'todos' ? productsDatabase : productsDatabase.filter(p => p.category === category);
-document.getElementById('product-count-label').innerText = `${filtered.length} produtos`;
-
-filtered.forEach(p => {
-const isInCart = cart[p.id] && cart[p.id].qty > 0;
-const card = document.createElement('div');
-card.className = 'product-card';
-card.onclick = (e) => {
-if (!e.target.closest('.btn-add-cart')) {
-openImageModal(p.id);
-}
-};
-card.innerHTML = `
-<div class="product-image-box">
-<span class="product-tag">${p.tag}</span>
-<img src="${p.image}" alt="${p.name}" loading="lazy">
-</div>
-<div class="product-content">
-<div>
-<div class="product-category-mini">${p.category}</div>
-<div class="product-name">${p.name}</div>
-<div class="product-specs" style="margin-top:6px;">${p.specs}</div>
-</div>
-<div class="product-footer">
-<div class="product-price">R$ ${p.price.toFixed(2).replace('.', ',')}</div>
-<button class="btn-add-cart ${isInCart ? 'added' : ''}" onclick="addToCart(${p.id})">
-${isInCart ? '<i class="fa-solid fa-check"></i> Adicionado' : '<span>+</span> Adicionar'}
-</button>
-</div>
-</div>
-`;
-grid.appendChild(card);
-});
-}
-
-function filterCategory(category, btnElement) {
-currentCategory = category;
-document.querySelectorAll('.cat-chip').forEach(c => c.classList.remove('active'));
-btnElement.classList.add('active');
-renderProducts(category);
-}
-
-/* --- ZOOM DO PRODUTO (MODAL) --- */
-function openImageModal(productId) {
-const prod = productsDatabase.find(p => p.id === productId);
-if (!prod) return;
-document.getElementById('zoom-product-title').innerText = prod.name;
-document.getElementById('zoom-product-img').src = prod.image;
-document.getElementById('zoom-product-specs').innerText = prod.specs;
-document.getElementById('zoom-product-price').innerText = `R$ ${prod.price.toFixed(2).replace('.', ',')}`;
-document.getElementById('image-modal').style.display = 'flex';
-}
-function closeImageModal() {
-document.getElementById('image-modal').style.display = 'none';
-}
-
-/* --- GERENCIAMENTO DO CARRINHO --- */
-function addToCart(productId) {
-if (!cart[productId]) {
-const product = productsDatabase.find(p => p.id === productId);
-if (product) {
-cart[productId] = { ...product, qty: 1 };
-showToast("Produto adicionado ao carrinho!");
-}
-}
-updateCartUI();
-renderProducts(currentCategory);
-
-const cartCounter = document.getElementById('cart-counter');
-cartCounter.style.transform = 'scale(1.3)';
-setTimeout(() => cartCounter.style.transform = 'scale(1)', 200);
-}
-
-function changeQty(productId, delta) {
-if (cart[productId]) {
-cart[productId].qty += delta;
-if (cart[productId].qty <= 0) delete cart[productId];
-}
-updateCartUI();
-renderProducts(currentCategory);
-}
-
-function updateCartUI() {
-let totalItems = 0;
-let totalPrice = 0;
-const listContainer = document.getElementById('cart-items-list');
-listContainer.innerHTML = '';
-const keys = Object.keys(cart);
-
-if (keys.length === 0) {
-listContainer.innerHTML = `<div style="text-align:center; color:var(--text-muted); padding:30px 0; font-size:12px; font-weight:700;">Seu carrinho está vazio. Escolha os produtos no catálogo!</div>`;
-} else {
-keys.forEach(id => {
-const item = cart[id];
-totalItems += item.qty;
-totalPrice += item.price * item.qty;
-const row = document.createElement('div');
-row.className = 'cart-item-row';
-row.innerHTML = `
-<img src="${item.image}" class="cart-item-thumb" alt="${item.name}">
-<div class="cart-item-info">
-<h4>${item.name}</h4>
-<span>R$ ${(item.price * item.qty).toFixed(2).replace('.', ',')}</span>
-</div>
-<div class="cart-item-controls">
-<button class="qty-btn" onclick="changeQty(${id}, -1)">-</button>
-<span class="item-qty">${item.qty}</span>
-<button class="qty-btn" onclick="changeQty(${id}, 1)">+</button>
-</div>
-`;
-listContainer.appendChild(row);
-});
-}
-document.getElementById('cart-counter').innerText = totalItems;
-document.getElementById('cart-total-value').innerText = `R$ ${totalPrice.toFixed(2).replace('.', ',')}`;
-}
-
-function openCartModal() { document.getElementById('cart-modal').style.display = 'flex'; }
-function closeCartModal() { document.getElementById('cart-modal').style.display = 'none'; }
-
-function finalizeOrderWhatsApp() {
-const keys = Object.keys(cart);
-if (keys.length === 0) {
-alert('Adicione pelo menos um produto ao carrinho antes de enviar o pedido.');
-return;
-}
-let message = "Olá! 👋 Gostaria de fechar o seguinte pedido na *JR Cosméticos*:\n\n";
-let totalSum = 0;
-keys.forEach(id => {
-const item = cart[id];
-const sub = item.price * item.qty;
-totalSum += sub;
-message += `• ${item.qty}x ${item.name} - R$ ${sub.toFixed(2).replace('.', ',')}\n`;
-});
-message += `\n*Total do Pedido: R$ ${totalSum.toFixed(2).replace('.', ',')}*\n\nAguardo orientações sobre pagamento e entrega para o salão.`;
-const phoneNumber = "5563992204543";
-window.open(`https://wa.me/${phoneNumber}?text=${encodeURIComponent(message)}`, '_blank');
-}
-
-/* --- COMPRESSOR DE IMAGENS DO CELULAR PARA ALTA VELOCIDADE --- */
-function convertFileToBase64(fileInput, targetInputId) {
-const file = fileInput.files[0];
-if (file) {
-const reader = new FileReader();
-reader.onload = function (e) {
-const img = new Image();
-img.onload = function() {
-const canvas = document.createElement('canvas');
-let width = img.width;
-let height = img.height;
-const max = 800;
-if (width > height) {
-if (width > max) { height = Math.round((height * max) / width); width = max; }
-} else {
-if (height > max) { width = Math.round((width * max) / height); height = max; }
-}
-canvas.width = width;
-canvas.height = height;
-const ctx = canvas.getContext('2d');
-ctx.drawImage(img, 0, 0, width, height);
-document.getElementById(targetInputId).value = canvas.toDataURL('image/jpeg', 0.8);
-};
-img.src = e.target.result;
-};
-reader.readAsDataURL(file);
-}
-}
-
-/* --- PAINEL ADMINISTRADOR --- */
-function openAdminModal() { document.getElementById('admin-modal').style.display = 'flex'; }
-function closeAdminModal() { document.getElementById('admin-modal').style.display = 'none'; }
-
-function verifyAdminLogin() {
-const pass = document.getElementById('admin-password-input').value;
-if (pass === 'araujo18') {
-document.getElementById('admin-login-screen').style.display = 'none';
-document.getElementById('admin-dashboard-screen').style.display = 'flex';
-renderAdminProductsList();
-renderAdminBannersList();
-} else {
-alert('Senha incorreta!');
-}
-}
-
-function logoutAdmin() {
-document.getElementById('admin-password-input').value = '';
-document.getElementById('admin-dashboard-screen').style.display = 'none';
-document.getElementById('admin-login-screen').style.display = 'flex';
-}
-
-function switchAdminTab(tab) {
-document.getElementById('admin-section-products').style.display = tab === 'products' ? 'flex' : 'none';
-document.getElementById('admin-section-banners').style.display = tab === 'banners' ? 'flex' : 'none';
-document.getElementById('tab-btn-products').classList.toggle('active', tab === 'products');
-document.getElementById('tab-btn-banners').classList.toggle('active', tab === 'banners');
-}
-
-/* --- CRUD PRODUTOS ADMIN --- */
-function renderAdminProductsList() {
-const list = document.getElementById('admin-products-list');
-list.innerHTML = '';
-productsDatabase.forEach(p => {
-const row = document.createElement('div');
-row.className = 'admin-item-row';
-row.innerHTML = `
-<span style="flex:1;"><b>${p.name}</b> - R$ ${p.price.toFixed(2)}</span>
-<div class="admin-item-actions">
-<button class="btn-action-icon edit" onclick="editProduct(${p.id})"><i class="fa-solid fa-pen"></i></button>
-<button class="btn-action-icon delete" onclick="deleteProduct(${p.id})"><i class="fa-solid fa-trash"></i></button>
-</div>
-`;
-list.appendChild(row);
-});
-}
-
-async function saveProduct() {
-const id = document.getElementById('edit-prod-id').value;
-const name = document.getElementById('new-p-name').value;
-const category = document.getElementById('new-p-cat').value;
-const specs = document.getElementById('new-p-specs').value;
-const price = parseFloat(document.getElementById('new-p-price').value);
-const image = document.getElementById('new-p-image').value;
-
-if (!name || !price || !image) {
-alert('Preencha os campos obrigatórios (Nome, Preço e Imagem)!');
-return;
-}
-
-if (id) {
-const index = productsDatabase.findIndex(p => p.id == id);
-if (index !== -1) {
-productsDatabase[index] = { ...productsDatabase[index], name, category, specs: specs || 'Uso Profissional', price, image };
-alert('Produto atualizado globalmente com sucesso!');
-}
-} else {
-const newId = productsDatabase.length > 0 ? Math.max(...productsDatabase.map(p => p.id)) + 1 : 1;
-productsDatabase.push({ id: newId, name, category, specs: specs || 'Uso Profissional', price, tag: 'Novo', image });
-alert('Produto publicado para todos os clientes!');
-}
-
-await saveProductsGlobal();
-resetProductForm();
-renderProducts(currentCategory);
-renderAdminProductsList();
-}
-
-function editProduct(id) {
-const prod = productsDatabase.find(p => p.id === id);
-if (!prod) return;
-document.getElementById('edit-prod-id').value = prod.id;
-document.getElementById('new-p-name').value = prod.name;
-document.getElementById('new-p-cat').value = prod.category;
-document.getElementById('new-p-specs').value = prod.specs;
-document.getElementById('new-p-price').value = prod.price;
-document.getElementById('new-p-image').value = prod.image;
-document.getElementById('prod-form-title').innerText = "Editar Produto";
-document.getElementById('btn-cancel-prod-edit').style.display = 'block';
-}
-
-function resetProductForm() {
-document.getElementById('edit-prod-id').value = '';
-document.getElementById('new-p-name').value = '';
-document.getElementById('new-p-specs').value = '';
-document.getElementById('new-p-price').value = '';
-document.getElementById('new-p-image').value = '';
-document.getElementById('new-p-file').value = '';
-document.getElementById('prod-form-title').innerText = "Adicionar Novo Produto";
-document.getElementById('btn-cancel-prod-edit').style.display = 'none';
-}
-
-async function deleteProduct(id) {
-if (confirm('Tem certeza que deseja remover este produto de todo o site?')) {
-productsDatabase = productsDatabase.filter(p => p.id !== id);
-delete cart[id];
-await saveProductsGlobal();
-renderProducts(currentCategory);
-renderAdminProductsList();
-updateCartUI();
-}
-}
-
-/* --- CRUD BANNERS ADMIN --- */
-function renderAdminBannersList() {
-const list = document.getElementById('admin-banners-list');
-list.innerHTML = '';
-slidesDatabase.forEach(b => {
-const row = document.createElement('div');
-row.className = 'admin-item-row';
-row.innerHTML = `
-<span style="flex:1;"><b>${b.title}</b></span>
-<div class="admin-item-actions">
-<button class="btn-action-icon edit" onclick="editBanner(${b.id})"><i class="fa-solid fa-pen"></i></button>
-<button class="btn-action-icon delete" onclick="deleteBanner(${b.id})"><i class="fa-solid fa-trash"></i></button>
-</div>
-`;
-list.appendChild(row);
-});
-}
-
-async function saveBanner() {
-const id = document.getElementById('edit-banner-id').value;
-const title = document.getElementById('new-b-title').value;
-const desc = document.getElementById('new-b-desc').value;
-const slogan = document.getElementById('new-b-slogan').value;
-const image = document.getElementById('new-b-image').value;
-
-if (!title || !image) {
-alert('Preencha os campos obrigatórios (Título e Imagem)!');
-return;
-}
-
-if (id) {
-const index = slidesDatabase.findIndex(b => b.id == id);
-if (index !== -1) {
-slidesDatabase[index] = { ...slidesDatabase[index], title, desc, slogan, image };
-alert('Banner atualizado globalmente!');
-}
-} else {
-const newId = slidesDatabase.length > 0 ? Math.max(...slidesDatabase.map(b => b.id)) + 1 : 1;
-slidesDatabase.push({ id: newId, title, desc, slogan, image });
-alert('Banner publicado para todos!');
-}
-
-await saveBannersGlobal();
-resetBannerForm();
-renderSlider();
-renderAdminBannersList();
-}
-
-function editBanner(id) {
-const banner = slidesDatabase.find(b => b.id === id);
-if (!banner) return;
-document.getElementById('edit-banner-id').value = banner.id;
-document.getElementById('new-b-title').value = banner.title;
-document.getElementById('new-b-desc').value = banner.desc;
-document.getElementById('new-b-slogan').value = banner.slogan;
-document.getElementById('new-b-image').value = banner.image;
-document.getElementById('banner-form-title').innerText = "Editar Banner";
-document.getElementById('btn-cancel-banner-edit').style.display = 'block';
-}
-
-function resetBannerForm() {
-document.getElementById('edit-banner-id').value = '';
-document.getElementById('new-b-title').value = '';
-document.getElementById('new-b-desc').value = '';
-document.getElementById('new-b-slogan').value = '';
-document.getElementById('new-b-image').value = '';
-document.getElementById('new-b-file').value = '';
-document.getElementById('banner-form-title').innerText = "Adicionar Novo Banner";
-document.getElementById('btn-cancel-banner-edit').style.display = 'none';
-}
-
-async function deleteBanner(id) {
-if (confirm('Tem certeza que deseja remover este banner?')) {
-slidesDatabase = slidesDatabase.filter(b => b.id !== id);
-await saveBannersGlobal();
-renderSlider();
-renderAdminBannersList();
-}
-}
-
-/* --- INICIALIZAÇÃO E CARREGAMENTO DAS DADOS DA NUVEM --- */
-window.onload = async () => {
-renderSlider();
-startSliderInterval();
-renderProducts('todos');
-await loadCloudData();
-};
-</script>
+  <div id="toast-container" class="toast-container"></div>
+
+  <a class="whatsapp-float"
+     href="https://wa.me/5563992204543?text=Olá!%20Gostaria%20de%20falar%20com%20o%20vendedor%20da%20JR%20Cosméticos."
+     target="_blank"
+     title="Falar com o vendedor">
+    <i class="fa-brands fa-whatsapp"></i>
+  </a>
+
+  <div class="top-announcement">
+    ✨ Produtos Profissionais para Salões de Beleza • Atendimento Exclusivo
+  </div>
+
+  <header>
+    <div class="brand-wrapper">
+      <div class="brand-logo-circle">JR</div>
+      <div class="brand-texts">
+        <h1>JR Cosméticos</h1>
+        <span>Profissional</span>
+      </div>
+    </div>
+
+    <div class="header-actions">
+      <button class="admin-login-btn" onclick="openAdminModal()">
+        <i class="fa-solid fa-gear"></i> Admin
+      </button>
+
+      <button class="cart-btn-top" onclick="openCartModal()">
+        <i class="fa-solid fa-cart-shopping"></i>
+        Carrinho <span id="cart-counter" class="cart-badge">0</span>
+      </button>
+    </div>
+  </header>
+
+  <section class="hero-slider">
+    <div class="slide-track" id="slide-track"></div>
+    <div class="slide-dots" id="slide-dots"></div>
+  </section>
+
+  <div class="categories-bar">
+    <button class="cat-chip active" onclick="filterCategory('todos',this)">Todos os Produtos</button>
+    <button class="cat-chip" onclick="filterCategory('Selagem Progressiva',this)">Selagem Progressiva</button>
+    <button class="cat-chip" onclick="filterCategory('Hidratação',this)">Hidratação</button>
+    <button class="cat-chip" onclick="filterCategory('Coloração',this)">Coloração</button>
+    <button class="cat-chip" onclick="filterCategory('Descolorante',this)">Descolorante</button>
+    <button class="cat-chip" onclick="filterCategory('Finalizador',this)">Finalizador</button>
+  </div>
+
+  <main class="catalog-container">
+    <div class="section-title">
+      <span>Catálogo Profissional</span>
+      <small id="product-count-label">Carregando produtos...</small>
+    </div>
+    <div class="products-grid" id="products-grid"></div>
+  </main>
+
+  <!-- MODAL DO CARRINHO -->
+  <div class="modal-overlay" id="cart-modal">
+    <div class="modal-card">
+      <div class="modal-header">
+        <div class="modal-title"><i class="fa-solid fa-basket-shopping"></i> Resumo do Pedido</div>
+        <button class="modal-close-btn" onclick="closeCartModal()">&times;</button>
+      </div>
+
+      <div class="modal-body">
+        <div class="cart-items-list" id="cart-items-list"></div>
+      </div>
+
+      <div class="modal-footer">
+        <div class="cart-total-row">
+          <span>Total Estimado:</span>
+          <strong id="cart-total-value">R$ 0,00</strong>
+        </div>
+
+        <button class="btn-checkout-whatsapp" onclick="finalizeOrderWhatsApp()">
+          <i class="fa-brands fa-whatsapp"></i> Enviar Pedido via WhatsApp
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL DE ZOOM -->
+  <div class="modal-overlay" id="image-modal">
+    <div class="modal-card" style="max-width:470px">
+      <div class="modal-header">
+        <div class="modal-title" id="zoom-product-title">Produto</div>
+        <button class="modal-close-btn" onclick="closeImageModal()">&times;</button>
+      </div>
+
+      <div class="modal-body">
+        <div class="zoom-box">
+          <img id="zoom-product-img" src="" alt="Imagem ampliada do produto">
+        </div>
+        <div id="zoom-product-specs" class="product-specs"></div>
+        <strong id="zoom-product-price" style="font-size:20px;color:var(--gold-light)"></strong>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL ADMIN -->
+  <div class="modal-overlay" id="admin-modal">
+    <div class="modal-card" style="max-width:650px">
+      <div class="modal-header">
+        <div class="modal-title"><i class="fa-solid fa-user-shield"></i> Painel do Administrador</div>
+        <button class="modal-close-btn" onclick="closeAdminModal()">&times;</button>
+      </div>
+
+      <div class="modal-body">
+
+        <div id="admin-login-screen" style="display:flex;flex-direction:column;gap:14px">
+          <p style="font-size:12px;color:var(--muted)">
+            Área restrita para gerenciamento de produtos e banners.
+          </p>
+
+          <div class="admin-form-group">
+            <label>Senha de acesso</label>
+            <input id="admin-password-input" type="password" placeholder="Digite sua senha">
+          </div>
+
+          <button class="admin-btn" onclick="verifyAdminLogin()">Entrar no Painel</button>
+        </div>
+
+        <div id="admin-dashboard-screen" style="display:none;flex-direction:column;gap:16px">
+          <div style="display:flex;justify-content:space-between;align-items:center">
+            <strong style="font-size:12px;color:var(--gold-light)">✨ Gerenciamento Global</strong>
+            <button class="admin-btn" style="padding:7px 12px" onclick="logoutAdmin()">Sair</button>
+          </div>
+
+          <div class="admin-tabs">
+            <button id="tab-btn-products" class="admin-tab-btn active" onclick="switchAdminTab('products')">Produtos</button>
+            <button id="tab-btn-banners" class="admin-tab-btn" onclick="switchAdminTab('banners')">Banners</button>
+          </div>
+
+          <!-- PRODUTOS -->
+          <div id="admin-section-products" style="display:flex;flex-direction:column;gap:14px">
+            <div style="padding:13px;background:var(--input);border:1px solid var(--border);border-radius:12px;display:flex;flex-direction:column;gap:10px">
+              <strong id="prod-form-title" style="font-size:12px">Adicionar Novo Produto</strong>
+              <input type="hidden" id="edit-prod-id">
+
+              <div class="admin-form-group">
+                <label>Nome do produto</label>
+                <input id="new-p-name" type="text" placeholder="Ex: Selagem Gold 1L">
+              </div>
+
+              <div class="admin-form-group">
+                <label>Categoria</label>
+                <select id="new-p-cat">
+                  <option value="Selagem Progressiva">Selagem Progressiva</option>
+                  <option value="Hidratação">Hidratação</option>
+                  <option value="Coloração">Coloração</option>
+                  <option value="Descolorante">Descolorante</option>
+                  <option value="Finalizador">Finalizador</option>
+                </select>
+              </div>
+
+              <div class="admin-form-group">
+                <label>Especificações</label>
+                <input id="new-p-specs" type="text" placeholder="Ex: Frasco 1 Litro">
+              </div>
+
+              <div class="admin-form-group">
+                <label>Preço</label>
+                <input id="new-p-price" type="number" step="0.01" placeholder="149.90">
+              </div>
+
+              <div class="admin-form-group">
+                <label>Imagem por URL ou galeria</label>
+                <input id="new-p-image" type="text" placeholder="https://site.com/imagem.jpg">
+                <input id="new-p-file" type="file" accept="image/*" onchange="convertFileToBase64(this,'new-p-image')">
+              </div>
+
+              <div style="display:flex;gap:8px">
+                <button class="admin-btn" style="flex:1" onclick="saveProduct()">Salvar e Publicar</button>
+                <button id="btn-cancel-prod-edit" class="admin-btn" style="display:none;background:#444;color:#fff" onclick="resetProductForm()">Cancelar</button>
+              </div>
+            </div>
+
+            <div>
+              <strong style="font-size:12px">Produtos cadastrados</strong>
+              <div id="admin-products-list" style="display:flex;flex-direction:column;gap:7px;max-height:220px;overflow:auto;margin-top:8px"></div>
+            </div>
+          </div>
+
+          <!-- BANNERS -->
+          <div id="admin-section-banners" style="display:none;flex-direction:column;gap:14px">
+            <div style="padding:13px;background:var(--input);border:1px solid var(--border);border-radius:12px;display:flex;flex-direction:column;gap:10px">
+              <strong id="banner-form-title" style="font-size:12px">Adicionar Novo Banner</strong>
+              <input type="hidden" id="edit-banner-id">
+
+              <div class="admin-form-group">
+                <label>Título principal</label>
+                <input id="new-b-title" type="text" placeholder="Ex: Tecnologia e Liso Perfeito">
+              </div>
+
+              <div class="admin-form-group">
+                <label>Descrição</label>
+                <input id="new-b-desc" type="text" placeholder="Descrição que aparece no banner">
+              </div>
+
+              <div class="admin-form-group">
+                <label>Slogan</label>
+                <input id="new-b-slogan" type="text" placeholder="Ex: Realce sua beleza">
+              </div>
+
+              <div class="admin-form-group">
+                <label>Imagem por URL ou galeria</label>
+                <input id="new-b-image" type="text" placeholder="https://site.com/banner.jpg">
+                <input id="new-b-file" type="file" accept="image/*" onchange="convertFileToBase64(this,'new-b-image')">
+              </div>
+
+              <div style="display:flex;gap:8px">
+                <button class="admin-btn" style="flex:1" onclick="saveBanner()">Salvar e Publicar</button>
+                <button id="btn-cancel-banner-edit" class="admin-btn" style="display:none;background:#444;color:#fff" onclick="resetBannerForm()">Cancelar</button>
+              </div>
+            </div>
+
+            <div>
+              <strong style="font-size:12px">Banners cadastrados</strong>
+              <div id="admin-banners-list" style="display:flex;flex-direction:column;gap:7px;max-height:220px;overflow:auto;margin-top:8px"></div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <footer>
+    <p><span class="brand-sign">JR Cosméticos</span> - Atendimento Profissional para Salões de Beleza.</p>
+    <p><i class="fa-brands fa-whatsapp"></i> WhatsApp: (63) 99220-4543</p>
+    <p style="font-size:10px;color:#555">© 2026 JR Cosméticos. Todos os direitos reservados.</p>
+  </footer>
+
+  <script>
+    /* =========================================================
+       LINK DA SUA API DO GOOGLE APPS SCRIPT / GOOGLE PLANILHA
+    ========================================================== */
+    const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwYJoTrgh-I4iOuM4ZP28rR2m5de2zwP5dBF6j5zzgmNgKjiEkNEdIA6BBsU24clZJLeQ/exec";
+
+    const DEFAULT_PRODUCTS = [
+      {
+        id: 1,
+        name: "Selagem Progressiva Gold Liss Pro 1L",
+        category: "Selagem Progressiva",
+        specs: "Frasco 1 Litro • Zero Formol",
+        price: 159.90,
+        tag: "Mais Vendido",
+        image: "https://images.unsplash.com/photo-1608248597359-97424e8838d7?w=500&auto=format&fit=crop&q=60"
+      },
+      {
+        id: 2,
+        name: "Máscara de Hidratação Profunda Óleo de Argan 1Kg",
+        category: "Hidratação",
+        specs: "Pote 1Kg • Alta Nutrição",
+        price: 110.00,
+        tag: "Essencial",
+        image: "https://images.unsplash.com/photo-1526947425960-945c6e72858f?w=500&auto=format&fit=crop&q=60"
+      },
+      {
+        id: 3,
+        name: "Pó Descolorante Azul Premium Professional 500g",
+        category: "Descolorante",
+        specs: "Pote 500g • Abertura Rápida",
+        price: 89.90,
+        tag: "Destaque",
+        image: "https://images.unsplash.com/photo-1608248597359-97424e8838d7?w=500&auto=format&fit=crop&q=60"
+      },
+      {
+        id: 4,
+        name: "Água Oxigenada Cremosa 30 Volumes 900ml",
+        category: "Coloração",
+        specs: "Frasco 900ml • Estabilizada",
+        price: 45.00,
+        tag: "Salão",
+        image: "https://images.unsplash.com/photo-1535585209827-a15fcdbc4c2d?w=500&auto=format&fit=crop&q=60"
+      },
+      {
+        id: 5,
+        name: "Kit Cronograma Capilar Completo Salão",
+        category: "Hidratação",
+        specs: "3 Potes 500g cada",
+        price: 198.00,
+        tag: "Combo",
+        image: "https://images.unsplash.com/photo-1526947425960-945c6e72858f?w=500&auto=format&fit=crop&q=60"
+      },
+      {
+        id: 6,
+        name: "Óleo Reparador de Pontas Finalizador 60ml",
+        category: "Finalizador",
+        specs: "Frasco 60ml • Brilho Extremo",
+        price: 54.90,
+        tag: "Essencial",
+        image: "https://images.unsplash.com/photo-1608248597359-97424e8838d7?w=500&auto=format&fit=crop&q=60"
+      }
+    ];
+
+    const DEFAULT_SLIDES = [
+      {
+        id: 1,
+        title: "Transformação Afro • Liso Absoluto",
+        desc: "Resultado profissional impecável após a aplicação da Selagem Progressiva.",
+        slogan: "Realce sua beleza, revele sua essência.",
+        image: "https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?w=1200&auto=format&fit=crop&q=80"
+      },
+      {
+        id: 2,
+        title: "Tecnologia e Liso Perfeito",
+        desc: "O padrão de excelência que o seu salão merece.",
+        slogan: "Brilho espelhado e toque sedoso.",
+        image: "https://images.unsplash.com/photo-1560869713-7d0a29430803?w=1200&auto=format&fit=crop&q=80"
+      },
+      {
+        id: 3,
+        title: "Exclusivo para Cabeleireiros",
+        desc: "Atendimento especializado e entrega rápida.",
+        slogan: "WhatsApp: (63) 99220-4543",
+        image: "https://images.unsplash.com/photo-1519699047748-de8e457a634e?w=1200&auto=format&fit=crop&q=80"
+      }
+    ];
+
+    let productsDatabase = JSON.parse(localStorage.getItem("jr_products")) || DEFAULT_PRODUCTS;
+    let slidesDatabase = JSON.parse(localStorage.getItem("jr_slides")) || DEFAULT_SLIDES;
+    let cart = {};
+    let currentCategory = "todos";
+    let slideIndex = 0;
+    let slideInterval;
+
+    function escapeHTML(value) {
+      return String(value || "")
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
+    }
+
+    function formatPrice(value) {
+      return Number(value || 0).toFixed(2).replace(".", ",");
+    }
+
+    function normalizeProducts(data) {
+      return data.map(item => ({
+        id: Number(item.id),
+        name: item.name || "",
+        category: item.category || "Finalizador",
+        specs: item.specs || "Uso Profissional",
+        price: Number(item.price || 0),
+        tag: item.tag || "Novo",
+        image: item.image || ""
+      })).filter(item => item.id && item.name);
+    }
+
+    function normalizeSlides(data) {
+      return data.map(item => ({
+        id: Number(item.id),
+        title: item.title || "",
+        desc: item.desc || "",
+        slogan: item.slogan || "",
+        image: item.image || ""
+      })).filter(item => item.id && item.title);
+    }
+
+    function showToast(message) {
+      const container = document.getElementById("toast-container");
+      const toast = document.createElement("div");
+      toast.className = "toast";
+      toast.innerHTML = `<i class="fa-solid fa-circle-check"></i> ${escapeHTML(message)}`;
+      container.appendChild(toast);
+
+      setTimeout(() => toast.classList.add("show"), 20);
+      setTimeout(() => {
+        toast.classList.remove("show");
+        setTimeout(() => toast.remove(), 350);
+      }, 2600);
+    }
+
+    /* =========================================================
+       LEITURA GLOBAL: CLIENTES BUSCAM PRODUTOS NA PLANILHA
+    ========================================================== */
+    async function loadCloudData() {
+      try {
+        const productsResponse = await fetch(`${GOOGLE_SCRIPT_URL}?tipo=produtos&t=${Date.now()}`);
+        const productsData = await productsResponse.json();
+
+        if (Array.isArray(productsData) && productsData.length > 0) {
+          productsDatabase = normalizeProducts(productsData);
+          localStorage.setItem("jr_products", JSON.stringify(productsDatabase));
+        }
+      } catch (error) {
+        console.warn("Não foi possível carregar produtos da nuvem. Usando cache local.", error);
+      }
+
+      try {
+        const bannersResponse = await fetch(`${GOOGLE_SCRIPT_URL}?tipo=banners&t=${Date.now()}`);
+        const bannersData = await bannersResponse.json();
+
+        if (Array.isArray(bannersData) && bannersData.length > 0) {
+          slidesDatabase = normalizeSlides(bannersData);
+          localStorage.setItem("jr_slides", JSON.stringify(slidesDatabase));
+        }
+      } catch (error) {
+        console.warn("Não foi possível carregar banners da nuvem. Usando cache local.", error);
+      }
+
+      renderProducts(currentCategory);
+      renderSlider();
+      renderAdminProductsList();
+      renderAdminBannersList();
+    }
+
+    /* =========================================================
+       GRAVAÇÃO GLOBAL: ADMIN SALVA DIRETAMENTE NA PLANILHA
+    ========================================================== */
+    async function saveGlobalData(type, items) {
+      const payload = {
+        tipo: type,
+        items: items
+      };
+
+      const response = await fetch(GOOGLE_SCRIPT_URL, {
+        method: "POST",
+        headers: {
+          "Content-Type": "text/plain;charset=utf-8"
+        },
+        body: JSON.stringify(payload)
+      });
+
+      if (!response.ok) {
+        throw new Error("Não foi possível salvar os dados na planilha.");
+      }
+
+      return response;
+    }
+
+    async function saveProductsGlobal() {
+      localStorage.setItem("jr_products", JSON.stringify(productsDatabase));
+      await saveGlobalData("produtos", productsDatabase);
+    }
+
+    async function saveBannersGlobal() {
+      localStorage.setItem("jr_slides", JSON.stringify(slidesDatabase));
+      await saveGlobalData("banners", slidesDatabase);
+    }
+
+    /* ================= CARROSSEL ================= */
+
+    function renderSlider() {
+      const track = document.getElementById("slide-track");
+      const dots = document.getElementById("slide-dots");
+
+      track.innerHTML = "";
+      dots.innerHTML = "";
+
+      if (!slidesDatabase.length) {
+        track.innerHTML = `
+          <div class="slide-item">
+            <div class="slide-overlay"></div>
+            <div class="slide-content">
+              <h2>JR Cosméticos</h2>
+              <p>Produtos profissionais para salão.</p>
+            </div>
+          </div>
+        `;
+        return;
+      }
+
+      slidesDatabase.forEach((slide, index) => {
+        const item = document.createElement("div");
+        item.className = "slide-item";
+        item.innerHTML = `
+          <img src="${escapeHTML(slide.image)}" alt="${escapeHTML(slide.title)}">
+          <div class="slide-overlay"></div>
+          <div class="slide-content">
+            <h2>${escapeHTML(slide.title)}</h2>
+            <p>${escapeHTML(slide.desc)}</p>
+            <div class="slide-slogan">${escapeHTML(slide.slogan)}</div>
+          </div>
+        `;
+        track.appendChild(item);
+
+        const dot = document.createElement("button");
+        dot.className = `dot ${index === 0 ? "active" : ""}`;
+        dot.setAttribute("aria-label", `Ir para banner ${index + 1}`);
+        dot.onclick = () => currentSlide(index);
+        dots.appendChild(dot);
+      });
+
+      showSlide(slideIndex);
+    }
+
+    function showSlide(index) {
+      if (!slidesDatabase.length) return;
+
+      if (index >= slidesDatabase.length) slideIndex = 0;
+      else if (index < 0) slideIndex = slidesDatabase.length - 1;
+      else slideIndex = index;
+
+      document.getElementById("slide-track").style.transform = `translateX(-${slideIndex * 100}%)`;
+
+      document.querySelectorAll(".dot").forEach((dot, i) => {
+        dot.classList.toggle("active", i === slideIndex);
+      });
+    }
+
+    function currentSlide(index) {
+      slideIndex = index;
+      showSlide(index);
+    }
+
+    function startSlider() {
+      clearInterval(slideInterval);
+      slideInterval = setInterval(() => showSlide(slideIndex + 1), 5000);
+    }
+
+    /* ================= CATÁLOGO ================= */
+
+    function renderProducts(category = "todos") {
+      const grid = document.getElementById("products-grid");
+      const filtered = category === "todos"
+        ? productsDatabase
+        : productsDatabase.filter(product => product.category === category);
+
+      document.getElementById("product-count-label").textContent = `${filtered.length} produtos`;
+      grid.innerHTML = "";
+
+      if (!filtered.length) {
+        grid.innerHTML = `<p style="grid-column:1/-1;color:var(--muted);text-align:center;padding:30px">Nenhum produto encontrado nesta categoria.</p>`;
+        return;
+      }
+
+      filtered.forEach(product => {
+        const added = !!cart[product.id];
+
+        const card = document.createElement("div");
+        card.className = "product-card";
+
+        card.onclick = event => {
+          if (!event.target.closest(".btn-add-cart")) {
+            openImageModal(product.id);
+          }
+        };
+
+        card.innerHTML = `
+          <div class="product-image-box">
+            <span class="product-tag">${escapeHTML(product.tag)}</span>
+            <img src="${escapeHTML(product.image)}" alt="${escapeHTML(product.name)}" loading="lazy">
+          </div>
+
+          <div class="product-content">
+            <div>
+              <div class="product-category-mini">${escapeHTML(product.category)}</div>
+              <div class="product-name">${escapeHTML(product.name)}</div>
+              <div class="product-specs">${escapeHTML(product.specs)}</div>
+            </div>
+
+            <div class="product-footer">
+              <div class="product-price">R$ ${formatPrice(product.price)}</div>
+              <button class="btn-add-cart ${added ? "added" : ""}" onclick="addToCart(${product.id})">
+                ${added ? '<i class="fa-solid fa-check"></i> Adicionado' : '<i class="fa-solid fa-plus"></i> Adicionar'}
+              </button>
+            </div>
+          </div>
+        `;
+
+        grid.appendChild(card);
+      });
+    }
+
+    function filterCategory(category, button) {
+      currentCategory = category;
+      document.querySelectorAll(".cat-chip").forEach(item => item.classList.remove("active"));
+      button.classList.add("active");
+      renderProducts(category);
+    }
+
+    /* ================= ZOOM PRODUTO ================= */
+
+    function openImageModal(productId) {
+      const product = productsDatabase.find(item => item.id === productId);
+      if (!product) return;
+
+      document.getElementById("zoom-product-title").textContent = product.name;
+      document.getElementById("zoom-product-img").src = product.image;
+      document.getElementById("zoom-product-img").alt = product.name;
+      document.getElementById("zoom-product-specs").textContent = product.specs;
+      document.getElementById("zoom-product-price").textContent = `R$ ${formatPrice(product.price)}`;
+      document.getElementById("image-modal").style.display = "flex";
+    }
+
+    function closeImageModal() {
+      document.getElementById("image-modal").style.display = "none";
+    }
+
+    /* ================= CARRINHO ================= */
+
+    function addToCart(productId) {
+      if (cart[productId]) return;
+
+      const product = productsDatabase.find(item => item.id === productId);
+      if (!product) return;
+
+      cart[productId] = { ...product, qty: 1 };
+
+      updateCartUI();
+      renderProducts(currentCategory);
+      showToast("Produto adicionado ao carrinho!");
+
+      const counter = document.getElementById("cart-counter");
+      counter.style.transform = "scale(1.25)";
+      setTimeout(() => counter.style.transform = "scale(1)", 200);
+    }
+
+    function changeQty(productId, change) {
+      if (!cart[productId]) return;
+
+      cart[productId].qty += change;
+
+      if (cart[productId].qty <= 0) {
+        delete cart[productId];
+      }
+
+      updateCartUI();
+      renderProducts(currentCategory);
+    }
+
+    function updateCartUI() {
+      const list = document.getElementById("cart-items-list");
+      const keys = Object.keys(cart);
+
+      let total = 0;
+      let amount = 0;
+
+      list.innerHTML = "";
+
+      if (!keys.length) {
+        list.innerHTML = `
+          <div style="padding:30px 5px;text-align:center;color:var(--muted);font-size:12px;font-weight:700">
+            Seu carrinho está vazio. Escolha produtos no catálogo!
+          </div>
+        `;
+      }
+
+      keys.forEach(id => {
+        const item = cart[id];
+        const subtotal = item.price * item.qty;
+
+        total += item.qty;
+        amount += subtotal;
+
+        const row = document.createElement("div");
+        row.className = "cart-item-row";
+
+        row.innerHTML = `
+          <img class="cart-item-thumb" src="${escapeHTML(item.image)}" alt="${escapeHTML(item.name)}">
+          <div class="cart-item-info">
+            <h4>${escapeHTML(item.name)}</h4>
+            <span>R$ ${formatPrice(subtotal)}</span>
+          </div>
+          <div class="cart-item-controls">
+            <button class="qty-btn" onclick="changeQty(${item.id},-1)">−</button>
+            <span class="item-qty">${item.qty}</span>
+            <button class="qty-btn" onclick="changeQty(${item.id},1)">+</button>
+          </div>
+        `;
+
+        list.appendChild(row);
+      });
+
+      document.getElementById("cart-counter").textContent = total;
+      document.getElementById("cart-total-value").textContent = `R$ ${formatPrice(amount)}`;
+    }
+
+    function openCartModal() {
+      document.getElementById("cart-modal").style.display = "flex";
+    }
+
+    function closeCartModal() {
+      document.getElementById("cart-modal").style.display = "none";
+    }
+
+    function finalizeOrderWhatsApp() {
+      const keys = Object.keys(cart);
+
+      if (!keys.length) {
+        alert("Adicione pelo menos um produto ao carrinho antes de enviar o pedido.");
+        return;
+      }
+
+      let total = 0;
+      let message = "Olá! 👋 Gostaria de fechar o seguinte pedido na *JR Cosméticos*:\n\n";
+
+      keys.forEach(id => {
+        const item = cart[id];
+        const subtotal = item.price * item.qty;
+        total += subtotal;
+
+        message += `• ${item.qty}x ${item.name} - R$ ${formatPrice(subtotal)}\n`;
+      });
+
+      message += `\n*Total do Pedido: R$ ${formatPrice(total)}*\n\nAguardo orientações sobre pagamento e entrega.`;
+
+      window.open(
+        `https://wa.me/5563992204543?text=${encodeURIComponent(message)}`,
+        "_blank"
+      );
+    }
+
+    /* ================= UPLOAD DE IMAGEM ================= */
+
+    function convertFileToBase64(input, targetId) {
+      const file = input.files[0];
+      if (!file) return;
+
+      const reader = new FileReader();
+
+      reader.onload = event => {
+        const image = new Image();
+
+        image.onload = () => {
+          const maxSize = 800;
+          let width = image.width;
+          let height = image.height;
+
+          if (width > maxSize || height > maxSize) {
+            if (width > height) {
+              height = Math.round(height * (maxSize / width));
+              width = maxSize;
+            } else {
+              width = Math.round(width * (maxSize / height));
+              height = maxSize;
+            }
+          }
+
+          const canvas = document.createElement("canvas");
+          canvas.width = width;
+          canvas.height = height;
+
+          const context = canvas.getContext("2d");
+          context.drawImage(image, 0, 0, width, height);
+
+          document.getElementById(targetId).value = canvas.toDataURL("image/jpeg", 0.78);
+          showToast("Imagem carregada com sucesso!");
+        };
+
+        image.src = event.target.result;
+      };
+
+      reader.readAsDataURL(file);
+    }
+
+    /* ================= ADMIN ================= */
+
+    function openAdminModal() {
+      document.getElementById("admin-modal").style.display = "flex";
+    }
+
+    function closeAdminModal() {
+      document.getElementById("admin-modal").style.display = "none";
+    }
+
+    function verifyAdminLogin() {
+      const password = document.getElementById("admin-password-input").value;
+
+      if (password === "araujo18") {
+        document.getElementById("admin-login-screen").style.display = "none";
+        document.getElementById("admin-dashboard-screen").style.display = "flex";
+        renderAdminProductsList();
+        renderAdminBannersList();
+      } else {
+        alert("Senha incorreta!");
+      }
+    }
+
+    function logoutAdmin() {
+      document.getElementById("admin-password-input").value = "";
+      document.getElementById("admin-login-screen").style.display = "flex";
+      document.getElementById("admin-dashboard-screen").style.display = "none";
+    }
+
+    function switchAdminTab(tab) {
+      const productTab = tab === "products";
+
+      document.getElementById("admin-section-products").style.display = productTab ? "flex" : "none";
+      document.getElementById("admin-section-banners").style.display = productTab ? "none" : "flex";
+
+      document.getElementById("tab-btn-products").classList.toggle("active", productTab);
+      document.getElementById("tab-btn-banners").classList.toggle("active", !productTab);
+    }
+
+    /* ================= ADMIN - PRODUTOS ================= */
+
+    function renderAdminProductsList() {
+      const list = document.getElementById("admin-products-list");
+      list.innerHTML = "";
+
+      productsDatabase.forEach(product => {
+        const item = document.createElement("div");
+        item.className = "admin-item-row";
+
+        item.innerHTML = `
+          <span><b>${escapeHTML(product.name)}</b> — R$ ${formatPrice(product.price)}</span>
+          <button class="btn-action-icon edit" title="Editar" onclick="editProduct(${product.id})">
+            <i class="fa-solid fa-pen"></i>
+          </button>
+          <button class="btn-action-icon delete" title="Excluir" onclick="deleteProduct(${product.id})">
+            <i class="fa-solid fa-trash"></i>
+          </button>
+        `;
+
+        list.appendChild(item);
+      });
+    }
+
+    async function saveProduct() {
+      const id = Number(document.getElementById("edit-prod-id").value);
+      const name = document.getElementById("new-p-name").value.trim();
+      const category = document.getElementById("new-p-cat").value;
+      const specs = document.getElementById("new-p-specs").value.trim();
+      const price = Number(document.getElementById("new-p-price").value);
+      const image = document.getElementById("new-p-image").value.trim();
+
+      if (!name || !price || !image) {
+        alert("Preencha Nome, Preço e Imagem.");
+        return;
+      }
+
+      if (id) {
+        const index = productsDatabase.findIndex(product => product.id === id);
+
+        if (index !== -1) {
+          productsDatabase[index] = {
+            ...productsDatabase[index],
+            name,
+            category,
+            specs: specs || "Uso Profissional",
+            price,
+            image
+          };
+        }
+      } else {
+        const newId = productsDatabase.length
+          ? Math.max(...productsDatabase.map(product => product.id)) + 1
+          : 1;
+
+        productsDatabase.push({
+          id: newId,
+          name,
+          category,
+          specs: specs || "Uso Profissional",
+          price,
+          tag: "Novo",
+          image
+        });
+      }
+
+      try {
+        await saveProductsGlobal();
+        resetProductForm();
+        renderProducts(currentCategory);
+        renderAdminProductsList();
+        showToast("Produto publicado para todos os clientes!");
+      } catch (error) {
+        alert("Não foi possível salvar na planilha. Verifique sua conexão e tente novamente.");
+        console.error(error);
+      }
+    }
+
+    function editProduct(id) {
+      const product = productsDatabase.find(item => item.id === id);
+      if (!product) return;
+
+      document.getElementById("edit-prod-id").value = product.id;
+      document.getElementById("new-p-name").value = product.name;
+      document.getElementById("new-p-cat").value = product.category;
+      document.getElementById("new-p-specs").value = product.specs;
+      document.getElementById("new-p-price").value = product.price;
+      document.getElementById("new-p-image").value = product.image;
+      document.getElementById("prod-form-title").textContent = "Editar Produto";
+      document.getElementById("btn-cancel-prod-edit").style.display = "block";
+    }
+
+    function resetProductForm() {
+      document.getElementById("edit-prod-id").value = "";
+      document.getElementById("new-p-name").value = "";
+      document.getElementById("new-p-specs").value = "";
+      document.getElementById("new-p-price").value = "";
+      document.getElementById("new-p-image").value = "";
+      document.getElementById("new-p-file").value = "";
+      document.getElementById("prod-form-title").textContent = "Adicionar Novo Produto";
+      document.getElementById("btn-cancel-prod-edit").style.display = "none";
+    }
+
+    async function deleteProduct(id) {
+      if (!confirm("Deseja excluir este produto de todo o site?")) return;
+
+      productsDatabase = productsDatabase.filter(product => product.id !== id);
+      delete cart[id];
+
+      try {
+        await saveProductsGlobal();
+        renderProducts(currentCategory);
+        renderAdminProductsList();
+        updateCartUI();
+        showToast("Produto removido do site!");
+      } catch (error) {
+        alert("Não foi possível excluir da planilha. Tente novamente.");
+        console.error(error);
+      }
+    }
+
+    /* ================= ADMIN - BANNERS ================= */
+
+    function renderAdminBannersList() {
+      const list = document.getElementById("admin-banners-list");
+      list.innerHTML = "";
+
+      slidesDatabase.forEach(banner => {
+        const item = document.createElement("div");
+        item.className = "admin-item-row";
+
+        item.innerHTML = `
+          <span><b>${escapeHTML(banner.title)}</b></span>
+          <button class="btn-action-icon edit" title="Editar" onclick="editBanner(${banner.id})">
+            <i class="fa-solid fa-pen"></i>
+          </button>
+          <button class="btn-action-icon delete" title="Excluir" onclick="deleteBanner(${banner.id})">
+            <i class="fa-solid fa-trash"></i>
+          </button>
+        `;
+
+        list.appendChild(item);
+      });
+    }
+
+    async function saveBanner() {
+      const id = Number(document.getElementById("edit-banner-id").value);
+      const title = document.getElementById("new-b-title").value.trim();
+      const desc = document.getElementById("new-b-desc").value.trim();
+      const slogan = document.getElementById("new-b-slogan").value.trim();
+      const image = document.getElementById("new-b-image").value.trim();
+
+      if (!title || !image) {
+        alert("Preencha Título e Imagem.");
+        return;
+      }
+
+      if (id) {
+        const index = slidesDatabase.findIndex(banner => banner.id === id);
+
+        if (index !== -1) {
+          slidesDatabase[index] = {
+            ...slidesDatabase[index],
+            title,
+            desc,
+            slogan,
+            image
+          };
+        }
+      } else {
+        const newId = slidesDatabase.length
+          ? Math.max(...slidesDatabase.map(banner => banner.id)) + 1
+          : 1;
+
+        slidesDatabase.push({
+          id: newId,
+          title,
+          desc,
+          slogan,
+          image
+        });
+      }
+
+      try {
+        await saveBannersGlobal();
+        resetBannerForm();
+        renderSlider();
+        renderAdminBannersList();
+        showToast("Banner publicado para todos os clientes!");
+      } catch (error) {
+        alert("Não foi possível salvar o banner na planilha. Tente novamente.");
+        console.error(error);
+      }
+    }
+
+    function editBanner(id) {
+      const banner = slidesDatabase.find(item => item.id === id);
+      if (!banner) return;
+
+      document.getElementById("edit-banner-id").value = banner.id;
+      document.getElementById("new-b-title").value = banner.title;
+      document.getElementById("new-b-desc").value = banner.desc;
+      document.getElementById("new-b-slogan").value = banner.slogan;
+      document.getElementById("new-b-image").value = banner.image;
+      document.getElementById("banner-form-title").textContent = "Editar Banner";
+      document.getElementById("btn-cancel-banner-edit").style.display = "block";
+    }
+
+    function resetBannerForm() {
+      document.getElementById("edit-banner-id").value = "";
+      document.getElementById("new-b-title").value = "";
+      document.getElementById("new-b-desc").value = "";
+      document.getElementById("new-b-slogan").value = "";
+      document.getElementById("new-b-image").value = "";
+      document.getElementById("new-b-file").value = "";
+      document.getElementById("banner-form-title").textContent = "Adicionar Novo Banner";
+      document.getElementById("btn-cancel-banner-edit").style.display = "none";
+    }
+
+    async function deleteBanner(id) {
+      if (!confirm("Deseja excluir este banner de todo o site?")) return;
+
+      slidesDatabase = slidesDatabase.filter(banner => banner.id !== id);
+
+      try {
+        await saveBannersGlobal();
+        renderSlider();
+        renderAdminBannersList();
+        showToast("Banner removido do site!");
+      } catch (error) {
+        alert("Não foi possível excluir o banner da planilha. Tente novamente.");
+        console.error(error);
+      }
+    }
+
+    /* ================= INICIALIZAÇÃO ================= */
+
+    window.addEventListener("load", async () => {
+      renderProducts("todos");
+      renderSlider();
+      updateCartUI();
+      startSlider();
+
+      await loadCloudData();
+    });
+  </script>
 </body>
 </html>

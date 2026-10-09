@@ -766,7 +766,7 @@ const GAS_URL = 'https://script.google.com/macros/s/AKfycbwYJoTrgh-I4iOuM4ZP28rR
 /* --- REGISTRO DO SERVICE WORKER (PWA INSTALÁVEL) --- */
 if ('serviceWorker' in navigator) {
   const swCode = `
-    const CACHE_NAME = 'jr-cosmeticos-v40';
+    const CACHE_NAME = 'jr-cosmeticos-v50';
     self.addEventListener('install', e => {
       self.skipWaiting();
       e.waitUntil(caches.open(CACHE_NAME).then(c => c.addAll(['./'])));
@@ -830,17 +830,15 @@ let currentCategory = 'todos';
 let slideIndex = 0;
 let slideInterval;
 
-/* --- COMPRESSÃO ULTRA-COMPACTA DE IMAGENS COM TIMEOUT DE SEGURANÇA --- */
-function compressImageIfNeeded(imageSrc, maxDimension = 280, quality = 0.40) {
+/* --- COMPRESSÃO ULTRA-LEVE DE IMAGENS (220px / ~3KB POR FOTO) --- */
+function compressImageIfNeeded(imageSrc, maxDimension = 220, quality = 0.35) {
   if (!imageSrc) return Promise.resolve('');
   if (imageSrc.startsWith('http://') || imageSrc.startsWith('https://')) {
     return Promise.resolve(imageSrc);
   }
   
   return new Promise((resolve) => {
-    let timer = setTimeout(() => {
-      resolve(imageSrc); // Resolve em 2.5s se a imagem travar
-    }, 2500);
+    let timer = setTimeout(() => { resolve(imageSrc); }, 2000);
 
     const img = new Image();
     img.onload = () => {
@@ -915,7 +913,6 @@ async function loadCloudData() {
       else if (result.data && Array.isArray(result.data.banners)) fetchedBanners = result.data.banners;
     }
 
-    // Só substitui a memória local se a nuvem trouxer dados válidos
     if (Array.isArray(fetchedProducts) && fetchedProducts.length > 0) {
       productsDatabase = fetchedProducts;
       localStorage.setItem('jr_products', JSON.stringify(productsDatabase));
@@ -942,7 +939,6 @@ async function loadCloudData() {
 
 /* --- GRAVAÇÃO NA PLANILHA DO GOOGLE --- */
 async function saveCloudGlobal() {
-  // Salva no LocalStorage do celular IMEDIATAMENTE
   localStorage.setItem('jr_products', JSON.stringify(productsDatabase));
   localStorage.setItem('jr_slides', JSON.stringify(slidesDatabase));
 
@@ -1227,7 +1223,7 @@ function convertFileToBase64(fileInput, targetInputId) {
   if (file) {
     const reader = new FileReader();
     reader.onload = function (e) {
-      compressImageIfNeeded(e.target.result, 280, 0.40).then(compressedBase64 => {
+      compressImageIfNeeded(e.target.result, 220, 0.35).then(compressedBase64 => {
         document.getElementById(targetInputId).value = compressedBase64;
       });
     };
@@ -1299,7 +1295,7 @@ async function saveProduct() {
   btn.innerText = "Processando Imagem...";
   btn.disabled = true;
 
-  const image = await compressImageIfNeeded(rawImage, 280, 0.40);
+  const image = await compressImageIfNeeded(rawImage, 220, 0.35);
 
   if (id) {
     const index = productsDatabase.findIndex(p => p.id == id);
@@ -1311,7 +1307,6 @@ async function saveProduct() {
     productsDatabase.push({ id: newId, name, category, specs: specs || 'Uso Profissional', price, tag: 'Novo', image });
   }
 
-  // Atualização Visual Imediata no Aparelho do Admin
   renderProducts(currentCategory);
   renderAdminProductsList();
 
@@ -1395,7 +1390,7 @@ async function saveBanner() {
   btn.innerText = "Processando Imagem...";
   btn.disabled = true;
 
-  const image = await compressImageIfNeeded(rawImage, 280, 0.40);
+  const image = await compressImageIfNeeded(rawImage, 220, 0.35);
 
   if (id) {
     const index = slidesDatabase.findIndex(b => b.id == id);

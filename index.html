@@ -766,7 +766,7 @@ const GAS_URL = 'https://script.google.com/macros/s/AKfycbwYJoTrgh-I4iOuM4ZP28rR
 /* --- REGISTRO DO SERVICE WORKER (PWA INSTALÁVEL) --- */
 if ('serviceWorker' in navigator) {
   const swCode = `
-    const CACHE_NAME = 'jr-cosmeticos-v20';
+    const CACHE_NAME = 'jr-cosmeticos-v22';
     self.addEventListener('install', e => {
       self.skipWaiting();
       e.waitUntil(caches.open(CACHE_NAME).then(c => c.addAll(['./'])));
@@ -822,68 +822,75 @@ function showToast(message) {
   }, 2500);
 }
 
-/* --- ESTADO E MEMÓRIA DE ALTA CONFIABILIDADE --- */
+/* --- ESTADO E MEMÓRIA --- */
 let productsDatabase = JSON.parse(localStorage.getItem('jr_products')) || [];
 let slidesDatabase = JSON.parse(localStorage.getItem('jr_slides')) || [];
 let cart = {};
 let currentCategory = 'todos';
 let slideIndex = 0;
 let slideInterval;
-let isSyncing = false;
+let isSyncing = false; // Trava de salvamento
 
-/* --- COMPRESSÃO AGRESSIVA DE IMAGENS (CANVAS 350px / QUALIDADE 0.45) --- */
-async function compressImageIfNeeded(imageSrc, maxDimension = 350, quality = 0.45) {
-  if (!imageSrc) return '';
-  // Se for URL HTTP/HTTPS externa, mantém a string como está
+/* --- COMPRESSÃO DE IMAGENS TOTALMENTE SEGURA --- */
+function compressImageIfNeeded(imageSrc, maxDimension = 300, quality = 0.50) {
+  if (!imageSrc) return Promise.resolve('');
+  // Se for uma URL externa HTTP/HTTPS, não mexe
   if (imageSrc.startsWith('http://') || imageSrc.startsWith('https://')) {
-    return imageSrc;
+    return Promise.resolve(imageSrc);
   }
   
   return new Promise((resolve) => {
     const img = new Image();
-    img.crossOrigin = 'Anonymous';
+    // NUNCA ative crossOrigin em Data URIs (evita onerror em dispositivos móveis)
+    if (!imageSrc.startsWith('data:')) {
+      img.crossOrigin = 'Anonymous';
+    }
     img.onload = () => {
-      const canvas = document.createElement('canvas');
-      let width = img.width;
-      let height = img.height;
+      try {
+        const canvas = document.createElement('canvas');
+        let width = img.width;
+        let height = img.height;
 
-      // Redimensionamento estrito para máximo de 350px de largura/altura
-      if (width > maxDimension || height > maxDimension) {
-        if (width > height) {
-          height = Math.round((height * maxDimension) / width);
-          width = maxDimension;
-        } else {
-          width = Math.round((width * maxDimension) / height);
-          height = maxDimension;
+        if (width > maxDimension || height > maxDimension) {
+          if (width > height) {
+            height = Math.round((height * maxDimension) / width);
+            width = maxDimension;
+          } else {
+            width = Math.round((width * maxDimension) / height);
+            height = maxDimension;
+          }
         }
+
+        canvas.width = width;
+        canvas.height = height;
+        const ctx = canvas.getContext('2d');
+
+        ctx.fillStyle = '#FFFFFF';
+        ctx.fillRect(0, 0, width, height);
+        ctx.drawImage(img, 0, 0, width, height);
+
+        const compressed = canvas.toDataURL('image/jpeg', quality);
+        resolve(compressed);
+      } catch (e) {
+        resolve(imageSrc);
       }
-
-      canvas.width = width;
-      canvas.height = height;
-      const ctx = canvas.getContext('2d');
-
-      // Preenchimento de fundo branco para converter transparência PNG em JPEG leve
-      ctx.fillStyle = '#FFFFFF';
-      ctx.fillRect(0, 0, width, height);
-      ctx.drawImage(img, 0, 0, width, height);
-
-      // Gera Base64 ultraleve (entre 10KB e 18KB)
-      resolve(canvas.toDataURL('image/jpeg', quality));
     };
-    img.onerror = () => resolve(imageSrc); 
+    img.onerror = () => {
+      resolve(imageSrc);
+    };
     img.src = imageSrc;
   });
 }
 
-/* --- LEITURA BLINDADA EM TEMPO REAL DA PLANILHA DO GOOGLE --- */
+/* --- LEITURA COM MESCLAGEM INTELIGENTE (IMPOSSÍVEL APAGAR PRODUTOS) --- */
 async function loadCloudData() {
-  if (isSyncing) return; // Se houver salvamento em andamento, cancela a leitura para não sobrescrever o estado local
+  if (isSyncing) return; // Não realiza leitura enquanto estiver salvando
 
   const countLabel = document.getElementById('product-count-label');
   if (countLabel) countLabel.innerText = "Sincronizando com a nuvem...";
 
   try {
-    const res = await fetch(GAS_URL, { method: 'GET', redirect: 'follow' });
+    const res = await fetch(GAS_URL + '?t=' + Date.now(), { method: 'GET', redirect: 'follow' });
     if (!res.ok) throw new Error(`HTTP Error: ${res.status}`);
 
     const rawText = await res.text();
@@ -892,7 +899,7 @@ async function loadCloudData() {
     try {
       result = JSON.parse(rawText);
     } catch(errJson) {
-      throw new Error('Retorno inválido recebido da nuvem');
+      throw new Error('Resposta inválida do servidor');
     }
     
     let fetchedProducts = null;
@@ -907,19 +914,43 @@ async function loadCloudData() {
       else if (result.data && Array.isArray(result.data.banners)) fetchedBanners = result.data.banners;
     }
 
-    // TRAVA ANTI-PERDA: Só sobrescreve os dados locais se a nuvem trouxer um array VÁLIDO e NÃO VAZIO (a não ser que o local também esteja vazio)
+    const deletedProdSet = new Set(JSON.parse(localStorage.getItem('jr_deleted_products') || '[]'));
+    const deletedBannerSet = new Set(JSON.parse(localStorage.getItem('jr_deleted_banners') || '[]'));
+
+    // FUSÃO INTELIGENTE DE PRODUTOS: Combina os produtos da Nuvem com os Locais
     if (Array.isArray(fetchedProducts)) {
-      if (fetchedProducts.length > 0 || productsDatabase.length === 0) {
-        productsDatabase = fetchedProducts;
-        localStorage.setItem('jr_products', JSON.stringify(productsDatabase));
-      }
+      const prodMap = new Map();
+      // 1. Adiciona itens da nuvem que não foram excluídos
+      fetchedProducts.forEach(p => {
+        if (p && p.id && !deletedProdSet.has(String(p.id))) {
+          prodMap.set(String(p.id), p);
+        }
+      });
+      // 2. Preserva itens locais que ainda não subiram ou estão pendentes
+      productsDatabase.forEach(p => {
+        if (p && p.id && !deletedProdSet.has(String(p.id)) && !prodMap.has(String(p.id))) {
+          prodMap.set(String(p.id), p);
+        }
+      });
+      productsDatabase = Array.from(prodMap.values());
+      localStorage.setItem('jr_products', JSON.stringify(productsDatabase));
     }
 
+    // FUSÃO INTELIGENTE DE BANNERS
     if (Array.isArray(fetchedBanners)) {
-      if (fetchedBanners.length > 0 || slidesDatabase.length === 0) {
-        slidesDatabase = fetchedBanners;
-        localStorage.setItem('jr_slides', JSON.stringify(slidesDatabase));
-      }
+      const bannerMap = new Map();
+      fetchedBanners.forEach(b => {
+        if (b && b.id && !deletedBannerSet.has(String(b.id))) {
+          bannerMap.set(String(b.id), b);
+        }
+      });
+      slidesDatabase.forEach(b => {
+        if (b && b.id && !deletedBannerSet.has(String(b.id)) && !bannerMap.has(String(b.id))) {
+          bannerMap.set(String(b.id), b);
+        }
+      });
+      slidesDatabase = Array.from(bannerMap.values());
+      localStorage.setItem('jr_slides', JSON.stringify(slidesDatabase));
     }
 
     renderProducts(currentCategory);
@@ -928,7 +959,7 @@ async function loadCloudData() {
     renderAdminBannersList();
 
   } catch (e) {
-    console.warn('Falha na resposta da nuvem. Mantendo cópia local protegida:', e);
+    console.warn('Usando réplica de segurança do dispositivo:', e);
     renderProducts(currentCategory);
     renderSlider();
     renderAdminProductsList();
@@ -936,11 +967,11 @@ async function loadCloudData() {
   }
 }
 
-/* --- GRAVAÇÃO EM SEGUNDO PLANO NA PLANILHA DO GOOGLE --- */
+/* --- SALVAMENTO EM SEGUNDO PLANO --- */
 async function saveCloudGlobal() {
-  isSyncing = true; // Ativa trava de segurança contra consultas GET simultâneas
+  isSyncing = true; // Ativa trava de segurança
 
-  // LOCALSTORAGE FIRST: Dados são salvos localmente ANTES de qualquer tentativa na nuvem
+  // SALVAMENTO LOCAL IMEDIATO
   localStorage.setItem('jr_products', JSON.stringify(productsDatabase));
   localStorage.setItem('jr_slides', JSON.stringify(slidesDatabase));
 
@@ -959,10 +990,9 @@ async function saveCloudGlobal() {
     });
 
   } catch (e) {
-    console.error('Erro de conexão ao salvar na nuvem, porém salvo localmente com sucesso:', e);
+    console.error('Falha de conexão com a planilha, mantido no celular:', e);
   } finally {
-    // Mantém a trava por 3.5 segundos até que o Google Sheets processe o POST
-    setTimeout(() => { isSyncing = false; }, 3500);
+    setTimeout(() => { isSyncing = false; }, 4000);
   }
 }
 
@@ -1102,7 +1132,7 @@ function filterCategory(category, btnElement) {
 
 /* --- ZOOM DO PRODUTO (MODAL) --- */
 function openImageModal(productId) {
-  const prod = productsDatabase.find(p => p.id === productId);
+  const prod = productsDatabase.find(p => p.id == productId);
   if (!prod) return;
   document.getElementById('zoom-product-title').innerText = prod.name;
   document.getElementById('zoom-product-img').src = prod.image;
@@ -1123,7 +1153,7 @@ function toggleCart(productId, event) {
     delete cart[productId];
     showToast("Produto removido do carrinho!");
   } else {
-    const product = productsDatabase.find(p => p.id === productId);
+    const product = productsDatabase.find(p => p.id == productId);
     if (product) {
       cart[productId] = { ...product, qty: 1 };
       showToast("Produto adicionado ao carrinho!");
@@ -1180,10 +1210,10 @@ function updateCartUI() {
           <span>R$ ${(item.price * item.qty).toFixed(2).replace('.', ',')}</span>
         </div>
         <div class="cart-item-controls">
-          <button class="qty-btn" onclick="changeQty(${id}, -1)">-</button>
+          <button class="qty-btn" onclick="changeQty('${id}', -1)">-</button>
           <span class="item-qty">${item.qty}</span>
-          <button class="qty-btn" onclick="changeQty(${id}, 1)">+</button>
-          <button class="cart-remove-btn" onclick="removeFromCart(${id})" title="Remover item">
+          <button class="qty-btn" onclick="changeQty('${id}', 1)">+</button>
+          <button class="cart-remove-btn" onclick="removeFromCart('${id}')" title="Remover item">
             <i class="fa-solid fa-trash-can"></i>
           </button>
         </div>
@@ -1221,13 +1251,13 @@ function finalizeOrderWhatsApp() {
   window.open(`https://wa.me/${phoneNumber}?text=${encodeURIComponent(message)}`, '_blank');
 }
 
-/* --- CONVERSÃO E COMPRESSÃO DE FOTO DA GALERIA DO CELULAR --- */
+/* --- COMPRESSÃO AUTOMÁTICA DA GALERIA DO CELULAR --- */
 function convertFileToBase64(fileInput, targetInputId) {
   const file = fileInput.files[0];
   if (file) {
     const reader = new FileReader();
     reader.onload = function (e) {
-      compressImageIfNeeded(e.target.result, 350, 0.45).then(compressedBase64 => {
+      compressImageIfNeeded(e.target.result, 300, 0.50).then(compressedBase64 => {
         document.getElementById(targetInputId).value = compressedBase64;
       });
     };
@@ -1274,8 +1304,8 @@ function renderAdminProductsList() {
     row.innerHTML = `
       <span style="flex:1;"><b>${p.name}</b> - R$ ${Number(p.price).toFixed(2)}</span>
       <div class="admin-item-actions">
-        <button class="btn-action-icon edit" onclick="editProduct(${p.id})"><i class="fa-solid fa-pen"></i></button>
-        <button class="btn-action-icon delete" onclick="deleteProduct(${p.id})"><i class="fa-solid fa-trash"></i></button>
+        <button class="btn-action-icon edit" onclick="editProduct('${p.id}')"><i class="fa-solid fa-pen"></i></button>
+        <button class="btn-action-icon delete" onclick="deleteProduct('${p.id}')"><i class="fa-solid fa-trash"></i></button>
       </div>
     `;
     list.appendChild(row);
@@ -1285,22 +1315,22 @@ function renderAdminProductsList() {
 async function saveProduct() {
   const btn = document.getElementById('btn-save-product');
   const id = document.getElementById('edit-prod-id').value;
-  const name = document.getElementById('new-p-name').value;
+  const name = document.getElementById('new-p-name').value.trim();
   const category = document.getElementById('new-p-cat').value;
-  const specs = document.getElementById('new-p-specs').value;
+  const specs = document.getElementById('new-p-specs').value.trim();
   const price = parseFloat(document.getElementById('new-p-price').value);
-  const rawImage = document.getElementById('new-p-image').value;
+  const rawImage = document.getElementById('new-p-image').value.trim();
 
   if (!name || isNaN(price) || !rawImage) {
     alert('Preencha os campos obrigatórios (Nome, Preço e Imagem)!');
     return;
   }
 
-  btn.innerText = "Otimizando Foto...";
+  btn.innerText = "Otimizando Imagem...";
   btn.disabled = true;
 
-  // Compressão agressiva para garantir tamanho leve
-  const image = await compressImageIfNeeded(rawImage, 350, 0.45);
+  // Compacta a imagem com extrema segurança
+  const image = await compressImageIfNeeded(rawImage, 300, 0.50);
 
   if (id) {
     const index = productsDatabase.findIndex(p => p.id == id);
@@ -1308,16 +1338,24 @@ async function saveProduct() {
       productsDatabase[index] = { ...productsDatabase[index], name, category, specs: specs || 'Uso Profissional', price, image };
     }
   } else {
-    const newId = productsDatabase.length > 0 ? Math.max(...productsDatabase.map(p => p.id)) + 1 : 1;
+    // ID único baseado em Timestamp (impossível haver colisão)
+    const newId = Date.now();
     productsDatabase.push({ id: newId, name, category, specs: specs || 'Uso Profissional', price, tag: 'Novo', image });
   }
 
-  // PERSISTÊNCIA LOCAL IMEDIATA: Atualiza e renderiza antes do envio
+  // Se o item estava na lista de excluídos previamente, remove dele
+  if (id) {
+    const deletedSet = new Set(JSON.parse(localStorage.getItem('jr_deleted_products') || '[]'));
+    deletedSet.delete(String(id));
+    localStorage.setItem('jr_deleted_products', JSON.stringify(Array.from(deletedSet)));
+  }
+
+  // 1. SALVAMENTO E RENDERIZAÇÃO INSTANTÂNEA NO DISPOSITIVO
   localStorage.setItem('jr_products', JSON.stringify(productsDatabase));
   renderProducts(currentCategory);
   renderAdminProductsList();
 
-  // ENVIO EM SEGUNDO PLANO
+  // 2. SINCRONIZAÇÃO EM SEGUNDO PLANO COM O GOOGLE SHEETS
   btn.innerText = "Sincronizando na Nuvem...";
   await saveCloudGlobal();
 
@@ -1329,7 +1367,7 @@ async function saveProduct() {
 }
 
 function editProduct(id) {
-  const prod = productsDatabase.find(p => p.id === id);
+  const prod = productsDatabase.find(p => p.id == id);
   if (!prod) return;
   document.getElementById('edit-prod-id').value = prod.id;
   document.getElementById('new-p-name').value = prod.name;
@@ -1354,16 +1392,19 @@ function resetProductForm() {
 
 async function deleteProduct(id) {
   if (confirm('Tem certeza que deseja remover este produto da Planilha e do site?')) {
-    productsDatabase = productsDatabase.filter(p => p.id !== id);
+    // Registra ID na lista negra para evitar ressuscitar via GET
+    const deletedSet = new Set(JSON.parse(localStorage.getItem('jr_deleted_products') || '[]'));
+    deletedSet.add(String(id));
+    localStorage.setItem('jr_deleted_products', JSON.stringify(Array.from(deletedSet)));
+
+    productsDatabase = productsDatabase.filter(p => p.id != id);
     delete cart[id];
     
-    // Atualiza localmente imediatamente
     localStorage.setItem('jr_products', JSON.stringify(productsDatabase));
     renderProducts(currentCategory);
     renderAdminProductsList();
     updateCartUI();
 
-    // Sincroniza remoção na nuvem
     await saveCloudGlobal();
     showToast("Produto removido!");
   }
@@ -1379,8 +1420,8 @@ function renderAdminBannersList() {
     row.innerHTML = `
       <span style="flex:1;"><b>${b.title}</b></span>
       <div class="admin-item-actions">
-        <button class="btn-action-icon edit" onclick="editBanner(${b.id})"><i class="fa-solid fa-pen"></i></button>
-        <button class="btn-action-icon delete" onclick="deleteBanner(${b.id})"><i class="fa-solid fa-trash"></i></button>
+        <button class="btn-action-icon edit" onclick="editBanner('${b.id}')"><i class="fa-solid fa-pen"></i></button>
+        <button class="btn-action-icon delete" onclick="deleteBanner('${b.id}')"><i class="fa-solid fa-trash"></i></button>
       </div>
     `;
     list.appendChild(row);
@@ -1390,20 +1431,20 @@ function renderAdminBannersList() {
 async function saveBanner() {
   const btn = document.getElementById('btn-save-banner');
   const id = document.getElementById('edit-banner-id').value;
-  const title = document.getElementById('new-b-title').value;
-  const desc = document.getElementById('new-b-desc').value;
-  const slogan = document.getElementById('new-b-slogan').value;
-  const rawImage = document.getElementById('new-b-image').value;
+  const title = document.getElementById('new-b-title').value.trim();
+  const desc = document.getElementById('new-b-desc').value.trim();
+  const slogan = document.getElementById('new-b-slogan').value.trim();
+  const rawImage = document.getElementById('new-b-image').value.trim();
 
   if (!title || !rawImage) {
     alert('Preencha os campos obrigatórios (Título e Imagem)!');
     return;
   }
 
-  btn.innerText = "Otimizando Imagem do Banner...";
+  btn.innerText = "Otimizando Imagem...";
   btn.disabled = true;
 
-  const image = await compressImageIfNeeded(rawImage, 350, 0.45);
+  const image = await compressImageIfNeeded(rawImage, 300, 0.50);
 
   if (id) {
     const index = slidesDatabase.findIndex(b => b.id == id);
@@ -1411,11 +1452,16 @@ async function saveBanner() {
       slidesDatabase[index] = { ...slidesDatabase[index], title, desc, slogan, image };
     }
   } else {
-    const newId = slidesDatabase.length > 0 ? Math.max(...slidesDatabase.map(b => b.id)) + 1 : 1;
+    const newId = Date.now();
     slidesDatabase.push({ id: newId, title, desc, slogan, image });
   }
 
-  // Atualiza tela instantaneamente
+  if (id) {
+    const deletedSet = new Set(JSON.parse(localStorage.getItem('jr_deleted_banners') || '[]'));
+    deletedSet.delete(String(id));
+    localStorage.setItem('jr_deleted_banners', JSON.stringify(Array.from(deletedSet)));
+  }
+
   localStorage.setItem('jr_slides', JSON.stringify(slidesDatabase));
   renderSlider();
   renderAdminBannersList();
@@ -1431,7 +1477,7 @@ async function saveBanner() {
 }
 
 function editBanner(id) {
-  const banner = slidesDatabase.find(b => b.id === id);
+  const banner = slidesDatabase.find(b => b.id == id);
   if (!banner) return;
   document.getElementById('edit-banner-id').value = banner.id;
   document.getElementById('new-b-title').value = banner.title;
@@ -1455,7 +1501,11 @@ function resetBannerForm() {
 
 async function deleteBanner(id) {
   if (confirm('Tem certeza que deseja remover este banner do site?')) {
-    slidesDatabase = slidesDatabase.filter(b => b.id !== id);
+    const deletedSet = new Set(JSON.parse(localStorage.getItem('jr_deleted_banners') || '[]'));
+    deletedSet.add(String(id));
+    localStorage.setItem('jr_deleted_banners', JSON.stringify(Array.from(deletedSet)));
+
+    slidesDatabase = slidesDatabase.filter(b => b.id != id);
     localStorage.setItem('jr_slides', JSON.stringify(slidesDatabase));
     renderSlider();
     renderAdminBannersList();

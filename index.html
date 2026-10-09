@@ -766,7 +766,7 @@ const GAS_URL = 'https://script.google.com/macros/s/AKfycbwYJoTrgh-I4iOuM4ZP28rR
 /* --- REGISTRO DO SERVICE WORKER (PWA INSTALÁVEL) --- */
 if ('serviceWorker' in navigator) {
   const swCode = `
-    const CACHE_NAME = 'jr-cosmeticos-v15';
+    const CACHE_NAME = 'jr-cosmeticos-v16';
     self.addEventListener('install', e => {
       self.skipWaiting();
       e.waitUntil(caches.open(CACHE_NAME).then(c => c.addAll(['./'])));
@@ -829,11 +829,54 @@ let cart = {};
 let currentCategory = 'todos';
 let slideIndex = 0;
 let slideInterval;
-let isSyncing = false; // Trava para impedir leitura durante gravação
+let isSyncing = false; 
+
+/* --- FUNÇÃO DE COMPRESSÃO AUTOMÁTICA DE IMAGENS (CANVAS) --- */
+async function compressImageIfNeeded(imageSrc, maxDimension = 500, quality = 0.60) {
+  if (!imageSrc) return '';
+  // Se for uma URL tradicional da web (http/https), não precisa compactar
+  if (imageSrc.startsWith('http://') || imageSrc.startsWith('https://')) {
+    return imageSrc;
+  }
+  
+  return new Promise((resolve) => {
+    const img = new Image();
+    img.crossOrigin = 'Anonymous';
+    img.onload = () => {
+      const canvas = document.createElement('canvas');
+      let width = img.width;
+      let height = img.height;
+
+      if (width > maxDimension || height > maxDimension) {
+        if (width > height) {
+          height = Math.round((height * maxDimension) / width);
+          width = maxDimension;
+        } else {
+          width = Math.round((width * maxDimension) / height);
+          height = maxDimension;
+        }
+      }
+
+      canvas.width = width;
+      canvas.height = height;
+      const ctx = canvas.getContext('2d');
+
+      // Preenchimento de fundo branco para manter transparências PNG limpas
+      ctx.fillStyle = '#FFFFFF';
+      ctx.fillRect(0, 0, width, height);
+      ctx.drawImage(img, 0, 0, width, height);
+
+      // Converte para JPEG ultra-leve (~15KB)
+      resolve(canvas.toDataURL('image/jpeg', quality));
+    };
+    img.onerror = () => resolve(imageSrc); 
+    img.src = imageSrc;
+  });
+}
 
 /* --- LEITURA ESTÁVEL EM TEMPO REAL DA PLANILHA DO GOOGLE --- */
 async function loadCloudData() {
-  if (isSyncing) return; // Não lê enquanto estiver salvando
+  if (isSyncing) return; 
 
   const countLabel = document.getElementById('product-count-label');
   if (countLabel) countLabel.innerText = "Sincronizando com a nuvem...";
@@ -855,7 +898,6 @@ async function loadCloudData() {
         else if (result.data && Array.isArray(result.data.banners)) fetchedBanners = result.data.banners;
       }
 
-      // Atualiza banco de dados apenas com respostas válidas
       if (Array.isArray(fetchedProducts)) {
         productsDatabase = fetchedProducts;
         localStorage.setItem('jr_products', JSON.stringify(productsDatabase));
@@ -901,7 +943,7 @@ async function saveCloudGlobal() {
   } catch (e) {
     console.error('Erro na gravação remota:', e);
   } finally {
-    setTimeout(() => { isSyncing = false; }, 3000);
+    setTimeout(() => { isSyncing = false; }, 2500);
   }
 }
 
@@ -1160,39 +1202,15 @@ function finalizeOrderWhatsApp() {
   window.open(`https://wa.me/${phoneNumber}?text=${encodeURIComponent(message)}`, '_blank');
 }
 
-/* --- COMPRESSOR ULTRA-LEVE DE FOTOS DA GALERIA DO CELULAR --- */
+/* --- CONVERSÃO E COMPRESSÃO NO UPLOAD DA GALERIA --- */
 function convertFileToBase64(fileInput, targetInputId) {
   const file = fileInput.files[0];
   if (file) {
     const reader = new FileReader();
     reader.onload = function (e) {
-      const img = new Image();
-      img.onload = function() {
-        const canvas = document.createElement('canvas');
-        let width = img.width;
-        let height = img.height;
-        const max = 350; // Dimensão máxima leve para a planilha do Google
-
-        if (width > height) {
-          if (width > max) { height = Math.round((height * max) / width); width = max; }
-        } else {
-          if (height > max) { width = Math.round((width * max) / height); height = max; }
-        }
-
-        canvas.width = width;
-        canvas.height = height;
-        const ctx = canvas.getContext('2d');
-        
-        // Fundo branco caso a imagem PNG seja transparente
-        ctx.fillStyle = '#FFFFFF';
-        ctx.fillRect(0, 0, width, height);
-        
-        ctx.drawImage(img, 0, 0, width, height);
-        
-        // Compressão ultra-leve de 0.45 para economizar espaço no Google Sheets
-        document.getElementById(targetInputId).value = canvas.toDataURL('image/jpeg', 0.45);
-      };
-      img.src = e.target.result;
+      compressImageIfNeeded(e.target.result, 500, 0.60).then(compressedBase64 => {
+        document.getElementById(targetInputId).value = compressedBase64;
+      });
     };
     reader.readAsDataURL(file);
   }
@@ -1252,15 +1270,18 @@ async function saveProduct() {
   const category = document.getElementById('new-p-cat').value;
   const specs = document.getElementById('new-p-specs').value;
   const price = parseFloat(document.getElementById('new-p-price').value);
-  const image = document.getElementById('new-p-image').value;
+  const rawImage = document.getElementById('new-p-image').value;
 
-  if (!name || isNaN(price) || !image) {
+  if (!name || isNaN(price) || !rawImage) {
     alert('Preencha os campos obrigatórios (Nome, Preço e Imagem)!');
     return;
   }
 
-  btn.innerText = "Sincronizando na Nuvem...";
+  btn.innerText = "Optimizing Image & Saving...";
   btn.disabled = true;
+
+  // Garante a compressão ultra-leve antes de enviar para a nuvem
+  const image = await compressImageIfNeeded(rawImage, 500, 0.60);
 
   if (id) {
     const index = productsDatabase.findIndex(p => p.id == id);
@@ -1272,6 +1293,7 @@ async function saveProduct() {
     productsDatabase.push({ id: newId, name, category, specs: specs || 'Uso Profissional', price, tag: 'Novo', image });
   }
 
+  btn.innerText = "Sincronizando na Nuvem...";
   await saveCloudGlobal();
 
   btn.innerText = "Salvar e Publicar na Planilha";
@@ -1343,15 +1365,18 @@ async function saveBanner() {
   const title = document.getElementById('new-b-title').value;
   const desc = document.getElementById('new-b-desc').value;
   const slogan = document.getElementById('new-b-slogan').value;
-  const image = document.getElementById('new-b-image').value;
+  const rawImage = document.getElementById('new-b-image').value;
 
-  if (!title || !image) {
+  if (!title || !rawImage) {
     alert('Preencha os campos obrigatórios (Título e Imagem)!');
     return;
   }
 
-  btn.innerText = "Sincronizando Banner...";
+  btn.innerText = "Otimizando Imagem do Banner...";
   btn.disabled = true;
+
+  // Garante compressão para o banner também
+  const image = await compressImageIfNeeded(rawImage, 600, 0.60);
 
   if (id) {
     const index = slidesDatabase.findIndex(b => b.id == id);
@@ -1363,6 +1388,7 @@ async function saveBanner() {
     slidesDatabase.push({ id: newId, title, desc, slogan, image });
   }
 
+  btn.innerText = "Sincronizando Banner...";
   await saveCloudGlobal();
 
   btn.innerText = "Salvar e Publicar Banner";

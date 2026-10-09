@@ -763,21 +763,29 @@ footer .brand-sign { font-weight: 900; color: var(--gold-light); letter-spacing:
 /* --- ENDPOINT OFICIAL DO GOOGLE APPS SCRIPT --- */
 const GAS_URL = 'https://script.google.com/macros/s/AKfycbwYJoTrgh-I4iOuM4ZP28rR2m5de2zwP5dBF6j5zzgmNgKjiEkNEdIA6BBsU24clZJLeQ/exec';
 
-/* --- REGISTRO DO SERVICE WORKER (PWA) --- */
+/* --- REGISTRO DO SERVICE WORKER (PWA INSTALÁVEL) --- */
 if ('serviceWorker' in navigator) {
   const swCode = `
-    const CACHE_NAME = 'jr-cosmeticos-v58';
-    self.addEventListener('install', e => { self.skipWaiting(); });
-    self.addEventListener('activate', e => { e.waitUntil(clients.claim()); });
+    const CACHE_NAME = 'jr-cosmeticos-v50';
+    self.addEventListener('install', e => {
+      self.skipWaiting();
+      e.waitUntil(caches.open(CACHE_NAME).then(c => c.addAll(['./'])));
+    });
+    self.addEventListener('activate', e => {
+      e.waitUntil(clients.claim());
+    });
     self.addEventListener('fetch', e => {
       if (e.request.method !== 'GET') return;
-      e.respondWith(fetch(e.request).catch(() => caches.match(e.request)));
+      e.respondWith(
+        fetch(e.request).catch(() => caches.match(e.request))
+      );
     });
   `;
   const blob = new Blob([swCode], { type: 'application/javascript' });
-  navigator.serviceWorker.register(URL.createObjectURL(blob)).catch(err => console.log('SW:', err));
+  navigator.serviceWorker.register(URL.createObjectURL(blob)).catch(err => console.log('SW Registration:', err));
 }
 
+/* --- SUPORTE À INSTALAÇÃO DO PWA NO CELULAR --- */
 let deferredPrompt;
 window.addEventListener('beforeinstallprompt', (e) => {
   e.preventDefault();
@@ -790,7 +798,9 @@ function installPWA() {
   if (deferredPrompt) {
     deferredPrompt.prompt();
     deferredPrompt.userChoice.then((choiceResult) => {
-      if (choiceResult.outcome === 'accepted') showToast("Instalando aplicativo...");
+      if (choiceResult.outcome === 'accepted') {
+        showToast("Instalando aplicativo...");
+      }
       deferredPrompt = null;
       const installBtn = document.getElementById('pwa-install-btn');
       if (installBtn) installBtn.style.display = 'none';
@@ -798,6 +808,7 @@ function installPWA() {
   }
 }
 
+/* --- TOAST NOTIFICATIONS --- */
 function showToast(message) {
   const container = document.getElementById('toast-container');
   const toast = document.createElement('div');
@@ -811,16 +822,16 @@ function showToast(message) {
   }, 2500);
 }
 
-/* --- ESTADO E MEMÓRIA DA APLICAÇÃO --- */
-let productsDatabase = [];
-let slidesDatabase = [];
+/* --- MEMÓRIA DA APLICAÇÃO --- */
+let productsDatabase = JSON.parse(localStorage.getItem('jr_products')) || [];
+let slidesDatabase = JSON.parse(localStorage.getItem('jr_slides')) || [];
 let cart = {};
 let currentCategory = 'todos';
 let slideIndex = 0;
 let slideInterval;
 
-/* --- COMPRESSÃO ULTRA-LEVE DE IMAGENS --- */
-function compressImageIfNeeded(imageSrc, maxDimension = 180, quality = 0.25) {
+/* --- COMPRESSÃO ULTRA-LEVE DE IMAGENS (220px / ~3KB POR FOTO) --- */
+function compressImageIfNeeded(imageSrc, maxDimension = 220, quality = 0.35) {
   if (!imageSrc) return Promise.resolve('');
   if (imageSrc.startsWith('http://') || imageSrc.startsWith('https://')) {
     return Promise.resolve(imageSrc);
@@ -828,6 +839,7 @@ function compressImageIfNeeded(imageSrc, maxDimension = 180, quality = 0.25) {
   
   return new Promise((resolve) => {
     let timer = setTimeout(() => { resolve(imageSrc); }, 2000);
+
     const img = new Image();
     img.onload = () => {
       clearTimeout(timer);
@@ -849,9 +861,11 @@ function compressImageIfNeeded(imageSrc, maxDimension = 180, quality = 0.25) {
         canvas.width = width;
         canvas.height = height;
         const ctx = canvas.getContext('2d');
+
         ctx.fillStyle = '#FFFFFF';
         ctx.fillRect(0, 0, width, height);
         ctx.drawImage(img, 0, 0, width, height);
+
         resolve(canvas.toDataURL('image/jpeg', quality));
       } catch (e) {
         resolve(imageSrc);
@@ -865,10 +879,10 @@ function compressImageIfNeeded(imageSrc, maxDimension = 180, quality = 0.25) {
   });
 }
 
-/* --- CARREGAMENTO DIRETO DA PLANILHA DO GOOGLE --- */
+/* --- LEITURA HÍBRIDA DA NUVEM DO GOOGLE --- */
 async function loadCloudData() {
   const countLabel = document.getElementById('product-count-label');
-  if (countLabel) countLabel.innerText = "Sincronizando com a nuvem Google...";
+  if (countLabel) countLabel.innerText = "Sincronizando com a nuvem...";
 
   try {
     const res = await fetch(GAS_URL + '?v=' + Date.now(), { 
@@ -876,13 +890,19 @@ async function loadCloudData() {
       redirect: 'follow' 
     });
 
-    if (!res.ok) throw new Error('Erro ao conectar na nuvem');
+    if (!res.ok) throw new Error(`HTTP Error: ${res.status}`);
 
     const rawText = await res.text();
-    const result = JSON.parse(rawText);
+    let result = null;
+
+    try {
+      result = JSON.parse(rawText);
+    } catch(errJson) {
+      throw new Error('Servidor retornou resposta inválida');
+    }
     
-    let fetchedProducts = [];
-    let fetchedBanners = [];
+    let fetchedProducts = null;
+    let fetchedBanners = null;
 
     if (result) {
       if (Array.isArray(result.products)) fetchedProducts = result.products;
@@ -893,8 +913,15 @@ async function loadCloudData() {
       else if (result.data && Array.isArray(result.data.banners)) fetchedBanners = result.data.banners;
     }
 
-    if (fetchedProducts.length > 0) productsDatabase = fetchedProducts;
-    if (fetchedBanners.length > 0) slidesDatabase = fetchedBanners;
+    if (Array.isArray(fetchedProducts) && fetchedProducts.length > 0) {
+      productsDatabase = fetchedProducts;
+      localStorage.setItem('jr_products', JSON.stringify(productsDatabase));
+    }
+
+    if (Array.isArray(fetchedBanners) && fetchedBanners.length > 0) {
+      slidesDatabase = fetchedBanners;
+      localStorage.setItem('jr_slides', JSON.stringify(slidesDatabase));
+    }
 
     renderProducts(currentCategory);
     renderSlider();
@@ -902,13 +929,19 @@ async function loadCloudData() {
     renderAdminBannersList();
 
   } catch (e) {
-    console.error('Erro ao buscar dados da planilha:', e);
-    if (countLabel) countLabel.innerText = "Erro ao sincronizar com a nuvem.";
+    console.warn('Mantendo dados locais do dispositivo:', e);
+    renderProducts(currentCategory);
+    renderSlider();
+    renderAdminProductsList();
+    renderAdminBannersList();
   }
 }
 
-/* --- SALVAMENTO ROBUSTO NA PLANILHA DO GOOGLE --- */
+/* --- GRAVAÇÃO NA PLANILHA DO GOOGLE --- */
 async function saveCloudGlobal() {
+  localStorage.setItem('jr_products', JSON.stringify(productsDatabase));
+  localStorage.setItem('jr_slides', JSON.stringify(slidesDatabase));
+
   const payload = {
     action: 'saveAll',
     products: productsDatabase,
@@ -916,21 +949,16 @@ async function saveCloudGlobal() {
   };
 
   try {
-    const response = await fetch(GAS_URL, {
+    await fetch(GAS_URL, {
       method: 'POST',
       headers: { 'Content-Type': 'text/plain;charset=utf-8' },
       body: JSON.stringify(payload),
       redirect: 'follow'
     });
-    
-    if (response.ok) {
-      showToast("✨ Salvo permanentemente na Planilha!");
-    } else {
-      throw new Error('Falha no salvamento remoto');
-    }
+    showToast("✨ Publicado na nuvem!");
   } catch (e) {
-    console.error('Erro ao gravar na nuvem:', e);
-    alert('Erro ao sincronizar com a Planilha do Google.');
+    console.error('Erro de envio ao servidor Google:', e);
+    showToast("Salvo localmente no aparelho!");
   }
 }
 
@@ -938,8 +966,6 @@ async function saveCloudGlobal() {
 function renderSlider() {
   const track = document.getElementById('slide-track');
   const dotsContainer = document.getElementById('slide-dots');
-  if (!track || !dotsContainer) return;
-
   track.innerHTML = '';
   dotsContainer.innerHTML = '';
 
@@ -983,7 +1009,7 @@ function renderSlider() {
 function showSlide(index) {
   const track = document.getElementById('slide-track');
   const dots = document.querySelectorAll('.dot');
-  if (!track || slidesDatabase.length === 0) return;
+  if (slidesDatabase.length === 0) return;
 
   if (index >= slidesDatabase.length) slideIndex = 0;
   else if (index < 0) slideIndex = slidesDatabase.length - 1;
@@ -1013,13 +1039,12 @@ function startSliderInterval() {
 /* --- RENDERIZAÇÃO DA VITRINE DE PRODUTOS --- */
 function renderProducts(category = 'todos') {
   const grid = document.getElementById('products-grid');
-  if (!grid) return;
   grid.innerHTML = '';
 
   const filtered = category === 'todos' ? productsDatabase : productsDatabase.filter(p => p.category === category);
   
   const label = document.getElementById('product-count-label');
-  if (label) label.innerText = `${filtered.length} produto(s) na nuvem`;
+  if (label) label.innerText = `${filtered.length} produto(s) no catálogo`;
 
   if (filtered.length === 0) {
     grid.innerHTML = `
@@ -1086,7 +1111,7 @@ function closeImageModal() {
   document.getElementById('image-modal').style.display = 'none';
 }
 
-/* --- TOGGLE CARRINHO --- */
+/* --- ALTERNAR (TOGGLE) ADICIONAR / REMOVER DO CARRINHO --- */
 function toggleCart(productId, event) {
   if (event) event.stopPropagation();
 
@@ -1108,6 +1133,7 @@ function toggleCart(productId, event) {
   setTimeout(() => cartCounter.style.transform = 'scale(1)', 200);
 }
 
+/* --- REMOVER ITEM INDIVIDUAL DO CARRINHO --- */
 function removeFromCart(productId) {
   if (cart[productId]) {
     delete cart[productId];
@@ -1187,7 +1213,8 @@ function finalizeOrderWhatsApp() {
   });
 
   message += `\n*Total do Pedido: R$ ${totalSum.toFixed(2).replace('.', ',')}*\n\nAguardo orientações sobre pagamento e entrega para o salão.`;
-  window.open(`https://wa.me/5563992204543?text=${encodeURIComponent(message)}`, '_blank');
+  const phoneNumber = "5563992204543";
+  window.open(`https://wa.me/${phoneNumber}?text=${encodeURIComponent(message)}`, '_blank');
 }
 
 /* --- CONVERSÃO E COMPRESSÃO DA GALERIA --- */
@@ -1196,7 +1223,7 @@ function convertFileToBase64(fileInput, targetInputId) {
   if (file) {
     const reader = new FileReader();
     reader.onload = function (e) {
-      compressImageIfNeeded(e.target.result, 180, 0.25).then(compressedBase64 => {
+      compressImageIfNeeded(e.target.result, 220, 0.35).then(compressedBase64 => {
         document.getElementById(targetInputId).value = compressedBase64;
       });
     };
@@ -1236,7 +1263,6 @@ function switchAdminTab(tab) {
 /* --- CRUD PRODUTOS ADMIN --- */
 function renderAdminProductsList() {
   const list = document.getElementById('admin-products-list');
-  if (!list) return;
   list.innerHTML = '';
   productsDatabase.forEach(p => {
     const row = document.createElement('div');
@@ -1269,7 +1295,7 @@ async function saveProduct() {
   btn.innerText = "Processando Imagem...";
   btn.disabled = true;
 
-  const image = await compressImageIfNeeded(rawImage, 180, 0.25);
+  const image = await compressImageIfNeeded(rawImage, 220, 0.35);
 
   if (id) {
     const index = productsDatabase.findIndex(p => p.id == id);
@@ -1277,15 +1303,14 @@ async function saveProduct() {
       productsDatabase[index] = { ...productsDatabase[index], name, category, specs: specs || 'Uso Profissional', price, image };
     }
   } else {
-    const newId = 'p_' + Date.now();
+    const newId = Date.now();
     productsDatabase.push({ id: newId, name, category, specs: specs || 'Uso Profissional', price, tag: 'Novo', image });
   }
 
-  // Atualiza imediatamente a tela local para exibição instantânea
   renderProducts(currentCategory);
   renderAdminProductsList();
 
-  btn.innerText = "Enviando para a Planilha Google...";
+  btn.innerText = "Enviando para a Nuvem...";
   await saveCloudGlobal();
 
   btn.innerText = "Salvar e Publicar na Nuvem";
@@ -1319,11 +1344,14 @@ function resetProductForm() {
 }
 
 async function deleteProduct(id) {
-  if (confirm('Tem certeza que deseja remover este produto da Planilha?')) {
+  if (confirm('Tem certeza que deseja remover este produto da Nuvem Google?')) {
     productsDatabase = productsDatabase.filter(p => p.id != id);
     delete cart[id];
+    
     renderProducts(currentCategory);
     renderAdminProductsList();
+    updateCartUI();
+
     await saveCloudGlobal();
   }
 }
@@ -1331,7 +1359,6 @@ async function deleteProduct(id) {
 /* --- CRUD BANNERS ADMIN --- */
 function renderAdminBannersList() {
   const list = document.getElementById('admin-banners-list');
-  if (!list) return;
   list.innerHTML = '';
   slidesDatabase.forEach(b => {
     const row = document.createElement('div');
@@ -1363,7 +1390,7 @@ async function saveBanner() {
   btn.innerText = "Processando Imagem...";
   btn.disabled = true;
 
-  const image = await compressImageIfNeeded(rawImage, 180, 0.25);
+  const image = await compressImageIfNeeded(rawImage, 220, 0.35);
 
   if (id) {
     const index = slidesDatabase.findIndex(b => b.id == id);
@@ -1371,15 +1398,14 @@ async function saveBanner() {
       slidesDatabase[index] = { ...slidesDatabase[index], title, desc, slogan, image };
     }
   } else {
-    const newId = 'b_' + Date.now();
+    const newId = Date.now();
     slidesDatabase.push({ id: newId, title, desc, slogan, image });
   }
 
-  // Atualiza imediatamente o slider local
   renderSlider();
   renderAdminBannersList();
 
-  btn.innerText = "Enviando Banner para a Planilha...";
+  btn.innerText = "Enviando para a Nuvem...";
   await saveCloudGlobal();
 
   btn.innerText = "Salvar e Publicar Banner";
@@ -1412,17 +1438,20 @@ function resetBannerForm() {
 }
 
 async function deleteBanner(id) {
-  if (confirm('Tem certeza que deseja remover este banner da Planilha?')) {
+  if (confirm('Tem certeza que deseja remover este banner da Nuvem Google?')) {
     slidesDatabase = slidesDatabase.filter(b => b.id != id);
     renderSlider();
     renderAdminBannersList();
+
     await saveCloudGlobal();
   }
 }
 
-/* --- INICIALIZAÇÃO NA NUVEM --- */
+/* --- INICIALIZAÇÃO OBRIGATÓRIA DA NUVEM --- */
 window.onload = async () => {
   startSliderInterval();
+  renderSlider();
+  renderProducts('todos');
   await loadCloudData();
 };
 </script>

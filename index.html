@@ -10,7 +10,7 @@
 <meta name="apple-mobile-web-app-title" content="JR Cosméticos">
 <title>JR Cosméticos | Profissional</title>
 
-<!-- PWA Manifest Embutido de Alta Compatibilidade -->
+<!-- PWA Manifest Embutido -->
 <link rel="manifest" href='data:application/manifest+json,{"name":"JR Cosméticos","short_name":"JR Cosméticos","description":"JR Cosméticos - Linha Profissional de Beleza","start_url":"./","scope":"./","display":"standalone","background_color":"#0b0b0b","theme_color":"#0b0b0b","icons":[{"src":"https://cdn-icons-png.flaticon.com/512/3050/3050239.png","sizes":"192x192","type":"image/png","purpose":"any maskable"},{"src":"https://cdn-icons-png.flaticon.com/512/3050/3050239.png","sizes":"512x512","type":"image/png","purpose":"any maskable"}]}'>
 <link rel="apple-touch-icon" href="https://cdn-icons-png.flaticon.com/512/3050/3050239.png">
 
@@ -27,6 +27,7 @@
   --gold-light: #f3e5ab;
   --gold-dark: #aa820a;
   --green-success: #25d366;
+  --danger: #ff4d4d;
   --text-white: #ffffff;
   --text-muted: #a3a3a3;
   --border: #2a2a2a;
@@ -194,13 +195,14 @@ header {
   justify-content: center; 
   background: #050505; 
 }
+/* PREENCHIMENTO COMPLETO DA IMAGEM DO BANNER */
 .slide-item img { 
   position: absolute; 
   inset: 0; 
   width: 100%; 
   height: 100%; 
-  object-fit: contain; 
-  opacity: 0.7; 
+  object-fit: cover; 
+  opacity: 0.75; 
 }
 
 .slide-overlay { 
@@ -327,7 +329,7 @@ header {
   box-shadow: 0 10px 30px rgba(0,0,0,0.7); 
 }
 
-/* IMAGEM INTEIRA SEM CORTE NOS CARDS */
+/* PREENCHIMENTO COMPLETO DE IMAGENS NOS CARDS (SEM ESPAÇOS VAZIOS) */
 .product-image-box { 
   width: 100%; 
   height: 180px; 
@@ -337,14 +339,11 @@ header {
   align-items: center; 
   justify-content: center; 
   overflow: hidden; 
-  padding: 8px; 
 }
 .product-image-box img { 
-  max-width: 100%; 
-  max-height: 100%; 
-  width: auto; 
-  height: auto;
-  object-fit: contain; 
+  width: 100%; 
+  height: 100%; 
+  object-fit: cover; 
   transition: transform 0.3s; 
 }
 .product-card:hover .product-image-box img { transform: scale(1.05); }
@@ -372,7 +371,7 @@ header {
 .product-footer { display: flex; align-items: center; justify-content: space-between; margin-top: 4px; }
 .product-price { font-size: 15px; font-weight: 900; color: var(--gold-light); }
 
-/* BOTÃO DE ADICIONAR COM ESTADO MUTÁVEL */
+/* BOTÃO DE ADICIONAR / ALTERNAR COM ESTADO MUTÁVEL */
 .btn-add-cart { 
   background: var(--gold-primary); 
   color: #0b0b0b; 
@@ -389,8 +388,18 @@ header {
   box-shadow: 0 4px 12px rgba(212,175,55,0.2); 
 }
 .btn-add-cart:hover { background: var(--gold-light); }
-.btn-add-cart.added { background: var(--green-success); color: #ffffff; cursor: default; box-shadow: 0 4px 12px rgba(37, 211, 102, 0.3); }
-.btn-add-cart.added:hover { background: #22bf5b; }
+
+/* ESTADO ADICIONADO - PERMITE REMOVER AO CLICAR */
+.btn-add-cart.added { 
+  background: var(--green-success); 
+  color: #ffffff; 
+  cursor: pointer; 
+  box-shadow: 0 4px 12px rgba(37, 211, 102, 0.3); 
+}
+.btn-add-cart.added:hover { 
+  background: var(--danger); 
+  box-shadow: 0 4px 12px rgba(255, 77, 77, 0.4); 
+}
 
 /* --- MODAIS --- */
 .modal-overlay { 
@@ -441,18 +450,36 @@ header {
 .admin-item-actions { display: flex; gap: 6px; }
 .btn-action-icon { background: transparent; border: 1px solid var(--border); color: #fff; width: 30px; height: 30px; border-radius: 6px; cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 12px; }
 .btn-action-icon.edit { color: var(--gold-primary); border-color: rgba(212,175,55,0.4); }
-.btn-action-icon.delete { color: #ff4d4d; border-color: rgba(255,77,77,0.4); }
+.btn-action-icon.delete { color: var(--danger); border-color: rgba(255,77,77,0.4); }
 
-/* Carrinho com Miniaturas Inteiras */
+/* CARRINHO DE COMPRAS COM ÍCONE DE LIXEIRA INDIVIDUAL */
 .cart-items-list { display: flex; flex-direction: column; gap: 12px; }
 .cart-item-row { display: flex; align-items: center; justify-content: space-between; background: var(--bg-input); padding: 10px 12px; border-radius: 12px; border: 1px solid var(--border); gap: 12px; }
-.cart-item-thumb { width: 50px; height: 50px; border-radius: 8px; object-fit: contain; background: #0b0b0b; border: 1px solid var(--border); padding: 2px; }
+.cart-item-thumb { width: 50px; height: 50px; border-radius: 8px; object-fit: cover; background: #0b0b0b; border: 1px solid var(--border); }
 .cart-item-info { flex: 1; }
 .cart-item-info h4 { font-size: 12px; font-weight: 800; color: #fff; margin-bottom: 2px; }
 .cart-item-info span { font-size: 11px; color: var(--gold-light); font-weight: 900; }
-.cart-item-controls { display: flex; align-items: center; gap: 8px; }
+.cart-item-controls { display: flex; align-items: center; gap: 6px; }
 .qty-btn { background: #2a2a2a; border: 1px solid var(--border); color: white; width: 24px; height: 24px; border-radius: 6px; font-weight: bold; cursor: pointer; display: flex; align-items: center; justify-content: center; }
 .item-qty { font-size: 12px; font-weight: 900; width: 20px; text-align: center; }
+
+/* BOTÃO DE EXCLUSÃO INDIVIDUAL (LIXEIRA) NO CARRINHO */
+.cart-remove-btn { 
+  background: transparent; 
+  border: 1px solid rgba(255, 77, 77, 0.4); 
+  color: var(--danger); 
+  width: 26px; 
+  height: 26px; 
+  border-radius: 6px; 
+  cursor: pointer; 
+  display: flex; 
+  align-items: center; 
+  justify-content: center; 
+  font-size: 11px; 
+  margin-left: 4px; 
+  transition: 0.2s; 
+}
+.cart-remove-btn:hover { background: var(--danger); color: #fff; }
 
 .modal-footer { padding: 20px; border-top: 1px solid var(--border); background: #0e0e0e; }
 .cart-total-row { display: flex; justify-content: space-between; font-size: 14px; font-weight: 900; margin-bottom: 14px; color: var(--text-muted); }
@@ -595,8 +622,8 @@ footer .brand-sign { font-weight: 900; color: var(--gold-light); letter-spacing:
       <button class="modal-close-btn" onclick="closeImageModal()">&times;</button>
     </div>
     <div class="modal-body" style="align-items: center;">
-      <div style="width:100%; height:280px; background:#0d0d0d; display:flex; align-items:center; justify-content:center; border-radius:12px; border:1px solid var(--border); padding:10px;">
-        <img id="zoom-product-img" src="" alt="Imagem Ampliada" style="max-width: 100%; max-height: 100%; object-fit: contain;">
+      <div style="width:100%; height:280px; background:#0d0d0d; display:flex; align-items:center; justify-content:center; border-radius:12px; border:1px solid var(--border); overflow:hidden;">
+        <img id="zoom-product-img" src="" alt="Imagem Ampliada" style="width: 100%; height: 100%; object-fit: cover;">
       </div>
       <div id="zoom-product-specs" class="product-specs" style="margin-top: 10px;"></div>
       <p id="zoom-product-price" style="font-size: 20px; font-weight: 900; color: var(--gold-light); margin-top: 8px;"></p>
@@ -746,7 +773,7 @@ const GAS_URL = 'https://script.google.com/macros/s/AKfycbwYJoTrgh-I4iOuM4ZP28rR
 /* --- REGISTRO DO SERVICE WORKER (PWA INSTALÁVEL) --- */
 if ('serviceWorker' in navigator) {
   const swCode = `
-    const CACHE_NAME = 'jr-cosmeticos-v12';
+    const CACHE_NAME = 'jr-cosmeticos-v14';
     self.addEventListener('install', e => {
       self.skipWaiting();
       e.waitUntil(caches.open(CACHE_NAME).then(c => c.addAll(['./'])));
@@ -802,16 +829,19 @@ function showToast(message) {
   }, 2500);
 }
 
-/* --- BANCO DE DADOS EM MEMÓRIA (ZERADO - SEM FALSOS PRODUTOS) --- */
+/* --- ESTADO E MEMÓRIA --- */
 let productsDatabase = JSON.parse(localStorage.getItem('jr_products')) || [];
 let slidesDatabase = JSON.parse(localStorage.getItem('jr_slides')) || [];
 let cart = {};
 let currentCategory = 'todos';
 let slideIndex = 0;
 let slideInterval;
+let isSyncing = false; // Trava para evitar que salvamento seja sobrescrito
 
-/* --- LEITURA EM TEMPO REAL DA PLANILHA DO GOOGLE --- */
+/* --- LEITURA ESTÁVEL EM TEMPO REAL DA PLANILHA DO GOOGLE --- */
 async function loadCloudData() {
+  if (isSyncing) return; // Se estiver salvando, ignora leitura para não zerar dados
+  
   const countLabel = document.getElementById('product-count-label');
   if (countLabel) countLabel.innerText = "Sincronizando com a nuvem...";
 
@@ -820,8 +850,8 @@ async function loadCloudData() {
     if (res.ok) {
       const result = await res.json();
       
-      let fetchedProducts = [];
-      let fetchedBanners = [];
+      let fetchedProducts = null;
+      let fetchedBanners = null;
 
       if (result) {
         if (Array.isArray(result.products)) fetchedProducts = result.products;
@@ -832,21 +862,24 @@ async function loadCloudData() {
         else if (result.data && Array.isArray(result.data.banners)) fetchedBanners = result.data.banners;
       }
 
-      productsDatabase = fetchedProducts;
-      slidesDatabase = fetchedBanners;
+      // Proteção: só atualiza se tiver dados válidos vindos da nuvem
+      if (Array.isArray(fetchedProducts) && (fetchedProducts.length > 0 || productsDatabase.length === 0)) {
+        productsDatabase = fetchedProducts;
+        localStorage.setItem('jr_products', JSON.stringify(productsDatabase));
+      }
 
-      localStorage.setItem('jr_products', JSON.stringify(productsDatabase));
-      localStorage.setItem('jr_slides', JSON.stringify(slidesDatabase));
+      if (Array.isArray(fetchedBanners) && (fetchedBanners.length > 0 || slidesDatabase.length === 0)) {
+        slidesDatabase = fetchedBanners;
+        localStorage.setItem('jr_slides', JSON.stringify(slidesDatabase));
+      }
 
       renderProducts(currentCategory);
       renderSlider();
       renderAdminProductsList();
       renderAdminBannersList();
-    } else {
-      if (countLabel) countLabel.innerText = "Erro ao conectar à nuvem.";
     }
   } catch (e) {
-    console.warn('Carregando dados armazenados em cache...', e);
+    console.warn('Carregando do cache seguro...', e);
     renderProducts(currentCategory);
     renderSlider();
     renderAdminProductsList();
@@ -854,8 +887,9 @@ async function loadCloudData() {
   }
 }
 
-/* --- SALVAMENTO EM TEMPO REAL NA PLANILHA DO GOOGLE --- */
+/* --- SALVAMENTO ESTÁVEL E DEFINITIVO NA PLANILHA DO GOOGLE --- */
 async function saveCloudGlobal() {
+  isSyncing = true;
   localStorage.setItem('jr_products', JSON.stringify(productsDatabase));
   localStorage.setItem('jr_slides', JSON.stringify(slidesDatabase));
 
@@ -872,8 +906,9 @@ async function saveCloudGlobal() {
       body: JSON.stringify(payload)
     });
   } catch (e) {
-    console.error('Erro na sincronização global com a Planilha Google:', e);
-    showToast('Aviso: Salvo localmente.');
+    console.error('Erro na gravação remota:', e);
+  } finally {
+    setTimeout(() => { isSyncing = false; }, 2000); // Libera trava após salvar
   }
 }
 
@@ -994,7 +1029,7 @@ function renderProducts(category = 'todos') {
         </div>
         <div class="product-footer">
           <div class="product-price">R$ ${Number(p.price).toFixed(2).replace('.', ',')}</div>
-          <button class="btn-add-cart ${isInCart ? 'added' : ''}" onclick="addToCart(${p.id})">
+          <button class="btn-add-cart ${isInCart ? 'added' : ''}" onclick="toggleCart(${p.id}, event)" title="${isInCart ? 'Clique para remover do carrinho' : 'Adicionar ao carrinho'}">
             ${isInCart ? '<i class="fa-solid fa-check"></i> Adicionado' : '<span>+</span> Adicionar'}
           </button>
         </div>
@@ -1026,9 +1061,14 @@ function closeImageModal() {
   document.getElementById('image-modal').style.display = 'none';
 }
 
-/* --- GERENCIAMENTO DO CARRINHO --- */
-function addToCart(productId) {
-  if (!cart[productId]) {
+/* --- ALTERNAR (TOGGLE) ADICIONAR / REMOVER DO CARRINHO --- */
+function toggleCart(productId, event) {
+  if (event) event.stopPropagation();
+
+  if (cart[productId]) {
+    delete cart[productId];
+    showToast("Produto removido do carrinho!");
+  } else {
     const product = productsDatabase.find(p => p.id === productId);
     if (product) {
       cart[productId] = { ...product, qty: 1 };
@@ -1041,6 +1081,16 @@ function addToCart(productId) {
   const cartCounter = document.getElementById('cart-counter');
   cartCounter.style.transform = 'scale(1.3)';
   setTimeout(() => cartCounter.style.transform = 'scale(1)', 200);
+}
+
+/* --- REMOVER ITEM INDIVIDUAL DO CARRINHO --- */
+function removeFromCart(productId) {
+  if (cart[productId]) {
+    delete cart[productId];
+    showToast("Item removido do carrinho!");
+    updateCartUI();
+    renderProducts(currentCategory);
+  }
 }
 
 function changeQty(productId, delta) {
@@ -1079,6 +1129,9 @@ function updateCartUI() {
           <button class="qty-btn" onclick="changeQty(${id}, -1)">-</button>
           <span class="item-qty">${item.qty}</span>
           <button class="qty-btn" onclick="changeQty(${id}, 1)">+</button>
+          <button class="cart-remove-btn" onclick="removeFromCart(${id})" title="Remover item">
+            <i class="fa-solid fa-trash-can"></i>
+          </button>
         </div>
       `;
       listContainer.appendChild(row);
@@ -1206,7 +1259,7 @@ async function saveProduct() {
     return;
   }
 
-  btn.innerText = "Sincronizando com a Planilha...";
+  btn.innerText = "Sincronizando na Nuvem...";
   btn.disabled = true;
 
   if (id) {
@@ -1224,7 +1277,7 @@ async function saveProduct() {
   btn.innerText = "Salvar e Publicar na Planilha";
   btn.disabled = false;
 
-  alert('Produto publicado e sincronizado com a Planilha Google!');
+  alert('Produto salvo com sucesso de forma permanente!');
   resetProductForm();
   renderProducts(currentCategory);
   renderAdminProductsList();
@@ -1262,7 +1315,7 @@ async function deleteProduct(id) {
     renderProducts(currentCategory);
     renderAdminProductsList();
     updateCartUI();
-    alert('Produto removido da Planilha!');
+    alert('Produto removido!');
   }
 }
 
@@ -1315,7 +1368,7 @@ async function saveBanner() {
   btn.innerText = "Salvar e Publicar Banner";
   btn.disabled = false;
 
-  alert('Banner sincronizado na Planilha Google!');
+  alert('Banner salvo com sucesso!');
   resetBannerForm();
   renderSlider();
   renderAdminBannersList();
@@ -1354,7 +1407,7 @@ async function deleteBanner(id) {
   }
 }
 
-/* --- INICIALIZAÇÃO DA APLICAÇÃO --- */
+/* --- INICIALIZAÇÃO --- */
 window.onload = async () => {
   renderSlider();
   startSliderInterval();

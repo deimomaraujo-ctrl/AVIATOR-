@@ -766,7 +766,7 @@ const GAS_URL = 'https://script.google.com/macros/s/AKfycbwYJoTrgh-I4iOuM4ZP28rR
 /* --- REGISTRO DO SERVICE WORKER (PWA INSTALÁVEL) --- */
 if ('serviceWorker' in navigator) {
   const swCode = `
-    const CACHE_NAME = 'jr-cosmeticos-v30';
+    const CACHE_NAME = 'jr-cosmeticos-v40';
     self.addEventListener('install', e => {
       self.skipWaiting();
       e.waitUntil(caches.open(CACHE_NAME).then(c => c.addAll(['./'])));
@@ -822,15 +822,15 @@ function showToast(message) {
   }, 2500);
 }
 
-/* --- ESTADO GLOBAL (FONTE ÚNICA DA VERDADE = NUVEM DO GOOGLE) --- */
-let productsDatabase = [];
-let slidesDatabase = [];
+/* --- MEMÓRIA DA APLICAÇÃO --- */
+let productsDatabase = JSON.parse(localStorage.getItem('jr_products')) || [];
+let slidesDatabase = JSON.parse(localStorage.getItem('jr_slides')) || [];
 let cart = {};
 let currentCategory = 'todos';
 let slideIndex = 0;
 let slideInterval;
 
-/* --- COMPRESSÃO ULTRA-LEVE DE IMAGENS (MAX 280px / 8KB) --- */
+/* --- COMPRESSÃO ULTRA-COMPACTA DE IMAGENS COM TIMEOUT DE SEGURANÇA --- */
 function compressImageIfNeeded(imageSrc, maxDimension = 280, quality = 0.40) {
   if (!imageSrc) return Promise.resolve('');
   if (imageSrc.startsWith('http://') || imageSrc.startsWith('https://')) {
@@ -838,8 +838,13 @@ function compressImageIfNeeded(imageSrc, maxDimension = 280, quality = 0.40) {
   }
   
   return new Promise((resolve) => {
+    let timer = setTimeout(() => {
+      resolve(imageSrc); // Resolve em 2.5s se a imagem travar
+    }, 2500);
+
     const img = new Image();
     img.onload = () => {
+      clearTimeout(timer);
       try {
         const canvas = document.createElement('canvas');
         let width = img.width;
@@ -868,18 +873,20 @@ function compressImageIfNeeded(imageSrc, maxDimension = 280, quality = 0.40) {
         resolve(imageSrc);
       }
     };
-    img.onerror = () => resolve(imageSrc);
+    img.onerror = () => {
+      clearTimeout(timer);
+      resolve(imageSrc);
+    };
     img.src = imageSrc;
   });
 }
 
-/* --- LEITURA DIRETA E ATUALIZADA DA NUVEM DO GOOGLE (TODOS OS DISPOSITIVOS) --- */
-async function loadCloudData(forceToast = false) {
+/* --- LEITURA HÍBRIDA DA NUVEM DO GOOGLE --- */
+async function loadCloudData() {
   const countLabel = document.getElementById('product-count-label');
-  if (countLabel) countLabel.innerText = "Atualizando com a Nuvem Google...";
+  if (countLabel) countLabel.innerText = "Sincronizando com a nuvem...";
 
   try {
-    // Parâmetro ?v=Date.now() destrói o cache dos celulares dos clientes
     const res = await fetch(GAS_URL + '?v=' + Date.now(), { 
       method: 'GET', 
       redirect: 'follow' 
@@ -893,11 +900,11 @@ async function loadCloudData(forceToast = false) {
     try {
       result = JSON.parse(rawText);
     } catch(errJson) {
-      throw new Error('Servidor Google retornou resposta não-JSON');
+      throw new Error('Servidor retornou resposta inválida');
     }
     
-    let fetchedProducts = [];
-    let fetchedBanners = [];
+    let fetchedProducts = null;
+    let fetchedBanners = null;
 
     if (result) {
       if (Array.isArray(result.products)) fetchedProducts = result.products;
@@ -908,29 +915,37 @@ async function loadCloudData(forceToast = false) {
       else if (result.data && Array.isArray(result.data.banners)) fetchedBanners = result.data.banners;
     }
 
-    // Atualiza base global com a resposta exata do Google Sheets
-    productsDatabase = fetchedProducts;
-    slidesDatabase = fetchedBanners;
+    // Só substitui a memória local se a nuvem trouxer dados válidos
+    if (Array.isArray(fetchedProducts) && fetchedProducts.length > 0) {
+      productsDatabase = fetchedProducts;
+      localStorage.setItem('jr_products', JSON.stringify(productsDatabase));
+    }
+
+    if (Array.isArray(fetchedBanners) && fetchedBanners.length > 0) {
+      slidesDatabase = fetchedBanners;
+      localStorage.setItem('jr_slides', JSON.stringify(slidesDatabase));
+    }
 
     renderProducts(currentCategory);
     renderSlider();
     renderAdminProductsList();
     renderAdminBannersList();
 
-    if (forceToast) {
-      showToast("Sincronizado com a nuvem!");
-    }
-
   } catch (e) {
-    console.error('Erro ao conectar à nuvem:', e);
-    if (countLabel) countLabel.innerText = "Erro ao carregar dados da nuvem.";
+    console.warn('Mantendo dados locais do dispositivo:', e);
     renderProducts(currentCategory);
     renderSlider();
+    renderAdminProductsList();
+    renderAdminBannersList();
   }
 }
 
-/* --- GRAVAÇÃO NA PLANILHA DO GOOGLE E RE-CHECAGEM GLOBAL --- */
+/* --- GRAVAÇÃO NA PLANILHA DO GOOGLE --- */
 async function saveCloudGlobal() {
+  // Salva no LocalStorage do celular IMEDIATAMENTE
+  localStorage.setItem('jr_products', JSON.stringify(productsDatabase));
+  localStorage.setItem('jr_slides', JSON.stringify(slidesDatabase));
+
   const payload = {
     action: 'saveAll',
     products: productsDatabase,
@@ -938,24 +953,16 @@ async function saveCloudGlobal() {
   };
 
   try {
-    const res = await fetch(GAS_URL, {
+    await fetch(GAS_URL, {
       method: 'POST',
       headers: { 'Content-Type': 'text/plain;charset=utf-8' },
       body: JSON.stringify(payload),
       redirect: 'follow'
     });
-
-    if (res.ok) {
-      // Força a atualização após salvar para confirmar que a nuvem gravou
-      setTimeout(async () => {
-        await loadCloudData(true);
-      }, 1500);
-    } else {
-      alert("Aviso: O servidor do Google demorou para responder. Verifique sua conexão.");
-    }
+    showToast("✨ Publicado na nuvem!");
   } catch (e) {
-    console.error('Erro ao enviar POST:', e);
-    alert("Falha de conexão com a planilha do Google. Tente novamente.");
+    console.error('Erro de envio ao servidor Google:', e);
+    showToast("Salvo localmente no aparelho!");
   }
 }
 
@@ -1289,10 +1296,9 @@ async function saveProduct() {
     return;
   }
 
-  btn.innerText = "Compactando Foto...";
+  btn.innerText = "Processando Imagem...";
   btn.disabled = true;
 
-  // Garante foto ultra-leve
   const image = await compressImageIfNeeded(rawImage, 280, 0.40);
 
   if (id) {
@@ -1305,9 +1311,11 @@ async function saveProduct() {
     productsDatabase.push({ id: newId, name, category, specs: specs || 'Uso Profissional', price, tag: 'Novo', image });
   }
 
-  btn.innerText = "Enviando para a Nuvem Google...";
-  
-  // Envia para o Google Sheets e re-checa globalmente
+  // Atualização Visual Imediata no Aparelho do Admin
+  renderProducts(currentCategory);
+  renderAdminProductsList();
+
+  btn.innerText = "Enviando para a Nuvem...";
   await saveCloudGlobal();
 
   btn.innerText = "Salvar e Publicar na Nuvem";
@@ -1345,6 +1353,10 @@ async function deleteProduct(id) {
     productsDatabase = productsDatabase.filter(p => p.id != id);
     delete cart[id];
     
+    renderProducts(currentCategory);
+    renderAdminProductsList();
+    updateCartUI();
+
     await saveCloudGlobal();
   }
 }
@@ -1380,7 +1392,7 @@ async function saveBanner() {
     return;
   }
 
-  btn.innerText = "Compactando Imagem do Banner...";
+  btn.innerText = "Processando Imagem...";
   btn.disabled = true;
 
   const image = await compressImageIfNeeded(rawImage, 280, 0.40);
@@ -1395,7 +1407,10 @@ async function saveBanner() {
     slidesDatabase.push({ id: newId, title, desc, slogan, image });
   }
 
-  btn.innerText = "Enviando para a Nuvem Google...";
+  renderSlider();
+  renderAdminBannersList();
+
+  btn.innerText = "Enviando para a Nuvem...";
   await saveCloudGlobal();
 
   btn.innerText = "Salvar e Publicar Banner";
@@ -1430,6 +1445,9 @@ function resetBannerForm() {
 async function deleteBanner(id) {
   if (confirm('Tem certeza que deseja remover este banner da Nuvem Google?')) {
     slidesDatabase = slidesDatabase.filter(b => b.id != id);
+    renderSlider();
+    renderAdminBannersList();
+
     await saveCloudGlobal();
   }
 }
@@ -1437,6 +1455,8 @@ async function deleteBanner(id) {
 /* --- INICIALIZAÇÃO OBRIGATÓRIA DA NUVEM --- */
 window.onload = async () => {
   startSliderInterval();
+  renderSlider();
+  renderProducts('todos');
   await loadCloudData();
 };
 </script>

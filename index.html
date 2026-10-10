@@ -317,7 +317,7 @@ header {
  box-shadow: 0 10px 30px rgba(0,0,0,0.7);
 }
 
-/* ESTILO REFORÇADO PARA PRODUTO ESGOTADO */
+/* ESTILO PRODUTO ESGOTADO */
 .product-card.out-of-stock {
  opacity: 0.5 !important;
  filter: grayscale(50%);
@@ -671,14 +671,9 @@ footer .brand-sign { font-weight: 900; color: var(--gold-light); letter-spacing:
  <label>Nome do Produto</label>
  <input type="text" id="new-p-name" placeholder="Ex: Selagem Térmica Liss 1L">
  </div>
- 
  <div class="admin-form-group">
  <label>Tag do Produto / Destaque</label>
  <input type="text" id="new-p-tag" placeholder="Ex: Novo, Lançamento, Mais Vendido, Oferta">
- </div>
- <div class="admin-form-group">
- <label>Ordem / Posição no Catálogo (Número)</label>
- <input type="number" id="new-p-order" placeholder="Ex: 1, 2, 3...">
  </div>
  <div class="admin-form-group">
  <label>Categoria</label>
@@ -776,9 +771,9 @@ footer .brand-sign { font-weight: 900; color: var(--gold-light); letter-spacing:
 URL DA IMPLANTAÇÃO DO GOOGLE APPS SCRIPT
 ========================================================
 */
-const GAS_URL = 'https://script.google.com/macros/s/AKfycbwSQxr1hLArtz8uJMRR9zXsj37p5tExsAp8GJ1a-2Vnn1pslYTEB956udblffbytx5s/exec';
+const GAS_URL = 'https://script.google.com/macros/s/AKfycbwuT_N-xr52xGIfaZVraxOcXMqyCABFOhAoWu2_jjHARoruwVON93HHOXU6P8AbjlRrzA/exec';
 
-/* BANCO DE DADOS EM MEMÓRIA RAM (100% SINCRONIZADO COM O GOOGLE) */
+/* BANCO DE DADOS EM MEMÓRIA */
 let productsDatabase = [];
 let slidesDatabase = [];
 let cart = {};
@@ -786,7 +781,7 @@ let currentCategory = 'todos';
 let slideIndex = 0;
 let slideTimeout = null;
 
-/* FUNÇÃO AUXILIAR DE SEGURANÇA PARA VERIFICAR ESTOQUE ESGOTADO */
+/* VERIFICAÇÃO RIGOROSA DE ESGOTADO */
 function isProductOutOfStock(p) {
  if (!p) return false;
  return p.outOfStock === true || p.outOfStock === 'true' || p.outOfStock === 'TRUE' || p.outOfStock === 1 || p.outOfStock === '1';
@@ -893,7 +888,7 @@ function convertFileToBase64(fileInput, targetInputId) {
  }
 }
 
-/* CARREGAR DADOS DA PLANILHA GOOGLE */
+/* CARREGAR DADOS DA NUVEM */
 async function loadCloudData() {
  const countLabel = document.getElementById('product-count-label');
  if (countLabel) countLabel.innerText = "Sincronizando com a Planilha Google...";
@@ -922,7 +917,7 @@ async function loadCloudData() {
  }
 }
 
-/* CARROSSEL */
+/* CARROSSEL (TEMPO DE EXIBIÇÃO DINÂMICO CORRIGIDO) */
 function renderSlider() {
  const track = document.getElementById('slide-track');
  const dotsContainer = document.getElementById('slide-dots');
@@ -993,20 +988,13 @@ function startSliderInterval() {
  }, ms);
 }
 
-/* VITRINE DE PRODUTOS (ORDENAÇÃO POR CAMPO ORDER + TRAVA ESGOTADO) */
+/* VITRINE DE PRODUTOS */
 function renderProducts(category = 'todos') {
  const grid = document.getElementById('products-grid');
  grid.innerHTML = '';
  let filtered = category === 'todos'
  ? [...productsDatabase]
  : productsDatabase.filter(p => p.category === category);
-
- // 1. ORDENAÇÃO NUMÉRICA CRESCENTE (FIELD 'order')
- filtered.sort((a, b) => {
- const orderA = (a.order !== undefined && a.order !== null && a.order !== '') ? parseFloat(a.order) : 9999;
- const orderB = (b.order !== undefined && b.order !== null && b.order !== '') ? parseFloat(b.order) : 9999;
- return orderA - orderB;
- });
 
  const label = document.getElementById('product-count-label');
  if (label) label.innerText = `${filtered.length} produto(s) na loja`;
@@ -1031,11 +1019,9 @@ function renderProducts(category = 'todos') {
  }
  };
 
- // Tag do Produto ou Tag de Esgotado
  const tagText = isOutOfStock ? 'Estoque Esgotado' : (p.tag || 'Novo');
  const tagClass = isOutOfStock ? 'product-tag sold-out' : 'product-tag';
 
- // Configuração do Botão
  let btnText = '<i class="fa-solid fa-cart-plus"></i> Comprar';
  let btnClass = 'btn-add-cart';
  let btnDisabled = '';
@@ -1186,7 +1172,6 @@ function toggleCart(productId, event) {
  if (event) event.stopPropagation();
  const product = productsDatabase.find(p => String(p.id) === String(productId));
 
- // VALIDAÇÃO DE SEGURANÇA REFORÇADA
  if (product && isProductOutOfStock(product)) {
  showToast("Produto temporariamente esgotado!", true);
  return;
@@ -1331,7 +1316,7 @@ function renderAdminProductsList() {
  const row = document.createElement('div');
  row.className = 'admin-item-row';
  row.innerHTML = `
- <span style="flex:1;"><b>[Pos ${p.order || '-'}] ${p.name}</b> ${isOut ? '<span style="color:var(--danger); font-size:10px;">(ESGOTADO)</span>' : ''} - R$ ${Number(p.price).toFixed(2)}</span>
+ <span style="flex:1;"><b>${p.name}</b> ${isOut ? '<span style="color:var(--danger); font-size:10px; font-weight:bold;">(ESGOTADO)</span>' : ''} - R$ ${Number(p.price).toFixed(2)}</span>
  <div class="admin-item-actions">
  <button class="btn-action-icon edit" onclick="editProduct('${p.id}')"><i class="fa-solid fa-pen"></i></button>
  <button class="btn-action-icon delete" onclick="deleteProduct('${p.id}')"><i class="fa-solid fa-trash"></i></button>
@@ -1347,8 +1332,6 @@ async function saveProduct() {
  const name = document.getElementById('new-p-name').value.trim();
  const tagInput = document.getElementById('new-p-tag').value.trim();
  const tag = tagInput !== '' ? tagInput : 'Novo';
- const orderInput = document.getElementById('new-p-order').value;
- const order = orderInput !== '' ? parseInt(orderInput) : 99;
  const category = document.getElementById('new-p-cat').value;
  const specs = document.getElementById('new-p-specs').value.trim();
  const price = parseFloat(document.getElementById('new-p-price').value);
@@ -1374,7 +1357,6 @@ async function saveProduct() {
  specs: specs || 'Uso Profissional',
  price: price,
  tag: tag,
- order: order,
  outOfStock: outOfStock,
  image: image
  }
@@ -1409,7 +1391,6 @@ function editProduct(id) {
  document.getElementById('edit-prod-id').value = prod.id;
  document.getElementById('new-p-name').value = prod.name;
  document.getElementById('new-p-tag').value = prod.tag || 'Novo';
- document.getElementById('new-p-order').value = prod.order !== undefined ? prod.order : '';
  document.getElementById('new-p-cat').value = prod.category;
  document.getElementById('new-p-specs').value = prod.specs || '';
  document.getElementById('new-p-price').value = prod.price;
@@ -1424,7 +1405,6 @@ function resetProductForm() {
  document.getElementById('edit-prod-id').value = '';
  document.getElementById('new-p-name').value = '';
  document.getElementById('new-p-tag').value = '';
- document.getElementById('new-p-order').value = '';
  document.getElementById('new-p-specs').value = '';
  document.getElementById('new-p-price').value = '';
  document.getElementById('new-p-outofstock').checked = false;

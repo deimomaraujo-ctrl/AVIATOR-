@@ -8,7 +8,16 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="JR Cosméticos">
-<title>JR Cosméticos | Profissional</title>
+<title>JR Cosméticos | Linha Profissional de Beleza</title>
+
+<!-- REQUISITO 9: META-TAGS DE COMPARTILHAMENTO NO WHATSAPP (OPEN GRAPH) -->
+<meta property="og:title" content="JR Cosméticos | Linha Profissional de Beleza">
+<meta property="og:description" content="Catálogo exclusivo de produtos profissionais para salões de beleza. Selagens, tratamentos, colorações e finalizadores premium.">
+<meta property="og:image" content="https://images.unsplash.com/photo-1560750588-73207b1ef5b8?q=80&w=1200&auto=format&fit=crop">
+<meta property="og:image:type" content="image/jpeg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:type" content="website">
 
 <!-- PWA Manifest Embutido -->
 <link rel="manifest" href='data:application/manifest+json,{"name":"JR Cosméticos","short_name":"JR Cosméticos","description":"JR Cosméticos - Linha Profissional de Beleza","start_url":"./","scope":"./","display":"standalone","background_color":"#0b0b0b","theme_color":"#0b0b0b","icons":[{"src":"https://cdn-icons-png.flaticon.com/512/3050/3050239.png","sizes":"192x192","type":"image/png","purpose":"any maskable"},{"src":"https://cdn-icons-png.flaticon.com/512/3050/3050239.png","sizes":"512x512","type":"image/png","purpose":"any maskable"}]}'>
@@ -306,6 +315,23 @@ header {
  border-color: var(--gold-primary);
  box-shadow: 0 10px 30px rgba(0,0,0,0.7);
 }
+
+/* REQUISITO 1: ESTILO PARA PRODUTO ESGOTADO */
+.product-card.out-of-stock {
+ opacity: 0.65;
+ filter: grayscale(40%);
+}
+.product-card.out-of-stock:hover {
+ transform: none;
+ border-color: var(--border);
+ box-shadow: none;
+}
+.product-tag.sold-out {
+ background: rgba(211, 47, 47, 0.9) !important;
+ color: #ffffff !important;
+ border-color: #ff4d4d !important;
+}
+
 .product-image-box {
  width: 100%;
  height: 180px;
@@ -322,7 +348,7 @@ header {
  object-fit: cover;
  transition: transform 0.3s;
 }
-.product-card:hover .product-image-box img { transform: scale(1.05); }
+.product-card:hover:not(.out-of-stock) .product-image-box img { transform: scale(1.05); }
 .product-tag {
  position: absolute;
  top: 10px;
@@ -344,6 +370,8 @@ header {
 .product-specs { font-size: 11px; color: var(--text-muted); background: var(--bg-input); padding: 4px 8px; border-radius: 6px; width: fit-content; font-weight: 700; border: 1px solid var(--border); }
 .product-footer { display: flex; align-items: center; justify-content: space-between; margin-top: 4px; }
 .product-price { font-size: 15px; font-weight: 900; color: var(--gold-light); }
+
+/* REQUISITO 4: BOTÃO COMPRAR E BOTÃO ESGOTADO */
 .btn-add-cart {
  background: var(--gold-primary);
  color: #0b0b0b;
@@ -359,11 +387,17 @@ header {
  gap: 4px;
  box-shadow: 0 4px 12px rgba(212,175,55,0.2);
 }
-.btn-add-cart:hover { background: var(--gold-light); }
+.btn-add-cart:hover:not(:disabled) { background: var(--gold-light); }
 .btn-add-cart.added { background: var(--green-success); color: #ffffff; }
-.btn-add-cart.added:hover { background: var(--danger); }
+.btn-add-cart:disabled {
+ background: #333333;
+ color: #888888;
+ cursor: not-allowed;
+ box-shadow: none;
+ border: 1px solid #444444;
+}
 
-/* MODAIS */
+/* MODAIS PADRÃO */
 .modal-overlay {
  position: fixed;
  inset: 0; 
@@ -395,14 +429,64 @@ header {
 .modal-close-btn { background: transparent; border: none; color: var(--text-muted); font-size: 22px; font-weight: bold; cursor: pointer; }
 .modal-body { padding: 20px; overflow-y: auto; display: flex; flex-direction: column; gap: 14px; max-height: 60vh; }
 
+/* REQUISITO 3: MODAL DE ZOOM FULLSCREEN */
+#image-modal .modal-card {
+ width: 100vw !important;
+ height: 100vh !important;
+ max-width: 100vw !important;
+ max-height: 100vh !important;
+ border-radius: 0 !important;
+ border: none !important;
+ animation: fadeIn 0.25s ease;
+}
+@keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+
+#image-modal .modal-body {
+ max-height: none !important;
+ flex: 1;
+ display: flex;
+ flex-direction: column;
+ align-items: center;
+ justify-content: flex-start;
+ padding: 16px;
+ overflow-y: auto;
+}
+
+.zoom-image-container {
+ width: 100%;
+ height: 50vh;
+ min-height: 280px;
+ background: #000;
+ border-radius: 16px;
+ border: 1px solid var(--border);
+ overflow: hidden;
+ position: relative;
+ display: flex;
+ align-items: center;
+ justify-content: center;
+ touch-action: none; /* Habilita gesto touch limpo */
+ cursor: grab;
+}
+.zoom-image-container img {
+ max-width: 100%;
+ max-height: 100%;
+ object-fit: contain;
+ transition: transform 0.1s ease-out;
+ transform-origin: center center;
+ user-select: none;
+ -webkit-user-drag: none;
+}
+
 /* ADMIN ELEMENTS */ 
 .admin-tabs { display: flex; gap: 8px; border-bottom: 1px solid var(--border); padding-bottom: 10px; margin-bottom: 10px; }
 .admin-tab-btn { background: var(--bg-input); border: 1px solid var(--border); color: var(--text-muted); padding: 6px 14px; border-radius: 6px; font-size: 11px; font-weight: 800; cursor: pointer; }
 .admin-tab-btn.active { background: var(--gold-primary); color: #0b0b0b; border-color: var(--gold-primary); }
 .admin-form-group { display: flex; flex-direction: column; gap: 6px; }
 .admin-form-group label { font-size: 11px; font-weight: 800; color: var(--gold-light); text-transform: uppercase; }
-.admin-form-group input, .admin-form-group select { background: var(--bg-input); border: 1px solid var(--border); border-radius: 8px; padding: 10px; color: #fff; font-size: 12px; }
+.admin-form-group input, .admin-form-group select, .admin-form-group textarea { background: var(--bg-input); border: 1px solid var(--border); border-radius: 8px; padding: 10px; color: #fff; font-size: 12px; }
 .admin-form-group input[type="file"] { padding: 6px; font-size: 11px; }
+.admin-checkbox-label { display: flex; align-items: center; gap: 8px; cursor: pointer; font-size: 12px; color: #fff; font-weight: 700; margin-top: 4px; }
+.admin-checkbox-label input { width: 16px; height: 16px; accent-color: var(--gold-primary); cursor: pointer; }
 .admin-btn { background: var(--gold-primary); color: #0b0b0b; font-weight: 900; border: none; padding: 12px; border-radius: 8px; cursor: pointer; text-transform: uppercase; font-size: 12px; transition: 0.2s; }
 .admin-btn:hover { background: var(--gold-light); }
 .admin-item-row { display: flex; align-items: center; justify-content: space-between; background: var(--bg-input); padding: 10px; border-radius: 8px; border: 1px solid var(--border); font-size: 12px; gap: 10px; }
@@ -520,19 +604,34 @@ footer .brand-sign { font-weight: 900; color: var(--gold-light); letter-spacing:
  </div>
 </div>
 
-<!-- MODAL ZOOM IMAGEM (MELLHORIA 3: SEM CORTES E ALTA RESOLUÇÃO) -->
+<!-- REQUISITO 3: MODAL DE ZOOM E DETALHES EM TELA CHEIA (FULLSCREEN + PINCH-ZOOM) -->
 <div class="modal-overlay" id="image-modal">
- <div class="modal-card" style="max-width: 480px; text-align: center;">
+ <div class="modal-card">
  <div class="modal-header">
  <div class="modal-title" id="zoom-product-title">Detalhes do Produto</div>
  <button class="modal-close-btn" onclick="closeImageModal()">&times;</button>
  </div>
- <div class="modal-body" style="align-items: center;"> 
- <div style="width:100%; height:320px; background:#0d0d0d; display:flex; align-items:center; justify-content:center; border-radius:12px; border:1px solid var(--border); overflow:hidden; padding: 10px;">
- <img id="zoom-product-img" src="" alt="Imagem Ampliada" style="max-width: 100%; max-height: 100%; width: auto; height: auto; object-fit: contain;">
+ <div class="modal-body"> 
+ <div class="zoom-image-container" id="zoom-container">
+ <img id="zoom-product-img" src="" alt="Imagem Ampliada">
  </div>
- <div id="zoom-product-specs" class="product-specs" style="margin-top: 10px;"></div>
- <p id="zoom-product-price" style="font-size: 20px; font-weight: 900; color: var(--gold-light); margin-top: 8px;"></p>
+ <p style="font-size:10px; color:var(--text-muted); text-align:center; margin-top:4px;">
+ <i class="fa-solid fa-magnifying-glass-plus"></i> Use dois dedos para dar zoom na imagem
+ </p>
+
+ <div style="width:100%; max-width:600px; display:flex; flex-direction:column; gap:12px; margin-top:16px; text-align:left;">
+ <div style="display:flex; justify-content:space-between; align-items:center;">
+ <span id="zoom-product-cat" class="product-category-mini"></span>
+ <span id="zoom-product-specs" class="product-specs"></span>
+ </div>
+ <h2 id="zoom-product-name" style="font-size:18px; font-weight:900; color:#fff;"></h2>
+ <p id="zoom-product-desc" style="font-size:13px; color:#cccccc; line-height:1.5; white-space:pre-line;"></p>
+ 
+ <div style="display:flex; justify-content:space-between; align-items:center; margin-top:10px; border-top:1px solid var(--border); padding-top:14px;">
+ <span id="zoom-product-price" style="font-size:24px; font-weight:900; color:var(--gold-light);"></span>
+ <div id="zoom-product-action-btn-wrapper"></div>
+ </div>
+ </div>
  </div>
  </div>
 </div>
@@ -577,10 +676,16 @@ footer .brand-sign { font-weight: 900; color: var(--gold-light); letter-spacing:
  <input type="text" id="new-p-name" placeholder="Ex: Selagem Térmica Liss 1L">
  </div>
 
- <!-- MELLHORIA 1: CAMPO PERSONALIZÁVEL PARA A TAG DO PRODUTO -->
+ <!-- REQUISITO 7: TAG DO PRODUTO -->
  <div class="admin-form-group">
  <label>Tag do Produto / Destaque</label>
  <input type="text" id="new-p-tag" placeholder="Ex: Novo, Lançamento, Mais Vendido, Oferta">
+ </div>
+
+ <!-- REQUISITO 2: ORDEM DE EXIBIÇÃO -->
+ <div class="admin-form-group">
+ <label>Ordem / Posição no Catálogo (Número)</label>
+ <input type="number" id="new-p-order" placeholder="Ex: 1, 2, 3...">
  </div>
  
  <div class="admin-form-group">
@@ -598,10 +703,25 @@ footer .brand-sign { font-weight: 900; color: var(--gold-light); letter-spacing:
  <label>Especificações (Volume / Peso)</label>
  <input type="text" id="new-p-specs" placeholder="Ex: Frasco 1 Litro">
  </div>
+
+ <div class="admin-form-group">
+ <label>Descrição Completa (Opcional)</label>
+ <textarea id="new-p-desc" rows="3" placeholder="Descreva os benefícios, modo de usar e diferenciais..."></textarea>
+ </div>
+
  <div class="admin-form-group">
  <label>Preço (R$)</label>
  <input type="number" step="0.01" id="new-p-price" placeholder="149.90">
  </div>
+
+ <!-- REQUISITO 1: CHECKBOX DE ESTOQUE ZERADO -->
+ <div class="admin-form-group">
+ <label class="admin-checkbox-label">
+ <input type="checkbox" id="new-p-outofstock">
+ Estoque Zerado / Esgotado
+ </label>
+ </div>
+
  <div class="admin-form-group">
  <label>Imagem (URL ou Foto do Aparelho)</label>
  <input type="text" id="new-p-image" placeholder="https://exemplo.com/foto.jpg">
@@ -634,6 +754,11 @@ footer .brand-sign { font-weight: 900; color: var(--gold-light); letter-spacing:
  <div class="admin-form-group">
  <label>Slogan / Rodapé do Banner</label>
  <input type="text" id="new-b-slogan" placeholder="Ex: Realce sua beleza...">
+ </div>
+ <!-- REQUISITO 5: TEMPO DINÂMICO DE EXIBIÇÃO -->
+ <div class="admin-form-group">
+ <label>Tempo de Exibição (em segundos)</label>
+ <input type="number" id="new-b-duration" placeholder="Ex: 5" value="5">
  </div>
  <div class="admin-form-group">
  <label>Imagem (URL ou Galeria)</label>
@@ -678,16 +803,15 @@ let slidesDatabase = [];
 let cart = {};
 let currentCategory = 'todos';
 let slideIndex = 0;
-let slideInterval;
+let slideTimeout = null;
 
 /* SERVICE WORKER (PWA) */
 if ('serviceWorker' in navigator) {
  const swCode = `
- const CACHE_NAME = 'jr-cosm-v99';
+ const CACHE_NAME = 'jr-cosm-v100';
  self.addEventListener('install', e => self.skipWaiting());
  self.addEventListener('activate', e => self.clients.claim());
  self.addEventListener('fetch', e => {
- // Sempre prioriza a rede para dados dinâmicos do Google
  if (e.request.url.includes('script.google.com')) {
  return;
  }
@@ -726,7 +850,7 @@ function showToast(message, isError = false) {
  }, 3500);
 }
 
-/* MELHORIA 2: OTIMIZAÇÃO E ALTA QUALIDADE DE FOTOS (MAX 800px / QUALIDADE 0.80) */
+/* REQUISITO 8: ALTA QUALIDADE E RESOULÇÃO DAS IMAGENS (MAX 800px / QUALIDADE 0.80) */
 function compressImageIfNeeded(imageSrc, maxDimension = 800, quality = 0.8) {
  if (!imageSrc) return Promise.resolve('');
  if (imageSrc.startsWith('http://') || imageSrc.startsWith('https://')) {
@@ -811,12 +935,13 @@ async function loadCloudData() {
  }
 }
 
-/* CARROSSEL */
+/* REQUISITO 5: CARROSSEL COM TEMPO DINÂMICO */
 function renderSlider() {
  const track = document.getElementById('slide-track');
  const dotsContainer = document.getElementById('slide-dots');
  track.innerHTML = '';
  dotsContainer.innerHTML = '';
+
  if (slidesDatabase.length === 0) {
  track.innerHTML = `
  <div class="slide-item">
@@ -829,6 +954,7 @@ function renderSlider() {
  </div>`;
  return;
  }
+
  slidesDatabase.forEach((slide, index) => {
  const slideDiv = document.createElement('div');
  slideDiv.className = 'slide-item';
@@ -842,12 +968,16 @@ function renderSlider() {
  </div>
  `;
  track.appendChild(slideDiv);
+
  const dot = document.createElement('span');
  dot.className = `dot ${index === 0 ? 'active' : ''}`;
  dot.onclick = () => currentSlide(index);
  dotsContainer.appendChild(dot);
  }); 
+
+ slideIndex = 0;
  showSlide(slideIndex);
+ startSliderInterval();
 }
 
 function showSlide(index) {
@@ -857,6 +987,7 @@ function showSlide(index) {
  if (index >= slidesDatabase.length) slideIndex = 0;
  else if (index < 0) slideIndex = slidesDatabase.length - 1;
  else slideIndex = index;
+
  track.style.transform = `translateX(-${slideIndex * 100}%)`;
  dots.forEach((dot, idx) => dot.classList.toggle('active', idx === slideIndex));
 }
@@ -864,28 +995,43 @@ function showSlide(index) {
 function currentSlide(index) {
  slideIndex = index;
  showSlide(slideIndex);
+ startSliderInterval();
 }
 
 function startSliderInterval() {
- clearInterval(slideInterval);
- slideInterval = setInterval(() => {
- if (slidesDatabase.length > 0) {
- slideIndex++;
+ clearTimeout(slideTimeout);
+ if (slidesDatabase.length === 0) return;
+ 
+ const currentSlideObj = slidesDatabase[slideIndex];
+ const durationSec = (currentSlideObj && currentSlideObj.duration) ? parseFloat(currentSlideObj.duration) : 5;
+ const ms = (isNaN(durationSec) || durationSec <= 0 ? 5 : durationSec) * 1000;
+
+ slideTimeout = setTimeout(() => {
+ slideIndex = (slideIndex + 1) % slidesDatabase.length;
  showSlide(slideIndex);
- }
- }, 5000);
+ startSliderInterval();
+ }, ms);
 }
 
-/* VITRINE DE PRODUTOS */
+/* REQUISITOS 1, 2 e 4: VITRINE DE PRODUTOS (ORDENAÇÃO + COMPRAR + ESGOTADO) */
 function renderProducts(category = 'todos') {
  const grid = document.getElementById('products-grid');
  grid.innerHTML = '';
- const filtered = category === 'todos'
- ? productsDatabase
+
+ let filtered = category === 'todos'
+ ? [...productsDatabase]
  : productsDatabase.filter(p => p.category === category); 
+
+ // REQUISITO 2: ORDENAÇÃO CUSTOMIZADA PELO CAMPO ORDER
+ filtered.sort((a, b) => {
+ const orderA = (a.order !== undefined && a.order !== null && a.order !== '') ? parseFloat(a.order) : 9999;
+ const orderB = (b.order !== undefined && b.order !== null && b.order !== '') ? parseFloat(b.order) : 9999;
+ return orderA - orderB;
+ });
 
  const label = document.getElementById('product-count-label');
  if (label) label.innerText = `${filtered.length} produto(s) na loja`;
+
  if (filtered.length === 0) {
  grid.innerHTML = `
  <div style="grid-column: 1 / -1; text-align: center; padding: 40px 0; color: var(--text-muted);">
@@ -894,18 +1040,40 @@ function renderProducts(category = 'todos') {
  </div>`;
  return;
  }
+
  filtered.forEach(p => {
  const isInCart = cart[p.id] && cart[p.id].qty > 0;
+ const isOutOfStock = p.outOfStock === true || p.outOfStock === 'true';
+
  const card = document.createElement('div');
- card.className = 'product-card';
+ card.className = `product-card ${isOutOfStock ? 'out-of-stock' : ''}`;
  card.onclick = (e) => {
  if (!e.target.closest('.btn-add-cart')) {
  openImageModal(p.id);
  }
  };
+
+ // Tag do Produto ou Tag de Esgotado
+ const tagText = isOutOfStock ? 'Estoque Esgotado' : (p.tag || 'Novo');
+ const tagClass = isOutOfStock ? 'product-tag sold-out' : 'product-tag';
+
+ // REQUISITO 4: Texto e estado do Botão ("Comprar" vs "✓ Adicionado" vs "Esgotado")
+ let btnText = '<i class="fa-solid fa-cart-plus"></i> Comprar';
+ let btnClass = 'btn-add-cart';
+ let btnDisabled = '';
+
+ if (isOutOfStock) {
+ btnText = 'Esgotado';
+ btnClass = 'btn-add-cart';
+ btnDisabled = 'disabled';
+ } else if (isInCart) {
+ btnText = '<i class="fa-solid fa-check"></i> Adicionado';
+ btnClass = 'btn-add-cart added';
+ }
+
  card.innerHTML = `
  <div class="product-image-box">
- <span class="product-tag">${p.tag || 'Novo'}</span>
+ <span class="${tagClass}">${tagText}</span>
  <img src="${p.image}" alt="${p.name}" loading="lazy">
  </div>
  <div class="product-content">
@@ -916,8 +1084,8 @@ function renderProducts(category = 'todos') {
  </div>
  <div class="product-footer"> 
  <div class="product-price">R$ ${Number(p.price).toFixed(2).replace('.', ',')}</div>
- <button class="btn-add-cart ${isInCart ? 'added' : ''}" onclick="toggleCart('${p.id}', event)">
- ${isInCart ? '<i class="fa-solid fa-check"></i> Adicionado' : '<span>+</span> Adicionar'}
+ <button class="${btnClass}" ${btnDisabled} onclick="toggleCart('${p.id}', event)">
+ ${btnText}
  </button>
  </div>
  </div>
@@ -933,42 +1101,144 @@ function filterCategory(category, btnElement) {
  renderProducts(category);
 }
 
-/* MODAL DE ZOOM */
+/* REQUISITO 3: MODAL DE ZOOM E DETALHES COM SUPORTE A TOUCH (PINCH-ZOOM / PAN) */
+let zoomScale = 1;
+let zoomPointX = 0, zoomPointY = 0;
+let startTouchesDist = 0;
+
 function openImageModal(productId) {
  const prod = productsDatabase.find(p => String(p.id) === String(productId));
  if (!prod) return;
+
+ const isOutOfStock = prod.outOfStock === true || prod.outOfStock === 'true';
+ const isInCart = cart[prod.id] && cart[prod.id].qty > 0;
+
  document.getElementById('zoom-product-title').innerText = prod.name;
- document.getElementById('zoom-product-img').src = prod.image;
+ document.getElementById('zoom-product-name').innerText = prod.name;
+ document.getElementById('zoom-product-cat').innerText = prod.category;
  document.getElementById('zoom-product-specs').innerText = prod.specs || 'Uso Profissional';
+ document.getElementById('zoom-product-desc').innerText = prod.desc || 'Produto de linha profissional desenvolvida com ativos de alta performance para garantir resultados incríveis no seu salão.';
  document.getElementById('zoom-product-price').innerText = `R$ ${Number(prod.price).toFixed(2).replace('.', ',')}`;
+ 
+ const imgEl = document.getElementById('zoom-product-img');
+ imgEl.src = prod.image;
+ resetZoomTransform();
+
+ // Botão de Ação dentro do Modal Fullscreen
+ const btnWrapper = document.getElementById('zoom-product-action-btn-wrapper');
+ if (isOutOfStock) {
+ btnWrapper.innerHTML = `<button class="btn-add-cart" disabled style="padding:10px 20px; font-size:13px;">Estoque Esgotado</button>`;
+ } else {
+ btnWrapper.innerHTML = `
+ <button class="btn-add-cart ${isInCart ? 'added' : ''}" style="padding:10px 20px; font-size:13px;" onclick="toggleCart('${prod.id}', event); openImageModal('${prod.id}');">
+ ${isInCart ? '<i class="fa-solid fa-check"></i> Adicionado' : '<i class="fa-solid fa-cart-plus"></i> Comprar'}
+ </button>`;
+ }
+
  document.getElementById('image-modal').style.display = 'flex';
+ setupPinchZoomHandlers();
 }
 
 function closeImageModal() {
  document.getElementById('image-modal').style.display = 'none';
+ resetZoomTransform();
 } 
+
+function resetZoomTransform() {
+ zoomScale = 1;
+ zoomPointX = 0;
+ zoomPointY = 0;
+ const imgEl = document.getElementById('zoom-product-img');
+ if (imgEl) imgEl.style.transform = `translate(0px, 0px) scale(1)`;
+}
+
+function setupPinchZoomHandlers() {
+ const container = document.getElementById('zoom-container');
+ const imgEl = document.getElementById('zoom-product-img');
+ if (!container || !imgEl) return;
+
+ let isDragging = false;
+ let startX = 0, startY = 0;
+
+ container.ontouchstart = (e) => {
+ if (e.touches.length === 2) {
+ startTouchesDist = Math.hypot(
+ e.touches[0].pageX - e.touches[1].pageX,
+ e.touches[0].pageY - e.touches[1].pageY
+ );
+ } else if (e.touches.length === 1 && zoomScale > 1) {
+ isDragging = true;
+ startX = e.touches[0].pageX - zoomPointX;
+ startY = e.touches[0].pageY - zoomPointY;
+ }
+ };
+
+ container.ontouchmove = (e) => {
+ if (e.touches.length === 2) {
+ e.preventDefault();
+ const dist = Math.hypot(
+ e.touches[0].pageX - e.touches[1].pageX,
+ e.touches[0].pageY - e.touches[1].pageY
+ );
+ const factor = dist / startTouchesDist;
+ zoomScale = Math.min(Math.max(1, zoomScale * factor), 3.5);
+ startTouchesDist = dist;
+ imgEl.style.transform = `translate(${zoomPointX}px, ${zoomPointY}px) scale(${zoomScale})`;
+ } else if (e.touches.length === 1 && isDragging) {
+ e.preventDefault();
+ zoomPointX = e.touches[0].pageX - startX;
+ zoomPointY = e.touches[0].pageY - startY;
+ imgEl.style.transform = `translate(${zoomPointX}px, ${zoomPointY}px) scale(${zoomScale})`;
+ }
+ };
+
+ container.ontouchend = (e) => {
+ isDragging = false;
+ if (zoomScale <= 1) resetZoomTransform();
+ };
+
+ // Duplo clique no Desktop/Mobile alterna zoom 1x e 2.5x
+ container.ondblclick = () => {
+ if (zoomScale > 1) {
+ resetZoomTransform();
+ } else {
+ zoomScale = 2.5;
+ imgEl.style.transform = `translate(0px, 0px) scale(2.5)`;
+ }
+ };
+}
 
 /* CARRINHO DE COMPRAS */
 function toggleCart(productId, event) {
  if (event) event.stopPropagation();
+ const product = productsDatabase.find(p => String(p.id) === String(productId));
+ 
+ // Se estiver esgotado, impede categoricamente
+ if (product && (product.outOfStock === true || product.outOfStock === 'true')) {
+ showToast("Produto temporariamente esgotado!", true);
+ return;
+ }
+
  if (cart[productId]) {
  delete cart[productId];
  showToast("Item removido do carrinho!");
  } else {
- const product = productsDatabase.find(p => String(p.id) === String(productId));
  if (product) {
  cart[productId] = { ...product, qty: 1 };
- showToast("Adicionado ao carrinho!");
+ showToast("Adicionado ao carrinho com sucesso!");
  }
  }
  updateCartUI();
  renderProducts(currentCategory);
 }
 
+/* REQUISITO 6: QUANTIDADE MÍNIMA = 1 (SOMENTE A LIXEIRA EXCLUI) */
 function changeQty(productId, delta) {
  if (cart[productId]) {
  cart[productId].qty += delta;
- if (cart[productId].qty <= 0) delete cart[productId];
+ if (cart[productId].qty < 1) {
+ cart[productId].qty = 1; // Garante mínimo 1 unidade
+ }
  }
  updateCartUI();
  renderProducts(currentCategory);
@@ -989,6 +1259,7 @@ function updateCartUI() {
  const listContainer = document.getElementById('cart-items-list');
  listContainer.innerHTML = '';
  const keys = Object.keys(cart);
+
  if (keys.length === 0) {
  listContainer.innerHTML = `<div style="text-align:center; color:var(--text-muted); padding:30px 0; font-size:12px; font-weight:700;">Seu carrinho está vazio.</div>`;
  } else {
@@ -1008,7 +1279,7 @@ function updateCartUI() {
  <button class="qty-btn" onclick="changeQty('${id}', -1)">-</button>
  <span class="item-qty">${item.qty}</span>
  <button class="qty-btn" onclick="changeQty('${id}', 1)">+</button>
- <button class="cart-remove-btn" onclick="removeFromCart('${id}')"><i class="fa-solid fa-trash-can"></i></button>
+ <button class="cart-remove-btn" onclick="removeFromCart('${id}')" title="Excluir produto"><i class="fa-solid fa-trash-can"></i></button>
  </div>
  `;
  listContainer.appendChild(row);
@@ -1077,15 +1348,16 @@ function switchAdminTab(tab) {
  document.getElementById('tab-btn-banners').classList.toggle('active', tab === 'banners');
 }
 
-/* CRUD PRODUTOS (COMUNICAÇÃO OBRIGATÓRIA COM O GOOGLE) */
+/* CRUD PRODUTOS (INTEGRAÇÃO COMPLETA COM A PLANILHA GOOGLE) */
 function renderAdminProductsList() {
  const list = document.getElementById('admin-products-list');
  list.innerHTML = '';
  productsDatabase.forEach(p => {
+ const isOut = p.outOfStock === true || p.outOfStock === 'true';
  const row = document.createElement('div');
  row.className = 'admin-item-row';
  row.innerHTML = `
- <span style="flex:1;"><b>${p.name}</b> - R$ ${Number(p.price).toFixed(2)}</span> 
+ <span style="flex:1;"><b>[Pos ${p.order || '-'}] ${p.name}</b> ${isOut ? '<span style="color:var(--danger); font-size:10px;">(ESGOTADO)</span>' : ''} - R$ ${Number(p.price).toFixed(2)}</span> 
  <div class="admin-item-actions">
  <button class="btn-action-icon edit" onclick="editProduct('${p.id}')"><i class="fa-solid fa-pen"></i></button>
  <button class="btn-action-icon delete" onclick="deleteProduct('${p.id}')"><i class="fa-solid fa-trash"></i></button>
@@ -1100,10 +1372,14 @@ async function saveProduct() {
  const id = document.getElementById('edit-prod-id').value || String(Date.now());
  const name = document.getElementById('new-p-name').value.trim();
  const tagInput = document.getElementById('new-p-tag').value.trim();
- const tag = tagInput !== '' ? tagInput : 'Novo'; // MELHORIA 1: Fallback seguro para "Novo"
+ const tag = tagInput !== '' ? tagInput : 'Novo';
+ const orderInput = document.getElementById('new-p-order').value;
+ const order = orderInput !== '' ? parseInt(orderInput) : 99;
  const category = document.getElementById('new-p-cat').value;
  const specs = document.getElementById('new-p-specs').value.trim();
+ const desc = document.getElementById('new-p-desc').value.trim();
  const price = parseFloat(document.getElementById('new-p-price').value);
+ const outOfStock = document.getElementById('new-p-outofstock').checked;
  const rawImage = document.getElementById('new-p-image').value.trim();
 
  if (!name || isNaN(price) || !rawImage) {
@@ -1115,7 +1391,6 @@ async function saveProduct() {
  btn.disabled = true;
 
  try {
- // MELHORIA 2: Compressão e Resolução Aumentadas (800px / 0.8)
  const image = await compressImageIfNeeded(rawImage, 800, 0.8);
 
  const payload = {
@@ -1125,8 +1400,11 @@ async function saveProduct() {
  name: name,
  category: category,
  specs: specs || 'Uso Profissional', 
+ desc: desc,
  price: price,
- tag: tag, // Envia a tag personalizada preenchida
+ tag: tag,
+ order: order,
+ outOfStock: outOfStock,
  image: image
  }
  };
@@ -1142,7 +1420,7 @@ async function saveProduct() {
 
  showToast("Produto salvo com sucesso na Planilha!");
  resetProductForm();
- await loadCloudData(); // Baixa os dados novos direto da planilha
+ await loadCloudData();
  } catch (err) {
  console.error(err);
  alert("ERRO AO SALVAR NA PLANILHA GOOGLE: Verifique se sua nova implantação foi feita como 'Qualquer Pessoa'.");
@@ -1158,10 +1436,13 @@ function editProduct(id) {
  if (!prod) return;
  document.getElementById('edit-prod-id').value = prod.id;
  document.getElementById('new-p-name').value = prod.name;
- document.getElementById('new-p-tag').value = prod.tag || 'Novo'; // MELHORIA 1
+ document.getElementById('new-p-tag').value = prod.tag || 'Novo';
+ document.getElementById('new-p-order').value = prod.order !== undefined ? prod.order : '';
  document.getElementById('new-p-cat').value = prod.category;
- document.getElementById('new-p-specs').value = prod.specs;
+ document.getElementById('new-p-specs').value = prod.specs || '';
+ document.getElementById('new-p-desc').value = prod.desc || '';
  document.getElementById('new-p-price').value = prod.price;
+ document.getElementById('new-p-outofstock').checked = (prod.outOfStock === true || prod.outOfStock === 'true');
  document.getElementById('new-p-image').value = prod.image;
  document.getElementById('prod-form-title').innerText = "Editar Produto"; 
  document.getElementById('btn-cancel-prod-edit').style.display = 'block';
@@ -1170,9 +1451,12 @@ function editProduct(id) {
 function resetProductForm() {
  document.getElementById('edit-prod-id').value = '';
  document.getElementById('new-p-name').value = '';
- document.getElementById('new-p-tag').value = ''; // MELHORIA 1
+ document.getElementById('new-p-tag').value = '';
+ document.getElementById('new-p-order').value = '';
  document.getElementById('new-p-specs').value = '';
+ document.getElementById('new-p-desc').value = '';
  document.getElementById('new-p-price').value = '';
+ document.getElementById('new-p-outofstock').checked = false;
  document.getElementById('new-p-image').value = '';
  document.getElementById('new-p-file').value = '';
  document.getElementById('prod-form-title').innerText = "Adicionar / Editar Produto";
@@ -1201,7 +1485,7 @@ async function deleteProduct(id) {
  }
 } 
 
-/* CRUD BANNERS (COMUNICAÇÃO OBRIGATÓRIA COM O GOOGLE) */
+/* CRUD BANNERS */
 function renderAdminBannersList() {
  const list = document.getElementById('admin-banners-list');
  list.innerHTML = '';
@@ -1209,7 +1493,7 @@ function renderAdminBannersList() {
  const row = document.createElement('div');
  row.className = 'admin-item-row';
  row.innerHTML = `
- <span style="flex:1;"><b>${b.title}</b></span>
+ <span style="flex:1;"><b>${b.title}</b> (${b.duration || 5}s)</span>
  <div class="admin-item-actions">
  <button class="btn-action-icon edit" onclick="editBanner('${b.id}')"><i class="fa-solid fa-pen"></i></button>
  <button class="btn-action-icon delete" onclick="deleteBanner('${b.id}')"><i class="fa-solid fa-trash"></i></button>
@@ -1225,6 +1509,7 @@ async function saveBanner() {
  const title = document.getElementById('new-b-title').value.trim();
  const desc = document.getElementById('new-b-desc').value.trim();
  const slogan = document.getElementById('new-b-slogan').value.trim();
+ const duration = parseFloat(document.getElementById('new-b-duration').value) || 5;
  const rawImage = document.getElementById('new-b-image').value.trim();
 
  if (!title || !rawImage) {
@@ -1236,7 +1521,6 @@ async function saveBanner() {
  btn.disabled = true;
 
  try { 
- // MELHORIA 2: Compressão e Resolução Aumentadas (800px / 0.8)
  const image = await compressImageIfNeeded(rawImage, 800, 0.8);
 
  const payload = {
@@ -1246,6 +1530,7 @@ async function saveBanner() {
  title: title,
  desc: desc,
  slogan: slogan,
+ duration: duration,
  image: image
  }
  };
@@ -1278,6 +1563,7 @@ function editBanner(id) {
  document.getElementById('new-b-title').value = banner.title; 
  document.getElementById('new-b-desc').value = banner.desc;
  document.getElementById('new-b-slogan').value = banner.slogan;
+ document.getElementById('new-b-duration').value = banner.duration || 5;
  document.getElementById('new-b-image').value = banner.image;
  document.getElementById('banner-form-title').innerText = "Editar Banner";
  document.getElementById('btn-cancel-banner-edit').style.display = 'block';
@@ -1288,6 +1574,7 @@ function resetBannerForm() {
  document.getElementById('new-b-title').value = '';
  document.getElementById('new-b-desc').value = '';
  document.getElementById('new-b-slogan').value = '';
+ document.getElementById('new-b-duration').value = 5;
  document.getElementById('new-b-image').value = '';
  document.getElementById('new-b-file').value = '';
  document.getElementById('banner-form-title').innerText = "Adicionar / Editar Banner";
@@ -1316,7 +1603,6 @@ async function deleteBanner(id) {
 
 /* INICIALIZAÇÃO */
 window.onload = async () => {
- startSliderInterval();
  renderProducts('todos');
  await loadCloudData();
 };

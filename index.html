@@ -10,10 +10,10 @@
 <meta name="apple-mobile-web-app-title" content="JR Cosméticos">
 <title>JR Cosméticos | Linha Profissional de Beleza</title>
 
-<!-- META-TAGS DE COMPARTILHAMENTO (OPEN GRAPH) - ATUALIZE A URL ABAIXO COM O LINK DIRETO DA SUA FOTO -->
+<!-- META-TAGS DE COMPARTILHAMENTO (OPEN GRAPH) - PRÉVIA DO WHATSAPP -->
 <meta property="og:title" content="JR Cosméticos | Linha Profissional de Beleza">
 <meta property="og:description" content="Catálogo exclusivo de produtos profissionais para salões de beleza. Selagens, tratamentos, colorações e finalizadores premium.">
-<meta property="og:image" content="SUBSTITUA_AQUI_PELA_URL_DIRETA_DA_SUA_IMAGEM.jpg">
+<meta property="og:image" content="https://lh3.googleusercontent.com/d/1CC2hG56vPDVlrC1brlRSQ7peVcZwgF_F">
 <meta property="og:image:type" content="image/jpeg">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
@@ -1539,7 +1539,7 @@ async function deleteBanner(id) {
  if (!confirm('Deseja excluir este banner da Planilha Google?')) return;
  showToast("Removendo Banner...");
  try {
- const res = acid = await fetch(GAS_URL, {
+ const res = await fetch(GAS_URL, {
  method: 'POST',
  headers: { 'Content-Type': 'text/plain;charset=utf-8' },
  body: JSON.stringify({ action: 'deleteBanner', id: id })
